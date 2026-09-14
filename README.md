@@ -77,6 +77,8 @@ _type in [
   "staffPage",
   "galleryPage",
   "contactPage",
+  "kvkkPage",
+  "cookiePolicyPage",
   "blogPage",
   "servicesPage",
   "projectsPage",

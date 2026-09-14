@@ -17,6 +17,8 @@ const SINGLETONS = [
   "staffPage",
   "galleryPage",
   "contactPage",
+  "kvkkPage",
+  "cookiePolicyPage",
   "blogPage",
   "servicesPage",
   "projectsPage",

@@ -228,6 +228,14 @@ export interface FaqItem {
   answer: string;
 }
 
+export interface KvkkPage {
+  pageTitle: string;
+  body?: PortableTextBlock[];
+  seo?: SeoSettings;
+}
+
+export type CookiePolicyPage = KvkkPage;
+
 export interface ContactPage extends BasePage {
   pageTitle: string;
   pageSubtitle?: string;

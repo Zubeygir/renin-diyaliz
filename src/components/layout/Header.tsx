@@ -135,6 +135,15 @@ export function Header({
             ))}
           </nav>
           <div className="h-5 w-[1px] bg-border/60" />
+          {contactInfo?.phone && (
+            <a
+              href={`tel:${contactInfo.phone.replace(/\s+/g, "")}`}
+              className="hidden lg:flex items-center gap-1.5 text-sm font-medium text-foreground/70 hover:text-primary transition-colors"
+            >
+              <RiPhoneLine size={15} className="shrink-0" />
+              {contactInfo.phone}
+            </a>
+          )}
           <LanguageSwitcher currentLocale={locale} />
         </div>
 

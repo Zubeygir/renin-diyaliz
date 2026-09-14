@@ -73,6 +73,9 @@ export interface Dictionary {
     services: string;
     contact: string;
     rights: string;
+    kvkk: string;
+    cookiePolicy: string;
+    social: string;
   };
 }
 
@@ -150,6 +153,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
       services: "Hizmetlerimiz",
       contact: "İletişim Bilgileri",
       rights: "Tüm hakları saklıdır.",
+      kvkk: "KVKK Aydınlatma Metni",
+      cookiePolicy: "Çerez Politikası",
+      social: "Sosyal Medya",
     },
   },
   en: {
@@ -225,6 +231,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
       services: "Our Services",
       contact: "Contact Information",
       rights: "All rights reserved.",
+      kvkk: "Privacy Notice",
+      cookiePolicy: "Cookie Policy",
+      social: "Social Media",
     },
   },
 };

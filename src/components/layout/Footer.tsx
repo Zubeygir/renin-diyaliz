@@ -53,6 +53,8 @@ export function Footer({
   const socialLinks: SocialLink[] = (settings?.socialLinks || []).filter((s: SocialLink) => s.url);
   const contact = settings?.contactInfo;
   const currentYear = new Date().getFullYear();
+  const kvkkHref = locale === "en" ? "/en/privacy" : "/kvkk";
+  const cookiePolicyHref = locale === "en" ? "/en/cookie-policy" : "/cerez-politikasi";
 
   return (
     <footer className="border-t bg-background">
@@ -105,7 +107,7 @@ export function Footer({
           {/* Footer Linkleri */}
           {footerLinks.length > 0 && (
             <div className="space-y-4">
-              <h3 className="font-bold text-sm uppercase tracking-wider">{dict.footer.quickLinks}</h3>
+              <h3 className="font-semibold text-sm">{dict.footer.quickLinks}</h3>
               <nav className="space-y-2">
                 {footerLinks.map((item, i) => (
                   <Link
@@ -126,7 +128,7 @@ export function Footer({
           {/* Sosyal Medya */}
           {socialLinks.length > 0 && (
             <div className="space-y-4">
-              <h3 className="font-bold text-sm uppercase tracking-wider">Sosyal Medya</h3>
+              <h3 className="font-semibold text-sm">{dict.footer.social}</h3>
               <div className="flex flex-wrap gap-3">
                 {socialLinks.map((social, i) => {
                   const Icon = socialIconMap[social.platform];
@@ -150,14 +152,24 @@ export function Footer({
         </div>
 
         {/* Alt Bar */}
-        <div className="mt-12 border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-3 text-center sm:text-left">
-            <span>© {currentYear} {settings?.siteName || "Özel Renin Diyaliz Merkezi"}. {dict.footer.rights}</span>
-            <span className="hidden sm:inline">•</span>
-            <span>Nefro-Med Sağlık Hizmetleri San. ve Tic. A.Ş.</span>
+        <div className="mt-12 border-t pt-6 flex flex-col gap-4">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-xs">
+            <Link href={kvkkHref} prefetch={false} className="text-muted-foreground hover:text-primary transition-colors">
+              {dict.footer.kvkk}
+            </Link>
+            <Link href={cookiePolicyHref} prefetch={false} className="text-muted-foreground hover:text-primary transition-colors">
+              {dict.footer.cookiePolicy}
+            </Link>
           </div>
-          <div className="text-center sm:text-right">
-            <span>Zübeyir Ali Demir &amp; Yaytech Studio ortak çalışmasıdır.</span>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+            <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-3 text-center sm:text-left">
+              <span>© {currentYear} {settings?.siteName || "Özel Renin Diyaliz Merkezi"}. {dict.footer.rights}</span>
+              <span className="hidden sm:inline">•</span>
+              <span>Nefro-Med Sağlık Hizmetleri San. ve Tic. A.Ş.</span>
+            </div>
+            <div className="text-center sm:text-right">
+              <span>Zübeyir Ali Demir &amp; Yaytech Studio ortak çalışmasıdır.</span>
+            </div>
           </div>
         </div>
       </div>

@@ -14,6 +14,8 @@ import { orgChartPageType } from "./singletons/orgChartPage";
 import { staffPageType } from "./singletons/staffPage";
 import { galleryPageType } from "./singletons/galleryPage";
 import { contactPageType } from "./singletons/contactPage";
+import { kvkkPageType } from "./singletons/kvkkPage";
+import { cookiePolicyPageType } from "./singletons/cookiePolicyPage";
 import { blogPageType } from "./singletons/blogPage";
 import { servicesPageType } from "./singletons/servicesPage";
 import { projectsPageType } from "./singletons/projectsPage";
@@ -43,6 +45,8 @@ export const schemaTypes = [
   staffPageType,
   galleryPageType,
   contactPageType,
+  kvkkPageType,
+  cookiePolicyPageType,
   blogPageType,
   servicesPageType,
   projectsPageType,

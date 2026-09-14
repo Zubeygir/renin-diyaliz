@@ -33,6 +33,10 @@ export const structure: StructureResolver = (S) =>
               .child(S.document().schemaType("galleryPage").documentId("galleryPage")),
             S.listItem().title("📬 İletişim").id("contactPage").schemaType("contactPage")
               .child(S.document().schemaType("contactPage").documentId("contactPage")),
+            S.listItem().title("🔒 KVKK Aydınlatma Metni").id("kvkkPage").schemaType("kvkkPage")
+              .child(S.document().schemaType("kvkkPage").documentId("kvkkPage")),
+            S.listItem().title("🍪 Çerez Politikası").id("cookiePolicyPage").schemaType("cookiePolicyPage")
+              .child(S.document().schemaType("cookiePolicyPage").documentId("cookiePolicyPage")),
             S.listItem().title("📝 Blog").id("blogPage").schemaType("blogPage")
               .child(S.document().schemaType("blogPage").documentId("blogPage")),
             S.listItem().title("🛠 Hizmetler").id("servicesPage").schemaType("servicesPage")

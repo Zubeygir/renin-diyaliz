@@ -242,6 +242,18 @@ export const contactPageQuery = groq`*[_type == "contactPage"][0] {
   seo
 }`;
 
+export const kvkkPageQuery = groq`*[_type == "kvkkPage"][0] {
+  "pageTitle": coalesce(pageTitle[$locale], pageTitle.tr, pageTitle),
+  "body": coalesce(body[$locale], body.tr, body),
+  seo
+}`;
+
+export const cookiePolicyPageQuery = groq`*[_type == "cookiePolicyPage"][0] {
+  "pageTitle": coalesce(pageTitle[$locale], pageTitle.tr, pageTitle),
+  "body": coalesce(body[$locale], body.tr, body),
+  seo
+}`;
+
 export const blogPageQuery = groq`*[_type == "blogPage"][0] {
   "heroTitle": coalesce(heroTitle[$locale], heroTitle.tr, heroTitle),
   "heroSubtitle": coalesce(heroSubtitle[$locale], heroSubtitle.tr, heroSubtitle),
@@ -438,6 +450,8 @@ export const allSlugsForSitemapQuery = groq`{
     "staff": *[_type == "staffPage"][0] { _updatedAt, "noIndex": seo.noIndex },
     "gallery": *[_type == "galleryPage"][0] { _updatedAt, "noIndex": seo.noIndex },
     "contact": *[_type == "contactPage"][0] { _updatedAt, "noIndex": seo.noIndex },
+    "kvkk": *[_type == "kvkkPage"][0] { _updatedAt, "noIndex": seo.noIndex },
+    "cookiePolicy": *[_type == "cookiePolicyPage"][0] { _updatedAt, "noIndex": seo.noIndex },
     "blog": *[_type == "blogPage"][0] { _updatedAt, "noIndex": seo.noIndex },
     "services": *[_type == "servicesPage"][0] { _updatedAt, "noIndex": seo.noIndex },
     "projects": *[_type == "projectsPage"][0] { _updatedAt, "noIndex": seo.noIndex }

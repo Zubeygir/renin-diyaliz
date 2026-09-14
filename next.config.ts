@@ -26,6 +26,8 @@ const nextConfig: NextConfig = {
       { source: "/projeler", destination: "/tr/projeler" },
       { source: "/projeler/:slug*", destination: "/tr/projeler/:slug*" },
       { source: "/iletisim", destination: "/tr/iletisim" },
+      { source: "/kvkk", destination: "/tr/kvkk" },
+      { source: "/cerez-politikasi", destination: "/tr/cerez-politikasi" },
 
       // English semantic routes -> mapped to internal /en/...
       { source: "/en/about", destination: "/en/hakkimizda" },
@@ -39,6 +41,8 @@ const nextConfig: NextConfig = {
       { source: "/en/projects", destination: "/en/projeler" },
       { source: "/en/projects/:slug*", destination: "/en/projeler/:slug*" },
       { source: "/en/contact", destination: "/en/iletisim" },
+      { source: "/en/privacy", destination: "/en/kvkk" },
+      { source: "/en/cookie-policy", destination: "/en/cerez-politikasi" },
     ];
   },
 };

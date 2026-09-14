@@ -18,7 +18,7 @@ type SitemapPage = {
 
 type SitemapData = {
   pages?: Record<
-    "home" | "about" | "missionVision" | "orgChart" | "staff" | "gallery" | "contact" | "blog" | "services" | "projects",
+    "home" | "about" | "missionVision" | "orgChart" | "staff" | "gallery" | "contact" | "kvkk" | "cookiePolicy" | "blog" | "services" | "projects",
     SitemapPage | null
   >;
   blogPosts?: LocalizedItem[];
@@ -49,6 +49,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/kadromuz`, lastModified: lastModified(pages?.staff?._updatedAt), changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/galeri`, lastModified: lastModified(pages?.gallery?._updatedAt), changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/iletisim`, lastModified: lastModified(pages?.contact?._updatedAt), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/kvkk`, lastModified: lastModified(pages?.kvkk?._updatedAt), changeFrequency: "yearly", priority: 0.3 },
+    { url: `${base}/cerez-politikasi`, lastModified: lastModified(pages?.cookiePolicy?._updatedAt), changeFrequency: "yearly", priority: 0.3 },
     { url: `${base}/blog`, lastModified: lastModified(pages?.blog?._updatedAt), changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/hizmetler`, lastModified: lastModified(pages?.services?._updatedAt), changeFrequency: "monthly", priority: 0.9 },
     { url: `${base}/projeler`, lastModified: lastModified(pages?.projects?._updatedAt), changeFrequency: "monthly", priority: 0.8 },
@@ -61,6 +63,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/en/team`, lastModified: lastModified(pages?.staff?._updatedAt), changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/en/gallery`, lastModified: lastModified(pages?.gallery?._updatedAt), changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/en/contact`, lastModified: lastModified(pages?.contact?._updatedAt), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/en/privacy`, lastModified: lastModified(pages?.kvkk?._updatedAt), changeFrequency: "yearly", priority: 0.2 },
+    { url: `${base}/en/cookie-policy`, lastModified: lastModified(pages?.cookiePolicy?._updatedAt), changeFrequency: "yearly", priority: 0.2 },
     { url: `${base}/en/blog`, lastModified: lastModified(pages?.blog?._updatedAt), changeFrequency: "weekly", priority: 0.8 },
     { url: `${base}/en/services`, lastModified: lastModified(pages?.services?._updatedAt), changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/en/projects`, lastModified: lastModified(pages?.projects?._updatedAt), changeFrequency: "monthly", priority: 0.7 },
@@ -75,6 +79,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (path === "/kadromuz" || path === "/en/team") return !pages?.staff?.noIndex;
     if (path === "/galeri" || path === "/en/gallery") return !pages?.gallery?.noIndex;
     if (path === "/iletisim" || path === "/en/contact") return !pages?.contact?.noIndex;
+    if (path === "/kvkk" || path === "/en/privacy") return !pages?.kvkk?.noIndex;
+    if (path === "/cerez-politikasi" || path === "/en/cookie-policy") return !pages?.cookiePolicy?.noIndex;
     if (path === "/blog" || path === "/en/blog") return !pages?.blog?.noIndex;
     if (path === "/hizmetler" || path === "/en/services") return !pages?.services?.noIndex;
     if (path === "/projeler" || path === "/en/projects") return !pages?.projects?.noIndex;
