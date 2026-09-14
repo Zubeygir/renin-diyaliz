@@ -32,6 +32,10 @@ const singletonTags: Record<string, string> = {
   navigation: "layout",
   homePage: "home",
   aboutPage: "about",
+  missionVisionPage: "missionVision",
+  orgChartPage: "orgChart",
+  staffPage: "staffPage",
+  galleryPage: "galleryPage",
   contactPage: "contact",
   blogPage: "blogPage",
   servicesPage: "servicesPage",
@@ -41,11 +45,21 @@ const singletonTags: Record<string, string> = {
 const sitemapPageTypes = new Set([
   "homePage",
   "aboutPage",
+  "missionVisionPage",
+  "orgChartPage",
+  "staffPage",
+  "galleryPage",
   "contactPage",
   "blogPage",
   "servicesPage",
   "projectsPage",
 ]);
+
+// Doküman türleri: kendi detay sayfası yok, sadece bir hub sayfasında liste olarak gösterilir.
+const listOnlyTags: Record<string, string> = {
+  staffMember: "staff:list",
+  galleryItem: "gallery:list",
+};
 
 function readSlug(value: unknown): string | undefined {
   if (typeof value === "string" && value.length > 0) return value;
@@ -111,6 +125,12 @@ function getRevalidationTags(
     tags.add("blog:list");
     tags.add("blog:categories");
     tags.add("home:featured");
+    return [...tags];
+  }
+
+  const listOnlyTag = listOnlyTags[documentType];
+  if (listOnlyTag) {
+    tags.add(listOnlyTag);
     return [...tags];
   }
 

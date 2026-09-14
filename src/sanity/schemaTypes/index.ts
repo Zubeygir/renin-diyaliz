@@ -5,6 +5,10 @@ import { siteSettingsType } from "./singletons/siteSettings";
 import { navigationType } from "./singletons/navigation";
 import { homePageType } from "./singletons/homePage";
 import { aboutPageType } from "./singletons/aboutPage";
+import { missionVisionPageType } from "./singletons/missionVisionPage";
+import { orgChartPageType } from "./singletons/orgChartPage";
+import { staffPageType } from "./singletons/staffPage";
+import { galleryPageType } from "./singletons/galleryPage";
 import { contactPageType } from "./singletons/contactPage";
 import { blogPageType } from "./singletons/blogPage";
 import { servicesPageType } from "./singletons/servicesPage";
@@ -13,6 +17,8 @@ import { blogPostType } from "./documents/blogPost";
 import { blogCategoryType } from "./documents/blogCategory";
 import { serviceType } from "./documents/service";
 import { projectType } from "./documents/project";
+import { staffMemberType } from "./documents/staffMember";
+import { galleryItemType } from "./documents/galleryItem";
 
 export const schemaTypes = [
   // Objects
@@ -24,6 +30,10 @@ export const schemaTypes = [
   navigationType,
   homePageType,
   aboutPageType,
+  missionVisionPageType,
+  orgChartPageType,
+  staffPageType,
+  galleryPageType,
   contactPageType,
   blogPageType,
   servicesPageType,
@@ -33,5 +43,6 @@ export const schemaTypes = [
   blogCategoryType,
   serviceType,
   projectType,
+  staffMemberType,
+  galleryItemType,
 ];
-

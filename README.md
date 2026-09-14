@@ -72,6 +72,10 @@ _type in [
   "navigation",
   "homePage",
   "aboutPage",
+  "missionVisionPage",
+  "orgChartPage",
+  "staffPage",
+  "galleryPage",
   "contactPage",
   "blogPage",
   "servicesPage",
@@ -80,6 +84,8 @@ _type in [
   "blogCategory",
   "service",
   "project",
+  "staffMember",
+  "galleryItem",
   "faq"
 ]
 ```

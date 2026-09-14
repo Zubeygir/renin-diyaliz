@@ -97,7 +97,18 @@ export default async function BlogPostPage({ params }: Props) {
             )}
           </div>
 
-          <h1 className="text-4xl font-bold mb-6 pt-2">{post.title}</h1>
+          <h1 className="text-4xl font-bold mb-4 pt-2">{post.title}</h1>
+
+          {(post.author?.name || post._updatedAt) && (
+            <div className="text-sm text-muted-foreground mb-6 flex flex-wrap gap-x-4 gap-y-1">
+              {post.author?.name && (
+                <span>
+                  {post.author.title ? `${post.author.title} ${post.author.name}` : post.author.name} tarafından hazırlanmıştır
+                </span>
+              )}
+              {post._updatedAt && <span>Son güncelleme: {formatDate(post._updatedAt)}</span>}
+            </div>
+          )}
         </FadeIn>
 
         {post.mainImage && (

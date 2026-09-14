@@ -35,6 +35,11 @@ export interface BlogCategory {
   slug: SanitySlug;
 }
 
+export interface BlogAuthor {
+  name: string;
+  title?: string;
+}
+
 export interface BlogPost {
   _id?: string;
   _createdAt?: string;
@@ -43,6 +48,7 @@ export interface BlogPost {
   slug: SanitySlug;
   excerpt?: string;
   publishedAt?: string;
+  author?: BlogAuthor;
   category?: BlogCategory;
   mainImage?: SanityImage;
   body?: PortableTextBlock[];
@@ -144,6 +150,52 @@ export interface AboutPage extends BasePage {
   pageSubtitle?: string;
   body?: PortableTextBlock[];
   mainImage?: SanityImage;
+}
+
+export interface MissionVisionPage extends BasePage {
+  pageTitle: string;
+  missionTitle?: string;
+  missionText?: string;
+  visionTitle?: string;
+  visionText?: string;
+  valuesTitle?: string;
+  values?: string[];
+  qualityPolicyTitle?: string;
+  qualityPolicyText?: PortableTextBlock[];
+}
+
+export interface OrgChartPage extends BasePage {
+  pageTitle: string;
+  pageSubtitle?: string;
+  chartImage?: SanityImage;
+}
+
+export interface StaffPage extends BasePage {
+  pageTitle: string;
+  pageSubtitle?: string;
+  ctaLabel?: string;
+  ctaLink?: string;
+}
+
+export type StaffGroup = "hekimler" | "hemsirelik" | "teknik";
+
+export interface StaffMember {
+  _id?: string;
+  name: string;
+  role: string;
+  group: StaffGroup;
+  photo?: SanityImage;
+}
+
+export interface GalleryPage extends BasePage {
+  pageTitle: string;
+  pageSubtitle?: string;
+}
+
+export interface GalleryItem {
+  _id?: string;
+  caption?: string;
+  image?: SanityImage;
 }
 
 export interface ContactPage extends BasePage {

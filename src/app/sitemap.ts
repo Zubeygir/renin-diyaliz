@@ -14,7 +14,10 @@ type SitemapPage = {
 };
 
 type SitemapData = {
-  pages?: Record<"home" | "about" | "contact" | "blog" | "services" | "projects", SitemapPage | null>;
+  pages?: Record<
+    "home" | "about" | "missionVision" | "orgChart" | "staff" | "gallery" | "contact" | "blog" | "services" | "projects",
+    SitemapPage | null
+  >;
   blogPosts?: SitemapItem[];
   services?: SitemapItem[];
   projects?: SitemapItem[];
@@ -36,6 +39,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRouteEntries: MetadataRoute.Sitemap = [
     { url: base, lastModified: lastModified(pages?.home?._updatedAt), changeFrequency: "weekly", priority: 1 },
     { url: `${base}/hakkimizda`, lastModified: lastModified(pages?.about?._updatedAt), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/misyon-vizyon-degerler`, lastModified: lastModified(pages?.missionVision?._updatedAt), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/organizasyon-semasi`, lastModified: lastModified(pages?.orgChart?._updatedAt), changeFrequency: "monthly", priority: 0.5 },
+    { url: `${base}/kadromuz`, lastModified: lastModified(pages?.staff?._updatedAt), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/galeri`, lastModified: lastModified(pages?.gallery?._updatedAt), changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/iletisim`, lastModified: lastModified(pages?.contact?._updatedAt), changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/blog`, lastModified: lastModified(pages?.blog?._updatedAt), changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/hizmetler`, lastModified: lastModified(pages?.services?._updatedAt), changeFrequency: "monthly", priority: 0.9 },
@@ -46,6 +53,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const path = route.url.replace(base, "") || "/";
     if (path === "/") return !pages?.home?.noIndex;
     if (path === "/hakkimizda") return !pages?.about?.noIndex;
+    if (path === "/misyon-vizyon-degerler") return !pages?.missionVision?.noIndex;
+    if (path === "/organizasyon-semasi") return !pages?.orgChart?.noIndex;
+    if (path === "/kadromuz") return !pages?.staff?.noIndex;
+    if (path === "/galeri") return !pages?.gallery?.noIndex;
     if (path === "/iletisim") return !pages?.contact?.noIndex;
     if (path === "/blog") return !pages?.blog?.noIndex;
     if (path === "/hizmetler") return !pages?.services?.noIndex;

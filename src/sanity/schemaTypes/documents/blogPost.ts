@@ -21,6 +21,16 @@ export const blogPostType = defineType({
     }),
     defineField({ name: "publishedAt", title: "Yayın Tarihi", type: "datetime", initialValue: () => new Date().toISOString() }),
     defineField({
+      name: "author",
+      title: "Yazar",
+      type: "object",
+      description: "Sağlık meslek mensubu imzası. Örn: 'Uzm. Dr. Ayşe Yılmaz'",
+      fields: [
+        defineField({ name: "name", title: "Ad Soyad", type: "string", validation: (Rule) => Rule.required() }),
+        defineField({ name: "title", title: "Unvan", type: "string", description: "Örn: Uzm. Dr., Diyaliz Hemşiresi" }),
+      ],
+    }),
+    defineField({
       name: "category",
       title: "Kategori",
       type: "reference",

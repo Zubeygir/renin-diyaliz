@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 type AnimateGroupProps = {
   children: React.ReactNode;
@@ -27,7 +27,7 @@ export function AnimateGroup({ children, stagger = 0.1, delay = 0, className }: 
 }
 
 // AnimateGroup içindeki her child bunu kullanır
-export const fadeUpItem = {
+export const fadeUpItem: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };

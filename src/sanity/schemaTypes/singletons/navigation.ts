@@ -35,6 +35,22 @@ export const navigationType = defineType({
       title: "Header Menü Linkleri",
       type: "array",
       of: [{ type: "object", fields: navItemFields, preview: { select: { title: "label", subtitle: "href" } } }],
+      initialValue: [
+        {
+          label: "Kurumsal",
+          href: "/hakkimizda",
+          subLinks: [
+            { label: "Hakkımızda", href: "/hakkimizda" },
+            { label: "Misyon / Vizyon / Değerler / Kalite Politikası", href: "/misyon-vizyon-degerler" },
+            { label: "Organizasyon Şeması", href: "/organizasyon-semasi" },
+          ],
+        },
+        { label: "Kadromuz", href: "/kadromuz" },
+        { label: "Hizmetler", href: "/hizmetler" },
+        { label: "Galeri", href: "/galeri" },
+        { label: "Blog", href: "/blog" },
+        { label: "İletişim", href: "/iletisim" },
+      ],
     }),
     defineField({
       name: "footerLinks",

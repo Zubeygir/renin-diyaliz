@@ -73,6 +73,47 @@ export const aboutPageQuery = groq`*[_type == "aboutPage"][0] {
   seo
 }`;
 
+export const missionVisionPageQuery = groq`*[_type == "missionVisionPage"][0] {
+  heroTitle, heroSubtitle,
+  heroImage ${imageFields},
+  pageTitle,
+  missionTitle, missionText,
+  visionTitle, visionText,
+  valuesTitle, values,
+  qualityPolicyTitle, qualityPolicyText,
+  seo
+}`;
+
+export const orgChartPageQuery = groq`*[_type == "orgChartPage"][0] {
+  heroTitle, heroSubtitle,
+  heroImage ${imageFields},
+  pageTitle, pageSubtitle,
+  chartImage ${imageFields},
+  seo
+}`;
+
+export const staffPageQuery = groq`*[_type == "staffPage"][0] {
+  heroTitle, heroSubtitle,
+  heroImage ${imageFields},
+  pageTitle, pageSubtitle, ctaLabel, ctaLink, seo
+}`;
+
+export const staffListQuery = groq`*[_type == "staffMember"] | order(group asc, order asc) {
+  _id, name, role, group,
+  photo ${imageFields}
+}`;
+
+export const galleryPageQuery = groq`*[_type == "galleryPage"][0] {
+  heroTitle, heroSubtitle,
+  heroImage ${imageFields},
+  pageTitle, pageSubtitle, seo
+}`;
+
+export const galleryListQuery = groq`*[_type == "galleryItem"] | order(order asc) {
+  _id, caption,
+  image ${imageFields}
+}`;
+
 export const contactPageQuery = groq`*[_type == "contactPage"][0] {
   heroTitle, heroSubtitle,
   heroImage ${imageFields},
@@ -102,17 +143,17 @@ export const projectsPageQuery = groq`*[_type == "projectsPage"][0] {
 // ─── Blog ──────────────────────────────────────────────────────────────────────
 
 export const blogListQuery = groq`*[_type == "blogPost"] | order(publishedAt desc) {
-  title, slug, excerpt, publishedAt, category->{title, slug},
+  title, slug, excerpt, publishedAt, author, category->{title, slug},
   mainImage ${imageFields}
 }`;
 
 export const blogFallbackQuery = groq`*[_type == "blogPost"] | order(publishedAt desc)[0...3] {
-  title, slug, excerpt, publishedAt, category->{title, slug},
+  title, slug, excerpt, publishedAt, author, category->{title, slug},
   mainImage ${imageFields}
 }`;
 
 export const blogPostBySlugQuery = groq`*[_type == "blogPost" && slug.current == $slug][0] {
-  _id, _updatedAt, title, slug, publishedAt, excerpt, category->{_id, title, slug}, seoTags,
+  _id, _updatedAt, title, slug, publishedAt, excerpt, author, category->{_id, title, slug}, seoTags,
   mainImage ${imageFields},
   body[] {
     ...,
@@ -129,12 +170,12 @@ export const blogCategoriesQuery = groq`*[_type == "blogCategory"] | order(title
 }`;
 
 export const blogListByCategorySlugQuery = groq`*[_type == "blogPost" && category->slug.current == $slug] | order(publishedAt desc) {
-  title, slug, excerpt, publishedAt, category->{title, slug},
+  title, slug, excerpt, publishedAt, author, category->{title, slug},
   mainImage ${imageFields}
 }`;
 
 export const blogRelatedPostsQuery = groq`*[_type == "blogPost" && category._ref == $categoryId && _id != $currentPostId] | order(publishedAt desc)[0...3] {
-  title, slug, excerpt, publishedAt, category->{title, slug},
+  title, slug, excerpt, publishedAt, author, category->{title, slug},
   mainImage ${imageFields}
 }`;
 
@@ -188,6 +229,10 @@ export const allSlugsForSitemapQuery = groq`{
   "pages": {
     "home": *[_type == "homePage"][0] { _updatedAt, "noIndex": seo.noIndex },
     "about": *[_type == "aboutPage"][0] { _updatedAt, "noIndex": seo.noIndex },
+    "missionVision": *[_type == "missionVisionPage"][0] { _updatedAt, "noIndex": seo.noIndex },
+    "orgChart": *[_type == "orgChartPage"][0] { _updatedAt, "noIndex": seo.noIndex },
+    "staff": *[_type == "staffPage"][0] { _updatedAt, "noIndex": seo.noIndex },
+    "gallery": *[_type == "galleryPage"][0] { _updatedAt, "noIndex": seo.noIndex },
     "contact": *[_type == "contactPage"][0] { _updatedAt, "noIndex": seo.noIndex },
     "blog": *[_type == "blogPage"][0] { _updatedAt, "noIndex": seo.noIndex },
     "services": *[_type == "servicesPage"][0] { _updatedAt, "noIndex": seo.noIndex },
