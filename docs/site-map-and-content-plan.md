@@ -13,7 +13,7 @@
 ## Referans Kaynaklar
 
 - Eski site (renindializ.com → dializmerkezi.com), işleten: **Nefro-Med Sağlık Hizmetleri Sanayi ve Ticaret A.Ş.**
-  - 2000 yılından beri hizmet, 50+1 diyaliz makinesi, 7/24 hizmet, Hepatit B/C için izole odalar, SGK + özel sigorta anlaşmaları, servis (hasta taşıma) hizmeti.
+  - 2000 yılından beri hizmet, 50+1 diyaliz makinesi, 7/24 hizmet, SGK + özel sigorta anlaşmaları, servis (hasta taşıma) hizmeti.
   - Adres (eski): Halil Rıfat Paşa Mah. Arel Sk. No:4, Şişli/İstanbul.
   - Kalite yönetimi: T.C. Sağlık Bakanlığı SKS Diyaliz Seti maddeleri (hasta kimliklendirme, ilaç güvenliği, enfeksiyon önleme, düşme riski azaltma, hasta mahremiyeti vb.) — doğrudan kullanılabilir, objektif ve doğrulanmış içerik.
 - Rakip örnek: RFM Diyaliz Merkezi — "Kurumsal" bilgiyi ayrı alt sayfalara bölen mega menu yapısı emsal alındı.
@@ -66,7 +66,7 @@ Section sırası ve ağırlığı tasarım aşamasında dengelenecek (Servis Ağ
 ## Kurumsal
 
 ### Hakkımızda
-- Kuruluş yılı, işleten şirket, kapasite, 7/24 hizmet, izole hasta odaları, SGK/özel sigorta uyumu.
+- Kuruluş yılı, işleten şirket, kapasite, izole hasta odaları, SGK/özel sigorta uyumu.
 - Üstünlük/karşılaştırma dili (ör. "en yüksek kalite", "mükemmeliyet") kullanılmayacak — sadece olgusal ifadeler.
 
 ### Misyon / Vizyon / Temel Değerler / Kalite Politikası
@@ -92,7 +92,7 @@ Section sırası ve ağırlığı tasarım aşamasında dengelenecek (Servis Ağ
 ## Hizmetler
 
 - Mevcut boilerplate hub + `[slug]` detay sayfası yapısı kullanılacak.
-- İçerik adayları: Hemodiyaliz, İzole Hasta Tedavisi (Hepatit B/C), Hasta Servis Hizmeti, SGK/Özel Sigorta Süreçleri.
+- İçerik adayları: Hemodiyaliz, Hasta Servis Hizmeti, SGK/Özel Sigorta Süreçleri.
 - Her detay sayfası: "ne, kimin için, nasıl işliyor" formatında, iddiasız/eğitici ton.
 
 ---
@@ -147,3 +147,5 @@ Section sırası ve ağırlığı tasarım aşamasında dengelenecek (Servis Ağ
 ## Sonraki Adım
 
 Tasarım dili (renk, tipografi, radius, genel estetik) ve teknik uygulama (Sanity şema değişiklikleri, yeni route'lar, i18n rewrite kuralı vb.) ayrı bir aşamada ele alınacak.
+
+Tüm eksik sayfalar yeni route olarak eklenecek. Sanity sabit sayfalar altına da eklenecek.
