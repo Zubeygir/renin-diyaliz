@@ -5,14 +5,14 @@ export const siteSettingsType = defineType({
   title: "Site Ayarları",
   type: "document",
   fields: [
-    defineField({ name: "siteName", title: "Site Adı", type: "string", validation: (Rule) => Rule.required(), initialValue: "Renin Diyaliz" }),
+    defineField({ name: "siteName", title: "Site Adı", type: "string", validation: (Rule) => Rule.required(), initialValue: "Özel Renin Diyaliz Merkezi" }),
     defineField({
       name: "siteTagline",
       title: "Slogan",
       type: "localizedString",
       initialValue: {
-        tr: "Diyaliz Merkezi",
-        en: "Dialysis Center",
+        tr: "Sağlığınız ve Yaşam Kaliteniz İçin",
+        en: "For Your Health and Quality of Life",
       },
     }),
     defineField({
@@ -37,8 +37,8 @@ export const siteSettingsType = defineType({
       title: "Varsayılan SEO",
       type: "object",
       fields: [
-        defineField({ name: "metaTitle", title: "Meta Başlık", type: "string", validation: (Rule) => Rule.max(60), initialValue: "Renin Diyaliz Merkezi" }),
-        defineField({ name: "metaDescription", title: "Meta Açıklama", type: "text", rows: 3, validation: (Rule) => Rule.max(160), initialValue: "Renin Diyaliz Merkezi resmi web sitesi." }),
+        defineField({ name: "metaTitle", title: "Meta Başlık", type: "string", validation: (Rule) => Rule.max(60), initialValue: "Özel Renin Diyaliz Merkezi | Şişli İstanbul" }),
+        defineField({ name: "metaDescription", title: "Meta Açıklama", type: "text", rows: 3, validation: (Rule) => Rule.max(160), initialValue: "2000 yılından bu yana 50+1 yatak ve diyaliz kapasitemiz, uzman hekim ve sağlık ekibimizle hemodiyaliz ve böbrek sağlığı hizmeti sunuyoruz." }),
       ],
     }),
     defineField({
@@ -46,7 +46,8 @@ export const siteSettingsType = defineType({
       title: "İletişim Bilgileri",
       type: "object",
       fields: [
-        defineField({ name: "phone", title: "Telefon", type: "string", initialValue: "0212 222 22 22" }),
+        defineField({ name: "phone", title: "Telefon (Sabit Hat)", type: "string", initialValue: "0212 320 10 12" }),
+        defineField({ name: "phone2", title: "İkinci Telefon / Mobil Hat", type: "string", description: "Örn: 0533 316 97 16", initialValue: "0533 316 97 16" }),
         defineField({ name: "email", title: "E-posta", type: "string", initialValue: "info@renindiyaliz.com" }),
         defineField({
           name: "address",
@@ -62,6 +63,7 @@ export const siteSettingsType = defineType({
           title: "WhatsApp Numarası",
           type: "string",
           description: "Başında + ile ülke kodu dahil. Örn: +905001234567",
+          initialValue: "+905333169716",
         }),
         defineField({
           name: "mapIframe",

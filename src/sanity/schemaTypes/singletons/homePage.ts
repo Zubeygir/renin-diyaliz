@@ -14,8 +14,26 @@ export const homePageType = defineType({
   ],
   fields: [
     // Hero Group
-    defineField({ name: "heroTitle", title: "Hero Başlık", type: "localizedString", group: "hero" }),
-    defineField({ name: "heroSubtitle", title: "Hero Alt Başlık", type: "localizedText", group: "hero" }),
+    defineField({
+      name: "heroTitle",
+      title: "Hero Başlık",
+      type: "localizedString",
+      group: "hero",
+      initialValue: {
+        tr: "Deneyim ile Buluşan Tıbbi Hizmetler",
+        en: "Medical Services Meeting Experience",
+      },
+    }),
+    defineField({
+      name: "heroSubtitle",
+      title: "Hero Alt Başlık",
+      type: "localizedText",
+      group: "hero",
+      initialValue: {
+        tr: "Hastaların bakımına ve yaşam kalitesini artırmaya odaklanarak; 50+1 yatak ve diyaliz kapasitemiz, deneyimli doktorlarımız ve güncel teknolojiye sahip cihazlarımızla hizmet veriyoruz.",
+        en: "Focusing on patient care and improving quality of life; serving with our 50+1 bed and dialysis capacity, experienced physicians, and modern technology devices.",
+      },
+    }),
     defineField({
       name: "heroImage",
       title: "Hero Görseli",
@@ -24,7 +42,16 @@ export const homePageType = defineType({
       options: { hotspot: true },
       fields: [defineField({ name: "alt", title: "Alt Metni", type: "string", validation: (Rule) => Rule.required() })],
     }),
-    defineField({ name: "heroCtaLabel", title: "Hero Buton Metni", type: "localizedString", group: "hero" }),
+    defineField({
+      name: "heroCtaLabel",
+      title: "Hero Buton Metni",
+      type: "localizedString",
+      group: "hero",
+      initialValue: {
+        tr: "Hizmetlerimiz",
+        en: "Our Services",
+      },
+    }),
     defineField({
       name: "heroCtaLink",
       title: "Hero Buton Linki",
@@ -68,9 +95,58 @@ export const homePageType = defineType({
     }),
 
     // About Preview Group
-    defineField({ name: "aboutTitle", title: "Hakkımızda Bölüm Başlığı", type: "localizedString", group: "about" }),
-    defineField({ name: "aboutSubtitle", title: "Hakkımızda Bölüm Alt Başlığı", type: "localizedText", group: "about" }),
-    defineField({ name: "aboutText", title: "Hakkımızda Kısa Yazı", type: "localizedPortableText", group: "about" }),
+    defineField({
+      name: "aboutTitle",
+      title: "Hakkımızda Bölüm Başlığı",
+      type: "localizedString",
+      group: "about",
+      initialValue: {
+        tr: "Hakkımızda",
+        en: "About Us",
+      },
+    }),
+    defineField({
+      name: "aboutSubtitle",
+      title: "Hakkımızda Bölüm Alt Başlığı",
+      type: "localizedText",
+      group: "about",
+      initialValue: {
+        tr: "Özel Renin Diyaliz Merkezi",
+        en: "Private Renin Dialysis Center",
+      },
+    }),
+    defineField({
+      name: "aboutText",
+      title: "Hakkımızda Kısa Yazı",
+      type: "localizedPortableText",
+      group: "about",
+      initialValue: {
+        tr: [
+          {
+            _type: "block",
+            style: "normal",
+            children: [
+              {
+                _type: "span",
+                text: "Renin Diyaliz Merkezi, hemodiyaliz alanında uzman hekimler tarafından kurulan bir sağlık kuruluşudur. Merkez, böbrek hastalarına deneyimli ve güler yüzlü bir sağlık ekibiyle, daha rahat koşullarda tedavi imkânı sağlamayı amaçlamaktadır. 2000 yılından bu yana hizmet veren merkez, hastaların yaşam kalitesini yükseltmeye ve hemodiyaliz tedavisini yüksek kalite standartlarında sunmaya odaklanmaktadır.",
+              },
+            ],
+          },
+        ],
+        en: [
+          {
+            _type: "block",
+            style: "normal",
+            children: [
+              {
+                _type: "span",
+                text: "Renin Dialysis Center is a healthcare institution founded by physicians specializing in hemodialysis. The center aims to provide kidney patients with treatment opportunities in more comfortable conditions with an experienced and friendly healthcare team. Serving since 2000, our center focuses on improving patients' quality of life and providing hemodialysis treatment at high quality standards.",
+              },
+            ],
+          },
+        ],
+      },
+    }),
     defineField({
       name: "aboutImage",
       title: "Hakkımızda Görseli",
@@ -79,12 +155,81 @@ export const homePageType = defineType({
       options: { hotspot: true },
       fields: [defineField({ name: "alt", title: "Alt Metni", type: "string" })],
     }),
-    defineField({ name: "aboutCtaLabel", title: "Daha Fazla Buton Metni", type: "localizedString", group: "about" }),
-    defineField({ name: "aboutCtaLink", title: "Buton Linki", type: "localizedString", group: "about" }),
+    defineField({
+      name: "aboutCtaLabel",
+      title: "Daha Fazla Buton Metni",
+      type: "localizedString",
+      group: "about",
+      initialValue: {
+        tr: "Kurumsal Bilgi",
+        en: "Corporate Details",
+      },
+    }),
+    defineField({
+      name: "aboutCtaLink",
+      title: "Buton Linki",
+      type: "localizedString",
+      group: "about",
+      initialValue: {
+        tr: "/hakkimizda",
+        en: "/en/about",
+      },
+    }),
+    defineField({
+      name: "stats",
+      title: "Rakamlarla Biz / İstatistikler",
+      type: "array",
+      group: "about",
+      description: "Hakkımızda bölümünde gösterilecek sayaç/istatistik kutuları (Örn: 50+1, 2000, 7/24).",
+      initialValue: [
+        {
+          value: "50+1",
+          label: { tr: "Yatak ve Diyaliz Kapasitesi", en: "Bed & Dialysis Capacity" },
+        },
+        {
+          value: "2000",
+          label: { tr: "Yılından Bu Yana Hizmet", en: "Serving Since 2000" },
+        },
+        {
+          value: "SKS",
+          label: { tr: "Sağlıkta Kalite Standartları", en: "Healthcare Quality Standards" },
+        },
+      ],
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({ name: "value", title: "Değer / Sayı", type: "string", description: "Örn: 50+1 veya 2000" }),
+            defineField({ name: "label", title: "Etiket", type: "localizedString", description: "Örn: Cihaz Kapasitesi" }),
+          ],
+          preview: {
+            select: { title: "value", subtitle: "label.tr" },
+          },
+        },
+      ],
+    }),
 
     // Services Preview Group
-    defineField({ name: "servicesTitle", title: "Hizmetler Bölüm Başlığı", type: "localizedString", group: "services" }),
-    defineField({ name: "servicesSubtitle", title: "Hizmetler Bölüm Alt Başlığı", type: "localizedText", group: "services" }),
+    defineField({
+      name: "servicesTitle",
+      title: "Hizmetler Bölüm Başlığı",
+      type: "localizedString",
+      group: "services",
+      initialValue: {
+        tr: "Hizmetlerimiz",
+        en: "Our Services",
+      },
+    }),
+    defineField({
+      name: "servicesSubtitle",
+      title: "Hizmetler Bölüm Alt Başlığı",
+      type: "localizedText",
+      group: "services",
+      initialValue: {
+        tr: "Deneyimli hekimlerimiz ve güncel teknolojiye sahip cihazlarımızla sunduğumuz tıbbi hizmetler.",
+        en: "Medical services provided by experienced physicians and state-of-the-art equipment.",
+      },
+    }),
     defineField({
       name: "featuredServices",
       title: "Öne Çıkan Hizmetler",
@@ -107,8 +252,26 @@ export const homePageType = defineType({
     }),
 
     // Blog Preview Group
-    defineField({ name: "blogTitle", title: "Blog Bölüm Başlığı", type: "localizedString", group: "blog" }),
-    defineField({ name: "blogSubtitle", title: "Blog Bölüm Alt Başlığı", type: "localizedText", group: "blog" }),
+    defineField({
+      name: "blogTitle",
+      title: "Blog Bölüm Başlığı",
+      type: "localizedString",
+      group: "blog",
+      initialValue: {
+        tr: "Bilgilendirici İçerikler ve Sağlık Rehberi",
+        en: "Informative Articles & Health Guide",
+      },
+    }),
+    defineField({
+      name: "blogSubtitle",
+      title: "Blog Bölüm Alt Başlığı",
+      type: "localizedText",
+      group: "blog",
+      initialValue: {
+        tr: "Böbreğin görevleri, böbrek yetmezliği, beslenme ve diyaliz yaşamına dair hekimlerimizden bilgilendirici içerikler.",
+        en: "Informative content from our physicians on kidney functions, renal failure, nutrition, and dialysis life.",
+      },
+    }),
     defineField({
       name: "featuredPosts",
       title: "Öne Çıkan Blog Yazıları",

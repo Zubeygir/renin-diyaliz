@@ -4,7 +4,7 @@ import { SanityImage } from "@/components/ui/SanityImage";
 import { RichText } from "@/components/ui/RichText";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { SanityImage as SanityImageType, Locale } from "@/types";
+import { SanityImage as SanityImageType, Locale, StatItem } from "@/types";
 import { getDictionary } from "@/lib/i18n";
 import type { PortableTextBlock } from "@portabletext/react";
 
@@ -15,6 +15,7 @@ interface AboutSectionProps {
   image?: SanityImageType;
   ctaLabel?: string;
   ctaLink?: string;
+  stats?: StatItem[];
   locale?: Locale;
 }
 
@@ -25,6 +26,7 @@ export function AboutSection({
   image,
   ctaLabel,
   ctaLink,
+  stats,
   locale = "tr",
 }: AboutSectionProps) {
   const dict = getDictionary(locale);
@@ -49,6 +51,19 @@ export function AboutSection({
             {text && text.length > 0 && (
               <FadeIn delay={0.15}>
                 <RichText value={text} className="text-muted-foreground" />
+              </FadeIn>
+            )}
+
+            {stats && stats.length > 0 && (
+              <FadeIn delay={0.2}>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4 border-t border-border">
+                  {stats.map((stat, i) => (
+                    <div key={i} className="space-y-1">
+                      <div className="text-2xl sm:text-3xl font-bold text-primary">{stat.value}</div>
+                      <div className="text-xs sm:text-sm text-muted-foreground">{stat.label}</div>
+                    </div>
+                  ))}
+                </div>
               </FadeIn>
             )}
 

@@ -24,6 +24,7 @@ export const layoutQuery = groq`{
     favicon { asset->{ _id, url } },
     contactInfo {
       phone,
+      phone2,
       email,
       "address": coalesce(address[$locale], address.tr, address),
       whatsappNumber,
@@ -79,6 +80,10 @@ export const homePageQuery = groq`*[_type == "homePage"][0] {
   aboutImage ${imageFields},
   "aboutCtaLabel": coalesce(aboutCtaLabel[$locale], aboutCtaLabel.tr, aboutCtaLabel),
   "aboutCtaLink": coalesce(aboutCtaLink[$locale], aboutCtaLink.tr, aboutCtaLink),
+  stats[] {
+    value,
+    "label": coalesce(label[$locale], label.tr, label)
+  },
   "servicesTitle": coalesce(servicesTitle[$locale], servicesTitle.tr, servicesTitle),
   "servicesSubtitle": coalesce(servicesSubtitle[$locale], servicesSubtitle.tr, servicesSubtitle),
   featuredServices[]-> {
@@ -218,8 +223,17 @@ export const contactPageQuery = groq`*[_type == "contactPage"][0] {
   showForm,
   "formTitle": coalesce(formTitle[$locale], formTitle.tr, formTitle),
   "successMessage": coalesce(successMessage[$locale], successMessage.tr, successMessage),
+  workingHours[] {
+    "days": coalesce(days[$locale], days.tr, days),
+    hours
+  },
+  faqs[] {
+    "question": coalesce(question[$locale], question.tr, question),
+    "answer": coalesce(answer[$locale], answer.tr, answer)
+  },
   "contactInfo": *[_type == "siteSettings"][0].contactInfo {
     phone,
+    phone2,
     email,
     "address": coalesce(address[$locale], address.tr, address),
     whatsappNumber,

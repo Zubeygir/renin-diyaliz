@@ -96,6 +96,7 @@ export default async function HomePage({
         image={data?.aboutImage}
         ctaLabel={data?.aboutCtaLabel}
         ctaLink={data?.aboutCtaLink}
+        stats={data?.stats}
         locale={locale}
       />
 

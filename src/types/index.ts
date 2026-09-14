@@ -72,6 +72,7 @@ export interface SocialLink {
 
 export interface ContactInfo {
   phone?: string;
+  phone2?: string;
   email?: string;
   address?: string;
   whatsappNumber?: string;
@@ -217,6 +218,16 @@ export interface GalleryItem {
   image?: SanityImage;
 }
 
+export interface WorkingHourItem {
+  days: string;
+  hours: string;
+}
+
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
 export interface ContactPage extends BasePage {
   pageTitle: string;
   pageSubtitle?: string;
@@ -224,6 +235,8 @@ export interface ContactPage extends BasePage {
   formTitle?: string;
   successMessage?: string;
   contactInfo?: SiteSettings["contactInfo"];
+  workingHours?: WorkingHourItem[];
+  faqs?: FaqItem[];
 }
 
 export interface InnerPageWithCta extends BasePage {
@@ -237,6 +250,11 @@ export type BlogPage = InnerPageWithCta;
 export type ServicesPage = InnerPageWithCta;
 export type ProjectsPage = InnerPageWithCta;
 
+export interface StatItem {
+  value: string;
+  label: string;
+}
+
 export interface HomePage {
   heroTitle: string;
   heroSubtitle?: string;
@@ -249,6 +267,7 @@ export interface HomePage {
   aboutImage?: SanityImage;
   aboutCtaLabel?: string;
   aboutCtaLink?: string;
+  stats?: StatItem[];
   servicesTitle?: string;
   servicesSubtitle?: string;
   featuredServices?: Service[];

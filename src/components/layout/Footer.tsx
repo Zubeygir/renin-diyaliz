@@ -68,11 +68,20 @@ export function Footer({
             <div className="space-y-2">
               {contact?.phone && (
                 <a
-                  href={`tel:${contact.phone}`}
+                  href={`tel:${contact.phone.replace(/\s+/g, "")}`}
                   className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   <RiPhoneLine className="shrink-0" />
                   {contact.phone}
+                </a>
+              )}
+              {contact?.phone2 && (
+                <a
+                  href={`tel:${contact.phone2.replace(/\s+/g, "")}`}
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <RiPhoneLine className="shrink-0" />
+                  {contact.phone2}
                 </a>
               )}
               {contact?.email && (
@@ -141,10 +150,15 @@ export function Footer({
         </div>
 
         {/* Alt Bar */}
-        <div className="mt-12 border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-muted-foreground w-full text-center sm:text-left">
-            © {currentYear} {settings?.siteName}. {dict.footer.rights}
-          </p>
+        <div className="mt-12 border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-3 text-center sm:text-left">
+            <span>© {currentYear} {settings?.siteName || "Özel Renin Diyaliz Merkezi"}. {dict.footer.rights}</span>
+            <span className="hidden sm:inline">•</span>
+            <span>Nefro-Med Sağlık Hizmetleri San. ve Tic. A.Ş.</span>
+          </div>
+          <div className="text-center sm:text-right">
+            <span>Zübeyir Ali Demir &amp; Yaytech Studio ortak çalışmasıdır.</span>
+          </div>
         </div>
       </div>
     </footer>
