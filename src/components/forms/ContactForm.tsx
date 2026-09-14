@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Locale, getDictionary } from "@/lib/i18n";
 
 const schema = z.object({
   name: z.string().min(2, "İsim en az 2 karakter olmalı"),
@@ -22,12 +23,15 @@ type FieldErrors = Partial<Record<keyof FormData, string[]>>;
 type ContactFormProps = {
   formTitle?: string;
   successMessage?: string;
+  locale?: Locale;
 };
 
 export function ContactForm({
-  formTitle = "Bize Ulaşın",
-  successMessage = "Mesajınız alındı. En kısa sürede size dönüş yapacağız.",
+  formTitle,
+  successMessage,
+  locale = "tr",
 }: ContactFormProps) {
+  const dict = getDictionary(locale);
   const [status, setStatus] = useState<Status>("idle");
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [formData, setFormData] = useState<FormData>({
@@ -38,12 +42,14 @@ export function ContactForm({
     message: "",
   });
 
+  const displayTitle = formTitle || dict.contact.title;
+  const displaySuccessMessage = successMessage || dict.contact.form.success;
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Alan hatasını temizle
     if (fieldErrors[name as keyof FormData]) {
       setFieldErrors((prev) => ({ ...prev, [name]: undefined }));
     }
@@ -54,7 +60,6 @@ export function ContactForm({
     setStatus("loading");
     setFieldErrors({});
 
-    // Client-side validasyon
     const result = schema.safeParse(formData);
     if (!result.success) {
       setFieldErrors(result.error.flatten().fieldErrors as FieldErrors);
@@ -62,7 +67,6 @@ export function ContactForm({
       return;
     }
 
-    // Honeypot alanını al
     const form = e.currentTarget;
     const honeypot = (form.elements.namedItem("website") as HTMLInputElement)?.value || "";
 
@@ -91,29 +95,29 @@ export function ContactForm({
     return (
       <div className="rounded-lg border bg-card p-8 text-center">
         <div className="text-4xl mb-4">✅</div>
-        <p className="text-lg font-medium">{successMessage}</p>
+        <p className="text-lg font-medium">{displaySuccessMessage}</p>
       </div>
     );
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-      {formTitle && <h2 className="text-2xl font-bold">{formTitle}</h2>}
+      {displayTitle && <h2 className="text-2xl font-bold">{displayTitle}</h2>}
 
-      {/* Honeypot — spam botları için gizli alan */}
+      {/* Honeypot */}
       <div className="absolute opacity-0 pointer-events-none h-0 overflow-hidden" aria-hidden="true">
         <input name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="name">Ad Soyad *</Label>
+          <Label htmlFor="name">{dict.contact.form.name} *</Label>
           <Input
             id="name"
             name="name"
             value={formData.name}
             onChange={handleChange}
-            placeholder="Adınız Soyadınız"
+            placeholder={dict.contact.form.namePlaceholder}
             aria-invalid={!!fieldErrors.name}
           />
           {fieldErrors.name && (
@@ -122,14 +126,14 @@ export function ContactForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email">E-posta *</Label>
+          <Label htmlFor="email">{dict.contact.form.email} *</Label>
           <Input
             id="email"
             name="email"
             type="email"
             value={formData.email}
             onChange={handleChange}
-            placeholder="ornek@mail.com"
+            placeholder={dict.contact.form.emailPlaceholder}
             aria-invalid={!!fieldErrors.email}
           />
           {fieldErrors.email && (
@@ -140,37 +144,37 @@ export function ContactForm({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="phone">Telefon</Label>
+          <Label htmlFor="phone">{dict.contact.form.phone}</Label>
           <Input
             id="phone"
             name="phone"
             type="tel"
             value={formData.phone}
             onChange={handleChange}
-            placeholder="+90 555 000 00 00"
+            placeholder={dict.contact.form.phonePlaceholder}
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="subject">Konu</Label>
+          <Label htmlFor="subject">{locale === "en" ? "Subject" : "Konu"}</Label>
           <Input
             id="subject"
             name="subject"
             value={formData.subject}
             onChange={handleChange}
-            placeholder="Mesajınızın konusu"
+            placeholder={locale === "en" ? "Subject of your message" : "Mesajınızın konusu"}
           />
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="message">Mesaj *</Label>
+        <Label htmlFor="message">{dict.contact.form.message} *</Label>
         <Textarea
           id="message"
           name="message"
           value={formData.message}
           onChange={handleChange}
-          placeholder="Mesajınızı buraya yazın..."
+          placeholder={dict.contact.form.messagePlaceholder}
           rows={6}
           aria-invalid={!!fieldErrors.message}
         />
@@ -181,12 +185,12 @@ export function ContactForm({
 
       {status === "error" && (
         <p className="text-sm text-destructive">
-          Bir hata oluştu. Lütfen tekrar deneyin.
+          {dict.contact.form.error}
         </p>
       )}
 
       <Button type="submit" disabled={status === "loading"} className="w-full sm:w-auto">
-        {status === "loading" ? "Gönderiliyor..." : "Gönder"}
+        {status === "loading" ? dict.contact.form.submitting : dict.contact.form.submit}
       </Button>
     </form>
   );

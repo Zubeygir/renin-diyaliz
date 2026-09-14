@@ -14,9 +14,12 @@ export const galleryItemType = defineType({
       validation: (Rule) => Rule.required(),
       description: "Sadece tesis, cihaz veya mekan fotoğrafı. Hasta görseli kullanılmaz.",
     }),
-    defineField({ name: "caption", title: "Açıklama", type: "string" }),
+    defineField({ name: "caption", title: "Açıklama", type: "localizedString" }),
     defineField({ name: "order", title: "Sıralama", type: "number", description: "Küçükten büyüğe sıralanır." }),
   ],
   orderings: [{ title: "Sıralama", name: "orderAsc", by: [{ field: "order", direction: "asc" }] }],
-  preview: { select: { title: "caption", media: "image" }, prepare: ({ title, media }) => ({ title: title || "Galeri Görseli", media }) },
+  preview: {
+    select: { title: "caption.tr", media: "image" },
+    prepare: ({ title, media }) => ({ title: title || "Galeri Görseli", media }),
+  },
 });

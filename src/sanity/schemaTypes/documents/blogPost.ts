@@ -1,24 +1,12 @@
 import { defineField, defineType } from "sanity";
-import React from "react";
-import { ColorInput } from "../../components/ColorInput";
-import { turkishSlugify } from "../../lib/slugify";
 
 export const blogPostType = defineType({
   name: "blogPost",
   title: "Blog Yazısı",
   type: "document",
   fields: [
-    defineField({ name: "title", title: "Başlık", type: "string", validation: (Rule) => Rule.required() }),
-    defineField({
-      name: "slug",
-      title: "Slug",
-      type: "slug",
-      options: {
-        source: "title",
-        slugify: turkishSlugify,
-      },
-      validation: (Rule) => Rule.required(),
-    }),
+    defineField({ name: "title", title: "Başlık", type: "localizedString" }),
+    defineField({ name: "slug", title: "Slug", type: "localizedSlug" }),
     defineField({ name: "publishedAt", title: "Yayın Tarihi", type: "datetime", initialValue: () => new Date().toISOString() }),
     defineField({
       name: "author",
@@ -27,7 +15,7 @@ export const blogPostType = defineType({
       description: "Sağlık meslek mensubu imzası. Örn: 'Uzm. Dr. Ayşe Yılmaz'",
       fields: [
         defineField({ name: "name", title: "Ad Soyad", type: "string", validation: (Rule) => Rule.required() }),
-        defineField({ name: "title", title: "Unvan", type: "string", description: "Örn: Uzm. Dr., Diyaliz Hemşiresi" }),
+        defineField({ name: "title", title: "Unvan", type: "localizedString", description: "Örn: Uzm. Dr., Diyaliz Hemşiresi" }),
       ],
     }),
     defineField({
@@ -48,97 +36,13 @@ export const blogPostType = defineType({
     defineField({
       name: "excerpt",
       title: "Özet",
-      type: "text",
-      rows: 3,
-      description: "Liste sayfalarında gösterilir. Maksimum 200 karakter.",
-      validation: (Rule) => Rule.max(200),
+      type: "localizedText",
+      description: "Liste sayfalarında gösterilir.",
     }),
     defineField({
       name: "body",
       title: "İçerik",
-      type: "array",
-      of: [
-        { 
-          type: "block",
-          marks: {
-            annotations: [
-              {
-                name: "link",
-                type: "object",
-                title: "Link",
-                fields: [
-                  {
-                    name: "href",
-                    type: "string",
-                    title: "URL / Bağlantı Yolu",
-                    validation: (Rule) =>
-                      Rule.custom((value) => {
-                        const strVal = value as string;
-                        if (!strVal) return true;
-                        // Relative path, anchor, mailto/tel, or absolute URL validation
-                        const isRelative = strVal.startsWith("/");
-                        const isMailtoOrTel = strVal.startsWith("mailto:") || strVal.startsWith("tel:");
-                        const isAnchor = strVal.startsWith("#");
-                        const isAbsolute = /^(https?:\/\/)/.test(strVal);
-                        
-                        if (isRelative || isMailtoOrTel || isAnchor || isAbsolute) {
-                          return true;
-                        }
-                        return "Geçerli bir URL veya bağıntılı yol girin (örn: https://example.com veya /hizmetler)";
-                      }),
-                  },
-                ],
-              },
-              {
-                name: "textColor",
-                type: "object",
-                title: "Metin Rengi",
-                icon: () => React.createElement('span', { style: { fontSize: '1.2em' } }, '💧'),
-                fields: [
-                  {
-                    name: "hex",
-                    type: "string",
-                    title: "Renk Seçin",
-                    components: {
-                      input: ColorInput,
-                    },
-                  },
-                ],
-              }
-            ]
-          }
-        },
-        {
-          type: "image",
-          options: { hotspot: true },
-          fields: [
-            defineField({ name: "alt", title: "Alt Metni", type: "string", validation: (Rule) => Rule.required() }),
-            defineField({
-              name: "alignment",
-              title: "Hizalama",
-              type: "string",
-              options: { list: [{ title: "Sol", value: "left" }, { title: "Orta", value: "center" }, { title: "Sağ", value: "right" }, { title: "Tam Genişlik", value: "full" }] },
-              initialValue: "center",
-            }),
-            defineField({
-              name: "size",
-              title: "Boyut",
-              type: "string",
-              options: { 
-                list: [
-                  { title: "Çok Küçük (%25)", value: "25" },
-                  { title: "Küçük (%33)", value: "33" },
-                  { title: "Orta (%50)", value: "50" },
-                  { title: "Geniş (%75)", value: "75" },
-                  { title: "Tam Genişlik (%100)", value: "100" }
-                ] 
-              },
-              initialValue: "100",
-            }),
-          ],
-        },
-        { type: "customHtml" },
-      ],
+      type: "localizedPortableText",
     }),
     defineField({
       name: "seoTags",
@@ -150,5 +54,19 @@ export const blogPostType = defineType({
     }),
     defineField({ name: "seo", title: "SEO", type: "seo" }),
   ],
+  preview: {
+    select: {
+      title: "title.tr",
+      subtitle: "title.en",
+      media: "mainImage",
+    },
+    prepare({ title, subtitle, media }) {
+      return {
+        title: title || "Başlıksız Yazı",
+        subtitle: subtitle || "EN çevirisi yok",
+        media,
+      };
+    },
+  },
   orderings: [{ title: "Yayın Tarihi (Yeni→Eski)", name: "publishedAtDesc", by: [{ field: "publishedAt", direction: "desc" }] }],
 });

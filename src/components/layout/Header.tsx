@@ -6,6 +6,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { Button } from "@/components/ui/button";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { Locale, getDictionary } from "@/lib/i18n";
 import {
   FaInstagram,
   FaFacebook,
@@ -45,6 +47,7 @@ export interface HeaderProps {
   links?: NavItem[];
   contactInfo?: HeaderContactInfo;
   socialLinks?: SocialLink[];
+  locale?: Locale;
 }
 
 function resolveHref(item: NavItem): string {
@@ -57,10 +60,13 @@ export function Header({
   links = [],
   contactInfo,
   socialLinks = [],
+  locale = "tr",
 }: HeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const dict = getDictionary(locale);
+  const homeUrl = locale === "en" ? "/en" : "/";
 
   // Sayfa değiştiğinde menüyü kapat
   useEffect(() => {
@@ -92,7 +98,7 @@ export function Header({
 
   const isActive = (item: NavItem) => {
     const href = resolveHref(item);
-    if (href === "/" && pathname !== "/") return false;
+    if ((href === "/" || href === "/en") && pathname !== "/" && pathname !== "/en") return false;
     return pathname.startsWith(href);
   };
 
@@ -100,9 +106,9 @@ export function Header({
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-20 items-center justify-between px-4">
         <Link
-          href="/"
+          href={homeUrl}
           prefetch={false}
-          onMouseEnter={() => router.prefetch("/")}
+          onMouseEnter={() => router.prefetch(homeUrl)}
           className="flex items-center group h-full"
         >
           <div className="relative flex items-center justify-start transition-all duration-200 group-hover:scale-[1.02] active:scale-95 h-full py-4 max-w-[250px] md:max-w-[450px]">
@@ -121,20 +127,25 @@ export function Header({
           </div>
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-6">
-          {links.map((item, i) => (
-            <DesktopNavItem key={i} item={item} active={isActive(item)} />
-          ))}
-        </nav>
+        {/* Desktop Nav & Language Switcher */}
+        <div className="hidden md:flex items-center gap-6">
+          <nav className="flex items-center gap-6">
+            {links.map((item, i) => (
+              <DesktopNavItem key={i} item={item} active={isActive(item)} />
+            ))}
+          </nav>
+          <div className="h-5 w-[1px] bg-border/60" />
+          <LanguageSwitcher currentLocale={locale} />
+        </div>
 
         {/* Mobile Controls */}
         <div className="flex items-center gap-2 md:hidden">
+          <LanguageSwitcher currentLocale={locale} />
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setMenuOpen(!menuOpen)}
-            aria-label={menuOpen ? "Menüyü kapat" : "Menüyü aç"}
+            aria-label={menuOpen ? dict.nav.close : dict.nav.menu}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
           >
@@ -245,7 +256,7 @@ function DesktopNavItem({ item, active }: { item: NavItem; active: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
 
   // Alt menü linklerinden biri aktifse üst menüyü de aktif boyarız
-  const isSubActive = item.subLinks?.some(sub => pathname === resolveHref(sub));
+  const isSubActive = item.subLinks?.some((sub) => pathname === resolveHref(sub));
   const reallyActive = active || isSubActive;
 
   if (!item.subLinks || item.subLinks.length === 0) {
@@ -267,7 +278,7 @@ function DesktopNavItem({ item, active }: { item: NavItem; active: boolean }) {
   }
 
   return (
-    <div 
+    <div
       className="relative group"
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
@@ -286,7 +297,7 @@ function DesktopNavItem({ item, active }: { item: NavItem; active: boolean }) {
           <RiArrowDownSLine size={16} />
         </motion.span>
       </Link>
-      
+
       <AnimatePresence>
         {isOpen && (
           <motion.div

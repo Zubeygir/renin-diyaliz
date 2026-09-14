@@ -24,9 +24,17 @@ export interface SanityImage {
   crop?: { top: number; bottom: number; left: number; right: number };
 }
 
+export type Locale = "tr" | "en";
+
 export interface SanitySlug {
   current: string;
   _type?: "slug";
+}
+
+export interface RawSlug {
+  tr?: SanitySlug;
+  en?: SanitySlug;
+  current?: string;
 }
 
 export interface BlogCategory {
@@ -46,6 +54,7 @@ export interface BlogPost {
   _updatedAt?: string;
   title: string;
   slug: SanitySlug;
+  rawSlug?: RawSlug;
   excerpt?: string;
   publishedAt?: string;
   author?: BlogAuthor;
@@ -105,6 +114,7 @@ export interface Service {
   _updatedAt?: string;
   title: string;
   slug: SanitySlug;
+  rawSlug?: RawSlug;
   mainImage?: SanityImage;
   body?: PortableTextBlock[];
   seo?: SeoSettings;
@@ -116,6 +126,7 @@ export interface Project {
   _updatedAt?: string;
   title: string;
   slug: SanitySlug;
+  rawSlug?: RawSlug;
   mainImage?: SanityImage;
   body?: PortableTextBlock[];
   seo?: SeoSettings;
@@ -185,6 +196,14 @@ export interface StaffMember {
   role: string;
   group: StaffGroup;
   photo?: SanityImage;
+  slug?: string;
+  rawSlug?: RawSlug;
+  hasDetailPage?: boolean;
+  bio?: PortableTextBlock[];
+  education?: string[];
+  skills?: string[];
+  certificates?: string[];
+  seo?: SeoSettings;
 }
 
 export interface GalleryPage extends BasePage {

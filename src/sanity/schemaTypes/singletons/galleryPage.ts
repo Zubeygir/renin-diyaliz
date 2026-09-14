@@ -11,8 +11,8 @@ export const galleryPageType = defineType({
   ],
   fields: [
     // Page Hero Group
-    defineField({ name: "heroTitle", title: "Hero Başlık", type: "string", group: "hero", description: "Sayfa üst kısmında duracak ana başlık. Boş bırakılırsa Sayfa Başlığı kullanılır." }),
-    defineField({ name: "heroSubtitle", title: "Hero Alt Başlık / Kısa Açıklama", type: "text", rows: 2, group: "hero" }),
+    defineField({ name: "heroTitle", title: "Hero Başlık", type: "localizedString", group: "hero" }),
+    defineField({ name: "heroSubtitle", title: "Hero Alt Başlık / Kısa Açıklama", type: "localizedText", group: "hero" }),
     defineField({
       name: "heroImage",
       title: "Hero Arka Plan Görseli",
@@ -22,14 +22,12 @@ export const galleryPageType = defineType({
       fields: [defineField({ name: "alt", title: "Alt Metni", type: "string" })],
     }),
     // Content Group
-    defineField({ name: "pageTitle", title: "Sayfa Başlığı", type: "string", group: "content", initialValue: "Galeri", validation: (Rule) => Rule.required() }),
+    defineField({ name: "pageTitle", title: "Sayfa Başlığı", type: "localizedString", group: "content" }),
     defineField({
       name: "pageSubtitle",
       title: "Alt Başlık / Kısa Yazı",
-      type: "text",
-      rows: 3,
+      type: "localizedText",
       group: "content",
-      initialValue: "Merkezimizden tesis, cihaz ve mekan görselleri.",
     }),
     // SEO Group
     defineField({ name: "seo", title: "SEO", type: "seo", group: "seo" }),

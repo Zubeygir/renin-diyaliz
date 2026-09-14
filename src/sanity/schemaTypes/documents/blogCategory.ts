@@ -1,5 +1,4 @@
 import { defineField, defineType } from "sanity";
-import { turkishSlugify } from "../../lib/slugify";
 
 export const blogCategoryType = defineType({
   name: "blogCategory",
@@ -9,20 +8,26 @@ export const blogCategoryType = defineType({
     defineField({
       name: "title",
       title: "Kategori Adı",
-      type: "string",
-      validation: (Rule) => Rule.required(),
+      type: "localizedString",
       description: "Sitede görünecek kategori adını girin.",
     }),
     defineField({
       name: "slug",
       title: "Slug",
-      type: "slug",
-      options: {
-        source: "title",
-        slugify: turkishSlugify,
-      },
-      validation: (Rule) => Rule.required(),
-      description: "URL'de görünecek kategori ismi (otomatik oluşturabilirsiniz).",
+      type: "localizedSlug",
+      description: "URL'de görünecek kategori ismi.",
     }),
   ],
+  preview: {
+    select: {
+      title: "title.tr",
+      subtitle: "title.en",
+    },
+    prepare({ title, subtitle }) {
+      return {
+        title: title || "Başlıksız Kategori",
+        subtitle: subtitle || "EN çevirisi yok",
+      };
+    },
+  },
 });

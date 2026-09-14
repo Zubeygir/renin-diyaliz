@@ -1,22 +1,12 @@
 import { defineField, defineType } from "sanity";
-import { turkishSlugify } from "../../lib/slugify";
 
 export const serviceType = defineType({
   name: "service",
   title: "Hizmet",
   type: "document",
   fields: [
-    defineField({ name: "title", title: "Başlık", type: "string", validation: (Rule) => Rule.required() }),
-    defineField({
-      name: "slug",
-      title: "Slug",
-      type: "slug",
-      options: {
-        source: "title",
-        slugify: turkishSlugify,
-      },
-      validation: (Rule) => Rule.required(),
-    }),
+    defineField({ name: "title", title: "Başlık", type: "localizedString" }),
+    defineField({ name: "slug", title: "Slug", type: "localizedSlug" }),
     defineField({
       name: "mainImage",
       title: "Ana Görsel",
@@ -28,41 +18,22 @@ export const serviceType = defineType({
     defineField({
       name: "body",
       title: "İçerik",
-      type: "array",
-      of: [
-        { type: "block" },
-        {
-          type: "image",
-          options: { hotspot: true },
-          fields: [
-            defineField({ name: "alt", title: "Alt Metni", type: "string" }),
-            defineField({
-              name: "alignment",
-              title: "Hizalama",
-              type: "string",
-              options: { list: [{ title: "Sol", value: "left" }, { title: "Orta", value: "center" }, { title: "Sağ", value: "right" }, { title: "Tam Genişlik", value: "full" }] },
-              initialValue: "center",
-            }),
-            defineField({
-              name: "size",
-              title: "Boyut",
-              type: "string",
-              options: { 
-                list: [
-                  { title: "Çok Küçük (%25)", value: "25" },
-                  { title: "Küçük (%33)", value: "33" },
-                  { title: "Orta (%50)", value: "50" },
-                  { title: "Geniş (%75)", value: "75" },
-                  { title: "Tam Genişlik (%100)", value: "100" }
-                ] 
-              },
-              initialValue: "100",
-            }),
-          ],
-        },
-        { type: "customHtml" },
-      ],
+      type: "localizedPortableText",
     }),
     defineField({ name: "seo", title: "SEO", type: "seo" }),
   ],
+  preview: {
+    select: {
+      title: "title.tr",
+      subtitle: "title.en",
+      media: "mainImage",
+    },
+    prepare({ title, subtitle, media }) {
+      return {
+        title: title || "Başlıksız Hizmet",
+        subtitle: subtitle || "EN çevirisi yok",
+        media,
+      };
+    },
+  },
 });

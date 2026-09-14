@@ -6,25 +6,37 @@ import { RiArrowRightSLine, RiHome4Line } from "react-icons/ri";
 import { JsonLd, breadcrumbListJsonLd } from "@/components/seo/JsonLd";
 import { BreadcrumbItem } from "@/types";
 
-const ROUTE_LABELS: Record<string, string> = {
-  hakkimizda: "Hakkımızda",
-  hizmetler: "Hizmetlerimiz",
-  projeler: "Projelerimiz",
-  blog: "Blog",
-  iletisim: "İletişim",
+const ROUTE_LABELS: Record<string, { tr: string; en: string }> = {
+  hakkimizda: { tr: "Hakkımızda", en: "About Us" },
+  about: { tr: "Hakkımızda", en: "About Us" },
+  hizmetler: { tr: "Hizmetlerimiz", en: "Services" },
+  services: { tr: "Hizmetlerimiz", en: "Services" },
+  projeler: { tr: "Projelerimiz", en: "Projects" },
+  projects: { tr: "Projelerimiz", en: "Projects" },
+  blog: { tr: "Blog", en: "Blog" },
+  iletisim: { tr: "İletişim", en: "Contact" },
+  contact: { tr: "İletişim", en: "Contact" },
+  galeri: { tr: "Galeri", en: "Gallery" },
+  gallery: { tr: "Galeri", en: "Gallery" },
+  kadromuz: { tr: "Kadromuz", en: "Our Team" },
+  team: { tr: "Kadromuz", en: "Our Team" },
+  "misyon-vizyon-degerler": { tr: "Misyon, Vizyon & Değerler", en: "Mission, Vision & Values" },
+  "mission-vision-values": { tr: "Misyon, Vizyon & Değerler", en: "Mission, Vision & Values" },
+  "organizasyon-semasi": { tr: "Organizasyon Şeması", en: "Organization Chart" },
+  "organization-chart": { tr: "Organizasyon Şeması", en: "Organization Chart" },
 };
 
-function formatSlugToLabel(slug: string): string {
+function formatSlugToLabel(slug: string, isEn: boolean): string {
   try {
     const decoded = decodeURIComponent(slug).trim().toLowerCase();
     if (ROUTE_LABELS[decoded]) {
-      return ROUTE_LABELS[decoded];
+      return isEn ? ROUTE_LABELS[decoded].en : ROUTE_LABELS[decoded].tr;
     }
     return decoded
       .replace(/[-_]+/g, " ")
       .split(" ")
       .filter(Boolean)
-      .map((word) => word.charAt(0).toLocaleUpperCase("tr-TR") + word.slice(1))
+      .map((word) => word.charAt(0).toLocaleUpperCase(isEn ? "en-US" : "tr-TR") + word.slice(1))
       .join(" ");
   } catch {
     return slug;
@@ -33,35 +45,41 @@ function formatSlugToLabel(slug: string): string {
 
 export function Breadcrumbs({ items, className = "" }: { items?: BreadcrumbItem[]; className?: string }) {
   const pathname = usePathname();
+  const rawPaths = pathname ? pathname.split("/").filter(Boolean) : [];
+  const isEn = rawPaths[0] === "en";
+  const paths = isEn ? rawPaths.slice(1) : rawPaths;
   
   // Eğer dışarıdan liste gelmezse current path'ten üret
   const generateBreadcrumbs = (): BreadcrumbItem[] => {
-    const paths = pathname.split("/").filter(Boolean);
     return paths.map((path, index) => {
-      const href = `/${paths.slice(0, index + 1).join("/")}`;
-      const label = formatSlugToLabel(path);
+      const segmentPrefix = isEn ? "/en/" : "/";
+      const href = `${segmentPrefix}${paths.slice(0, index + 1).join("/")}`;
+      const label = formatSlugToLabel(path, isEn);
       return { label, href, active: index === paths.length - 1 };
     });
   };
 
   const breadcrumbs = items || generateBreadcrumbs();
 
-  if (pathname === "/") return null;
+  if (pathname === "/" || pathname === "/en" || !paths.length) return null;
+
+  const homeHref = isEn ? "/en" : "/";
+  const homeLabel = isEn ? "Home" : "Ana Sayfa";
 
   return (
     <>
       <JsonLd data={breadcrumbListJsonLd(breadcrumbs)} />
-      <nav aria-label="Breadcrumb" className={`flex items-center text-sm text-muted-foreground ${className}`}>
+      <nav aria-label={isEn ? "Breadcrumb" : "Ekmek Kırıntısı"} className={`flex items-center text-sm text-muted-foreground ${className}`}>
       <ol className="flex items-center gap-2 flex-wrap">
         <li>
           <Link 
-            href="/" 
+            href={homeHref} 
             prefetch={false}
             className="flex items-center hover:text-primary transition-colors gap-1"
-            title="Ana Sayfa"
+            title={homeLabel}
           >
             <RiHome4Line size={16} />
-            <span className="sr-only">Ana Sayfa</span>
+            <span className="sr-only">{homeLabel}</span>
           </Link>
         </li>
         

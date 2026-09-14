@@ -4,7 +4,8 @@ import { SanityImage } from "@/components/ui/SanityImage";
 import { RichText } from "@/components/ui/RichText";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { SanityImage as SanityImageType } from "@/types";
+import { SanityImage as SanityImageType, Locale } from "@/types";
+import { getDictionary } from "@/lib/i18n";
 import type { PortableTextBlock } from "@portabletext/react";
 
 interface AboutSectionProps {
@@ -14,6 +15,7 @@ interface AboutSectionProps {
   image?: SanityImageType;
   ctaLabel?: string;
   ctaLink?: string;
+  locale?: Locale;
 }
 
 export function AboutSection({
@@ -23,11 +25,13 @@ export function AboutSection({
   image,
   ctaLabel,
   ctaLink,
+  locale = "tr",
 }: AboutSectionProps) {
-  // Graceful fallback values
-  const displayTitle = title || "Hakkımızda";
-  const displayCtaLabel = ctaLabel || "Devamını Oku";
-  const displayCtaLink = ctaLink || "/hakkimizda";
+  const dict = getDictionary(locale);
+  const displayTitle = title || dict.nav.about;
+  const displayCtaLabel = ctaLabel || dict.common.readMore;
+  const defaultHref = locale === "en" ? "/en/about" : "/hakkimizda";
+  const displayCtaLink = ctaLink || defaultHref;
 
   return (
     <section className="py-20 md:py-28 overflow-hidden bg-background">
@@ -59,7 +63,6 @@ export function AboutSection({
           {image && (
             <div className="lg:col-span-5 relative">
               <FadeIn direction="left" delay={0.3} className="relative">
-                {/* Decorative Elements for premium look */}
                 <div className="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-primary/20 to-transparent blur-2xl z-0" />
                 <div className="relative aspect-[4/3] sm:aspect-[3/2] lg:aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl z-10 border bg-card">
                   <SanityImage

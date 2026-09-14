@@ -25,6 +25,7 @@ const collectionConfig: Record<string, CollectionConfig> = {
   blogPost: { detailPrefix: "blog:detail", listTag: "blog:list" },
   service: { detailPrefix: "service:detail", listTag: "service:list" },
   project: { detailPrefix: "project:detail", listTag: "project:list" },
+  staffMember: { detailPrefix: "staff:detail", listTag: "staff:list" },
 };
 
 const singletonTags: Record<string, string> = {
@@ -57,18 +58,36 @@ const sitemapPageTypes = new Set([
 
 // Doküman türleri: kendi detay sayfası yok, sadece bir hub sayfasında liste olarak gösterilir.
 const listOnlyTags: Record<string, string> = {
-  staffMember: "staff:list",
   galleryItem: "gallery:list",
 };
 
-function readSlug(value: unknown): string | undefined {
-  if (typeof value === "string" && value.length > 0) return value;
-  if (typeof value !== "object" || value === null) return undefined;
+function readSlugs(value: unknown): string[] {
+  if (!value) return [];
+  if (typeof value === "string" && value.length > 0) return [value];
+  if (typeof value !== "object") return [];
 
-  const current = (value as { current?: unknown }).current;
-  return typeof current === "string" && current.length > 0
-    ? current
-    : undefined;
+  const results = new Set<string>();
+  const obj = value as Record<string, unknown>;
+
+  // Format 1: { current: "..." }
+  if (typeof obj.current === "string" && obj.current.length > 0) {
+    results.add(obj.current);
+  }
+
+  // Format 2: LocalizedSlug { tr: { current: "..." }, en: { current: "..." } } or { tr: "...", en: "..." }
+  for (const key of Object.keys(obj)) {
+    const nested = obj[key];
+    if (typeof nested === "string" && nested.length > 0) {
+      results.add(nested);
+    } else if (nested && typeof nested === "object") {
+      const nestedCurrent = (nested as { current?: unknown }).current;
+      if (typeof nestedCurrent === "string" && nestedCurrent.length > 0) {
+        results.add(nestedCurrent);
+      }
+    }
+  }
+
+  return [...results];
 }
 
 function readOperation(value: unknown): WebhookOperation | undefined {
@@ -83,8 +102,8 @@ function getRevalidationTags(
   payload: WebhookPayload
 ): string[] {
   const tags = new Set<string>();
-  const currentSlug = readSlug(payload.slug);
-  const previousSlug = readSlug(payload.previousSlug);
+  const currentSlugs = readSlugs(payload.slug);
+  const previousSlugs = readSlugs(payload.previousSlug);
   const categoryId =
     typeof payload.categoryId === "string" ? payload.categoryId : undefined;
   const previousCategoryId =
@@ -102,8 +121,8 @@ function getRevalidationTags(
 
   const collection = collectionConfig[documentType];
   if (collection) {
-    if (currentSlug) tags.add(`${collection.detailPrefix}:${currentSlug}`);
-    if (previousSlug) tags.add(`${collection.detailPrefix}:${previousSlug}`);
+    for (const slug of currentSlugs) tags.add(`${collection.detailPrefix}:${slug}`);
+    for (const slug of previousSlugs) tags.add(`${collection.detailPrefix}:${slug}`);
 
     if (inventoryChanged || affectsList) {
       tags.add(collection.listTag);

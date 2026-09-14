@@ -10,8 +10,8 @@ import {
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { RiMailLine, RiPhoneLine, RiMapPinLine } from "react-icons/ri";
-
 import { SiteSettings, Navigation } from "@/types";
+import { Locale, getDictionary } from "@/lib/i18n";
 
 type NavItem = {
   label: string;
@@ -39,7 +39,16 @@ function resolveHref(item: NavItem): string {
   return item.href || "#";
 }
 
-export function Footer({ settings, navigation }: { settings: SiteSettings; navigation: Navigation }) {
+export function Footer({
+  settings,
+  navigation,
+  locale = "tr",
+}: {
+  settings?: SiteSettings;
+  navigation?: Navigation;
+  locale?: Locale;
+}) {
+  const dict = getDictionary(locale);
   const footerLinks: NavItem[] = navigation?.footerLinks || [];
   const socialLinks: SocialLink[] = (settings?.socialLinks || []).filter((s: SocialLink) => s.url);
   const contact = settings?.contactInfo;
@@ -87,7 +96,7 @@ export function Footer({ settings, navigation }: { settings: SiteSettings; navig
           {/* Footer Linkleri */}
           {footerLinks.length > 0 && (
             <div className="space-y-4">
-              <h3 className="font-bold text-sm uppercase tracking-wider">Hızlı Linkler</h3>
+              <h3 className="font-bold text-sm uppercase tracking-wider">{dict.footer.quickLinks}</h3>
               <nav className="space-y-2">
                 {footerLinks.map((item, i) => (
                   <Link
@@ -134,7 +143,7 @@ export function Footer({ settings, navigation }: { settings: SiteSettings; navig
         {/* Alt Bar */}
         <div className="mt-12 border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground w-full text-center sm:text-left">
-            © {currentYear} {settings?.siteName}. Tüm hakları saklıdır.
+            © {currentYear} {settings?.siteName}. {dict.footer.rights}
           </p>
         </div>
       </div>

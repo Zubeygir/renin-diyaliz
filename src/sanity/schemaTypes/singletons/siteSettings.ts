@@ -5,8 +5,16 @@ export const siteSettingsType = defineType({
   title: "Site Ayarları",
   type: "document",
   fields: [
-    defineField({ name: "siteName", title: "Site Adı", type: "string", validation: (Rule) => Rule.required() }),
-    defineField({ name: "siteTagline", title: "Slogan", type: "string" }),
+    defineField({ name: "siteName", title: "Site Adı", type: "string", validation: (Rule) => Rule.required(), initialValue: "Renin Diyaliz" }),
+    defineField({
+      name: "siteTagline",
+      title: "Slogan",
+      type: "localizedString",
+      initialValue: {
+        tr: "Diyaliz Merkezi",
+        en: "Dialysis Center",
+      },
+    }),
     defineField({
       name: "logo",
       title: "Logo",
@@ -29,8 +37,8 @@ export const siteSettingsType = defineType({
       title: "Varsayılan SEO",
       type: "object",
       fields: [
-        defineField({ name: "metaTitle", title: "Meta Başlık", type: "string", validation: (Rule) => Rule.max(60) }),
-        defineField({ name: "metaDescription", title: "Meta Açıklama", type: "text", rows: 3, validation: (Rule) => Rule.max(160) }),
+        defineField({ name: "metaTitle", title: "Meta Başlık", type: "string", validation: (Rule) => Rule.max(60), initialValue: "Renin Diyaliz Merkezi" }),
+        defineField({ name: "metaDescription", title: "Meta Açıklama", type: "text", rows: 3, validation: (Rule) => Rule.max(160), initialValue: "Renin Diyaliz Merkezi resmi web sitesi." }),
       ],
     }),
     defineField({
@@ -38,9 +46,17 @@ export const siteSettingsType = defineType({
       title: "İletişim Bilgileri",
       type: "object",
       fields: [
-        defineField({ name: "phone", title: "Telefon", type: "string" }),
-        defineField({ name: "email", title: "E-posta", type: "string" }),
-        defineField({ name: "address", title: "Adres", type: "text", rows: 3 }),
+        defineField({ name: "phone", title: "Telefon", type: "string", initialValue: "0212 222 22 22" }),
+        defineField({ name: "email", title: "E-posta", type: "string", initialValue: "info@renindiyaliz.com" }),
+        defineField({
+          name: "address",
+          title: "Adres",
+          type: "localizedText",
+          initialValue: {
+            tr: "Halil Rıfat Paşa Mah. Arel Sk. No:4, Şişli / İstanbul",
+            en: "Halil Rifat Pasa Mah. Arel Sk. No:4, Sisli / Istanbul",
+          },
+        }),
         defineField({
           name: "whatsappNumber",
           title: "WhatsApp Numarası",

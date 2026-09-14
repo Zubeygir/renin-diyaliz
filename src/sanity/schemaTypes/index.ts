@@ -1,6 +1,10 @@
 import { seoType } from "./objects/seo";
 import { socialLinkType } from "./objects/socialLink";
 import { customHtmlType } from "./objects/customHtml";
+import { localizedStringType } from "./objects/localizedString";
+import { localizedTextType } from "./objects/localizedText";
+import { localizedSlugType } from "./objects/localizedSlug";
+import { localizedPortableTextType } from "./objects/localizedPortableText";
 import { siteSettingsType } from "./singletons/siteSettings";
 import { navigationType } from "./singletons/navigation";
 import { homePageType } from "./singletons/homePage";
@@ -25,6 +29,10 @@ export const schemaTypes = [
   seoType,
   socialLinkType,
   customHtmlType,
+  localizedStringType,
+  localizedTextType,
+  localizedSlugType,
+  localizedPortableTextType,
   // Singletons
   siteSettingsType,
   navigationType,
