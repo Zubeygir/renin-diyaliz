@@ -41,7 +41,7 @@ Footer (statik):
   - Çerez Politikası
   - Son güncelleme tarihi + editör iletişim bilgisi
   - Şirket unvanı: Nefro-Med Sağlık Hizmetleri San. ve Tic. A.Ş.
-  - "Developed by Yaytech Studio" credit linki
+  - "Zübeyir Ali Demir & Yaytech Studio ortak çalışmasıdır." credit linki
   - Sosyal medya ikonları (siteSettings'te girilirse gösterilir)
 ```
 
