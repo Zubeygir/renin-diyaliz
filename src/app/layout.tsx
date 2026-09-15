@@ -8,12 +8,12 @@ import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/components/seo/Json
 import NextTopLoader from "nextjs-toploader";
 
 const publicSans = Public_Sans({
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   variable: "--font-sans",
 });
 
 const schibstedGrotesk = Schibsted_Grotesk({
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   variable: "--font-heading",
 });
 

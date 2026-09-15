@@ -109,7 +109,7 @@ export const homePageQuery = groq`*[_type == "homePage"][0] {
   },
   "serviceAreaTitle": coalesce(serviceAreaTitle[$locale], serviceAreaTitle.tr, serviceAreaTitle),
   "serviceAreaSubtitle": coalesce(serviceAreaSubtitle[$locale], serviceAreaSubtitle.tr, serviceAreaSubtitle),
-  serviceAreaImage ${imageFields},
+  serviceAreaImage { asset->{ _id, url, mimeType } },
   "partnersTitle": coalesce(partnersTitle[$locale], partnersTitle.tr, partnersTitle),
   "blogTitle": coalesce(blogTitle[$locale], blogTitle.tr, blogTitle),
   "blogSubtitle": coalesce(blogSubtitle[$locale], blogSubtitle.tr, blogSubtitle),

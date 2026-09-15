@@ -42,10 +42,10 @@ Mevcut kod boilerplate'in jenerik 5 section'ını kullanıyor (Hero, Hakkımızd
 
 - [x] Header / Footer
 - [x] Ana Sayfa
-- [ ] Hakkımızda
-- [ ] Misyon / Vizyon / Değerler / Kalite Politikası
-- [ ] Organizasyon Şeması
-- [ ] Kadromuz
+- [x] Hakkımızda
+- [x] Misyon / Vizyon / Değerler / Kalite Politikası
+- [x] Organizasyon Şeması
+- [x] Kadromuz
 - [ ] Hizmetler
 - [ ] Galeri
 - [ ] Blog

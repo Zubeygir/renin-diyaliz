@@ -57,7 +57,7 @@ export default async function MissionVisionPage({
         backgroundImage={data?.heroImage}
       />
 
-      <div className="container mx-auto px-4 max-w-3xl flex flex-col gap-12 md:gap-16">
+      <div className="container mx-auto px-4 max-w-4xl flex flex-col gap-12 md:gap-16">
         {(data?.missionText || data?.visionText) && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
             {data?.missionText && (
@@ -65,7 +65,7 @@ export default async function MissionVisionPage({
                 <h2 className="text-2xl font-bold tracking-tight mb-3">
                   {data.missionTitle || (locale === "en" ? "Our Mission" : "Misyonumuz")}
                 </h2>
-                <p className="text-muted-foreground leading-relaxed whitespace-pre-line">{data.missionText}</p>
+                <p className="text-lg text-foreground/80 leading-relaxed whitespace-pre-line">{data.missionText}</p>
               </FadeIn>
             )}
             {data?.visionText && (
@@ -73,7 +73,7 @@ export default async function MissionVisionPage({
                 <h2 className="text-2xl font-bold tracking-tight mb-3">
                   {data.visionTitle || (locale === "en" ? "Our Vision" : "Vizyonumuz")}
                 </h2>
-                <p className="text-muted-foreground leading-relaxed whitespace-pre-line">{data.visionText}</p>
+                <p className="text-lg text-foreground/80 leading-relaxed whitespace-pre-line">{data.visionText}</p>
               </FadeIn>
             )}
           </div>
@@ -100,7 +100,10 @@ export default async function MissionVisionPage({
             <h2 className="text-2xl font-bold tracking-tight mb-4">
               {data.qualityPolicyTitle || (locale === "en" ? "Quality Policy" : "Kalite Politikamız")}
             </h2>
-            <RichText value={data.qualityPolicyText} />
+            <RichText
+              value={data.qualityPolicyText}
+              className="[&_ul]:sm:columns-2 [&_ul]:sm:gap-x-10 [&_li]:break-inside-avoid"
+            />
           </FadeIn>
         )}
       </div>

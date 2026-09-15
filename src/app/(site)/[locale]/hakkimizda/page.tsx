@@ -73,6 +73,14 @@ export default async function AboutPage({
               </h2>
             </FadeIn>
 
+            {data?.pageSubtitle && (
+              <FadeIn delay={0.15}>
+                <p className="text-lg md:text-xl text-foreground/80 leading-relaxed mb-6">
+                  {data.pageSubtitle}
+                </p>
+              </FadeIn>
+            )}
+
             <FadeIn delay={0.2}>
               <RichText value={data?.body} />
             </FadeIn>
@@ -81,8 +89,9 @@ export default async function AboutPage({
           {/* Sağ Kolon: Görsel */}
           <div className="lg:col-span-5 lg:sticky lg:top-24">
             {data?.mainImage && (
-              <FadeIn direction="left" delay={0.3}>
-                <div className="relative aspect-[4/3] sm:aspect-[3/2] lg:aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl">
+              <FadeIn direction="left" delay={0.3} className="relative max-w-sm mx-auto lg:max-w-none">
+                <div className="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-primary/20 to-transparent blur-2xl z-0" />
+                <div className="relative aspect-[4/3] sm:aspect-[3/2] lg:aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl z-10 border bg-card">
                   <SanityImage
                     image={data.mainImage}
                     fill

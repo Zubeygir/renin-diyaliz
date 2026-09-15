@@ -118,15 +118,17 @@ export default async function StaffDetailPage({ params }: Props) {
             </div>
 
             <div className="flex flex-col text-center sm:text-left justify-center flex-1">
-              <span className="text-xs font-semibold uppercase tracking-wider text-primary mb-1">
-                {dict.staff.groups[member.group]}
-              </span>
               <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">
                 {member.name}
               </h1>
-              <p className="text-base text-muted-foreground font-medium">
-                {member.role}
-              </p>
+              <div className="flex flex-col items-center sm:items-start gap-2 sm:flex-row sm:gap-3">
+                <p className="text-base text-muted-foreground font-medium">
+                  {member.role}
+                </p>
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary">
+                  {dict.staff.groups[member.group]}
+                </span>
+              </div>
             </div>
           </div>
         </FadeIn>
@@ -154,9 +156,10 @@ export default async function StaffDetailPage({ params }: Props) {
                 <h2 className="text-xl font-bold tracking-tight">
                   {dict.staff.education}
                 </h2>
-                <ul className="space-y-2 border-l-2 border-primary/30 pl-4">
+                <ul className="space-y-2">
                   {member.education!.map((item, i) => (
-                    <li key={i} className="text-sm md:text-base text-foreground/90">
+                    <li key={i} className="flex items-start gap-3 text-sm md:text-base text-foreground/90">
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
                       {item}
                     </li>
                   ))}
@@ -193,9 +196,10 @@ export default async function StaffDetailPage({ params }: Props) {
                 <h2 className="text-xl font-bold tracking-tight">
                   {dict.staff.certificates}
                 </h2>
-                <ul className="space-y-2 border-l-2 border-primary/30 pl-4">
+                <ul className="space-y-2">
                   {member.certificates!.map((cert, i) => (
-                    <li key={i} className="text-sm md:text-base text-foreground/90">
+                    <li key={i} className="flex items-start gap-3 text-sm md:text-base text-foreground/90">
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
                       {cert}
                     </li>
                   ))}

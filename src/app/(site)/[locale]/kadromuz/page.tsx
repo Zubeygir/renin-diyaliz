@@ -130,7 +130,7 @@ export default async function StaffHubPage({
         )}
 
         {pageData?.ctaLabel && pageData?.ctaLink && (
-          <FadeIn className="p-8 md:p-12 rounded-lg bg-muted border text-center max-w-2xl mx-auto">
+          <FadeIn className="p-8 md:p-12 rounded-lg bg-primary/5 border border-primary/20 text-center max-w-2xl mx-auto">
             <p className="text-muted-foreground mb-6">
               {locale === "en" ? "If you would like to join our team, you can submit your application." : "Ekibimize katılmak isterseniz başvurunuzu iletebilirsiniz."}
             </p>

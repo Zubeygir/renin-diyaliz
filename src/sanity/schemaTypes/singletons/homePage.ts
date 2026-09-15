@@ -336,13 +336,12 @@ export const homePageType = defineType({
     }),
     defineField({
       name: "serviceAreaImage",
-      title: "Servis Ağı Görseli (Opsiyonel)",
+      title: "Servis Ağı Görseli / Videosu (Opsiyonel)",
       description:
-        "Gerçek harita animasyonu eklenene kadar gösterilecek statik görsel. Boş bırakılırsa yerine nötr bir görsel alan gösterilir.",
-      type: "image",
+        "Statik görsel veya harita animasyonu videosu (MP4/WebM). Boş bırakılırsa yerine nötr bir görsel alan gösterilir.",
+      type: "file",
       group: "serviceArea",
-      options: { hotspot: true },
-      fields: [defineField({ name: "alt", title: "Alt Metni", type: "string" })],
+      options: { accept: "image/*,video/mp4,video/webm" },
     }),
 
     // Partners Preview Group

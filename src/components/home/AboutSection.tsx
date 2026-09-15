@@ -63,7 +63,7 @@ export function AboutSection({
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4 border-t border-border">
                   {stats.map((stat, i) => (
                     <div key={i} className="space-y-1">
-                      <div className="text-2xl sm:text-3xl font-bold text-primary">
+                      <div className="font-heading text-2xl sm:text-3xl font-bold text-primary">
                         <CountUp value={stat.value} />
                       </div>
                       <div className="text-xs sm:text-sm text-muted-foreground">{stat.label}</div>

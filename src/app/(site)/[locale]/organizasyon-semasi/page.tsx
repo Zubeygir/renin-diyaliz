@@ -58,14 +58,17 @@ export default async function OrgChartPage({
       />
 
       {data?.chartImage?.asset && (
-        <div className="container mx-auto px-4 max-w-4xl">
-          <FadeIn direction="up">
-            <div className="relative aspect-[3/4] sm:aspect-[4/3] w-full rounded-lg overflow-hidden border bg-muted">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <FadeIn direction="up" className="relative">
+            <div className="absolute -inset-8 -z-10 rounded-[2rem] bg-gradient-to-tr from-primary/25 via-primary/10 to-transparent blur-3xl" />
+            <div className="rounded-2xl border bg-accent/40 p-6 sm:p-10">
               <SanityImage
                 image={data.chartImage}
-                fill
-                objectFit="contain"
-                sizes="(max-width: 1024px) 100vw, 800px"
+                width={data.chartImage.asset.metadata?.dimensions?.width || 1200}
+                height={data.chartImage.asset.metadata?.dimensions?.height || 900}
+                sizes="(max-width: 1280px) 100vw, 1100px"
+                className="w-full h-auto rounded-lg"
+                priority
               />
             </div>
           </FadeIn>

@@ -110,7 +110,7 @@ export default async function HomePage({
       <ServiceAreaSection
         title={data?.serviceAreaTitle}
         subtitle={data?.serviceAreaSubtitle}
-        image={data?.serviceAreaImage}
+        media={data?.serviceAreaImage}
       />
 
       {/* 5. Anlaşmalı Kurumlar */}

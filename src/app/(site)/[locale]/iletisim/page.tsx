@@ -177,7 +177,7 @@ export default async function ContactPage({
                       className="flex items-center justify-between p-3 rounded-lg bg-muted/40 border border-border/50 text-sm"
                     >
                       <span className="font-medium text-foreground">{item.days}</span>
-                      <span className="text-muted-foreground font-mono">{item.hours}</span>
+                      <span className="text-muted-foreground">{item.hours}</span>
                     </div>
                   ))}
                 </div>

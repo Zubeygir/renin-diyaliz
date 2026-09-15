@@ -191,7 +191,7 @@ export function Footer({
               <span>Nefro-Med Sağlık Hizmetleri San. ve Tic. A.Ş.</span>
             </div>
             <span className="text-muted-foreground">
-              Zübeyir Ali Demir &amp; Yaytech Studio ortak çalışmasıdır.
+              Web Design by Zübeyir Ali Demir &amp; Yaytech Studio.
             </span>
           </div>
         </div>

@@ -309,7 +309,7 @@ export interface HomePage {
   featuredServices?: Service[];
   serviceAreaTitle?: string;
   serviceAreaSubtitle?: string;
-  serviceAreaImage?: SanityImage;
+  serviceAreaImage?: SanityFile;
   partnersTitle?: string;
   ctaTitle?: string;
   ctaSubtitle?: string;

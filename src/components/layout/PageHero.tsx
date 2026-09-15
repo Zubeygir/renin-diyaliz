@@ -34,7 +34,9 @@ export function PageHero({
           <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
         </div>
       ) : (
-        <div className="absolute inset-0 z-0 bg-gradient-to-r from-primary/10 via-primary/5 to-background" />
+        <div className="absolute inset-0 z-0 bg-background">
+          <div className="absolute top-1/2 right-[-8%] h-[480px] w-[480px] -translate-y-1/2 rounded-full bg-primary/20 blur-[130px]" />
+        </div>
       )}
 
       {/* Content */}
