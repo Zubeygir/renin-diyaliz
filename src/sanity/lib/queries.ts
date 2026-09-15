@@ -43,6 +43,7 @@ export const layoutQuery = groq`{
       subLinks[] {
         "label": coalesce(label[$locale], label.tr, label),
         "href": coalesce(href[$locale], href.tr, href),
+        "description": coalesce(description[$locale], description.tr, description),
         openInNewTab
       }
     },
@@ -56,6 +57,10 @@ export const layoutQuery = groq`{
         openInNewTab
       }
     }
+  },
+  "workingHours": *[_type == "contactPage"][0].workingHours[] {
+    "days": coalesce(days[$locale], days.tr, days),
+    hours
   }
 }`;
 

@@ -65,8 +65,20 @@ export function Header({
   const pathname = usePathname();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const dict = getDictionary(locale);
   const homeUrl = locale === "en" ? "/en" : "/";
+  const isHomepage = pathname === homeUrl;
+  const isTransparent = isHomepage && !scrolled && !menuOpen;
+
+  // Ana sayfada hero video'nun üstünde şeffaf, scroll edilince normal header
+  useEffect(() => {
+    if (!isHomepage) return;
+    const handleScroll = () => setScrolled(window.scrollY > 40);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isHomepage]);
 
   // Sayfa değiştiğinde menüyü kapat
   useEffect(() => {
@@ -103,7 +115,14 @@ export function Header({
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header
+      className={cn(
+        "sticky top-0 z-40 w-full transition-colors duration-300",
+        isTransparent
+          ? "border-b border-transparent bg-transparent"
+          : "border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+      )}
+    >
       <div className="container mx-auto flex h-20 items-center justify-between px-4">
         <Link
           href={homeUrl}
@@ -111,12 +130,12 @@ export function Header({
           onMouseEnter={() => router.prefetch(homeUrl)}
           className="flex items-center group h-full"
         >
-          <div className="relative flex items-center justify-start transition-all duration-200 group-hover:scale-[1.02] active:scale-95 h-full py-4 max-w-[250px] md:max-w-[450px]">
+          <div className="relative flex items-center justify-start transition-all duration-200 group-hover:scale-[1.02] active:scale-95 h-full py-3 max-w-[250px] md:max-w-[450px]">
             {logo ? (
               <SanityImage
                 image={logo}
-                width={800}
-                height={200}
+                width={1194}
+                height={434}
                 fit="max"
                 className="h-full w-auto object-contain object-left"
                 priority
@@ -197,11 +216,16 @@ export function Header({
                           href={resolveHref(sub)}
                           prefetch={false}
                           className={cn(
-                            "text-sm font-medium py-2 transition-colors hover:text-primary",
+                            "flex flex-col gap-0.5 py-2 transition-colors hover:text-primary",
                             isActive(sub) ? "text-primary" : "text-muted-foreground"
                           )}
                         >
-                          {sub.label}
+                          <span className="text-sm font-medium">{sub.label}</span>
+                          {sub.description && (
+                            <span className="text-xs text-muted-foreground leading-snug">
+                              {sub.description}
+                            </span>
+                          )}
                         </Link>
                       ))}
                     </div>
@@ -270,25 +294,30 @@ function DesktopNavItem({ item, active }: { item: NavItem; active: boolean }) {
 
   if (!item.subLinks || item.subLinks.length === 0) {
     return (
-      <Link
-        href={resolveHref(item)}
-        prefetch={false}
-        onMouseEnter={() => router.prefetch(resolveHref(item))}
-        target={item.openInNewTab ? "_blank" : undefined}
-        rel={item.openInNewTab ? "noopener noreferrer" : undefined}
-        className={cn(
-          "text-sm font-medium transition-colors hover:text-primary",
-          reallyActive ? "text-primary font-semibold" : "text-foreground/70"
+      <div className="relative h-20 flex items-center">
+        <Link
+          href={resolveHref(item)}
+          prefetch={false}
+          onMouseEnter={() => router.prefetch(resolveHref(item))}
+          target={item.openInNewTab ? "_blank" : undefined}
+          rel={item.openInNewTab ? "noopener noreferrer" : undefined}
+          className={cn(
+            "text-sm font-medium transition-colors hover:text-primary",
+            reallyActive ? "text-primary font-semibold" : "text-foreground/70"
+          )}
+        >
+          {item.label}
+        </Link>
+        {reallyActive && (
+          <span className="absolute inset-x-0 bottom-0 h-[2px] rounded-full bg-primary" />
         )}
-      >
-        {item.label}
-      </Link>
+      </div>
     );
   }
 
   return (
     <div
-      className="relative group"
+      className="relative h-20 flex items-center group"
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
     >
@@ -306,6 +335,9 @@ function DesktopNavItem({ item, active }: { item: NavItem; active: boolean }) {
           <RiArrowDownSLine size={16} />
         </motion.span>
       </Link>
+      {reallyActive && (
+        <span className="absolute inset-x-0 bottom-0 h-[2px] rounded-full bg-primary" />
+      )}
 
       <AnimatePresence>
         {isOpen && (
@@ -314,9 +346,9 @@ function DesktopNavItem({ item, active }: { item: NavItem; active: boolean }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="absolute left-0 top-full pt-4 min-w-[200px]"
+            className="absolute left-0 top-full min-w-[340px]"
           >
-            <div className="bg-popover border rounded-xl shadow-xl p-2 overflow-hidden">
+            <div className="bg-popover border border-border/60 rounded-lg shadow-md p-2 overflow-hidden">
               {item.subLinks.map((sub, j) => {
                 const subActive = pathname === resolveHref(sub);
                 return (
@@ -327,12 +359,21 @@ function DesktopNavItem({ item, active }: { item: NavItem; active: boolean }) {
                     onMouseEnter={() => router.prefetch(resolveHref(sub))}
                     target={sub.openInNewTab ? "_blank" : undefined}
                     rel={sub.openInNewTab ? "noopener noreferrer" : undefined}
-                    className={cn(
-                      "flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-muted transition-colors",
-                      subActive ? "text-primary bg-primary/5" : "text-foreground/70"
-                    )}
+                    className="group/sub flex flex-col gap-0.5 px-4 py-3"
                   >
-                    {sub.label}
+                    <span
+                      className={cn(
+                        "text-sm font-semibold transition-colors",
+                        subActive ? "text-primary" : "text-foreground group-hover/sub:text-primary"
+                      )}
+                    >
+                      {sub.label}
+                    </span>
+                    {sub.description && (
+                      <span className="text-xs text-muted-foreground leading-snug">
+                        {sub.description}
+                      </span>
+                    )}
                   </Link>
                 );
               })}

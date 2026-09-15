@@ -72,34 +72,40 @@ export function LanguageSwitcher({
 
   return (
     <div
-      className={cn(
-        "inline-flex items-center rounded-md border border-border/70 bg-muted/40 p-0.5 text-xs font-semibold select-none",
-        className
-      )}
+      className={cn("inline-flex items-center gap-1.5 text-xs select-none", className)}
       aria-label="Dil seçimi / Language selection"
     >
-      <Link
-        href={getTargetUrl("tr")}
-        className={cn(
-          "px-2 py-1 rounded transition-all leading-none",
-          currentLocale === "tr"
-            ? "bg-primary text-primary-foreground shadow-xs font-bold"
-            : "text-muted-foreground hover:text-foreground"
-        )}
-      >
+      <LanguageLink locale="tr" active={currentLocale === "tr"} href={getTargetUrl("tr")}>
         TR
-      </Link>
-      <Link
-        href={getTargetUrl("en")}
-        className={cn(
-          "px-2 py-1 rounded transition-all leading-none",
-          currentLocale === "en"
-            ? "bg-primary text-primary-foreground shadow-xs font-bold"
-            : "text-muted-foreground hover:text-foreground"
-        )}
-      >
+      </LanguageLink>
+      <span className="text-border">/</span>
+      <LanguageLink locale="en" active={currentLocale === "en"} href={getTargetUrl("en")}>
         EN
-      </Link>
+      </LanguageLink>
     </div>
+  );
+}
+
+function LanguageLink({
+  href,
+  active,
+  children,
+}: {
+  locale: Locale;
+  href: string;
+  active: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "relative py-1 transition-colors leading-none",
+        active ? "font-semibold text-foreground" : "text-foreground/55 hover:text-foreground"
+      )}
+    >
+      {children}
+      {active && <span className="absolute inset-x-0 -bottom-0.5 h-[1.5px] rounded-full bg-primary" />}
+    </Link>
   );
 }

@@ -5,7 +5,7 @@ import { layoutQuery } from "@/sanity/lib/queries";
 import { urlForImage } from "@/sanity/lib/image";
 import { getSiteUrl } from "./utils";
 import { Locale } from "./i18n";
-import { SanityImage, SiteSettings, Navigation, SeoSettings } from "@/types";
+import { SanityImage, SiteSettings, Navigation, SeoSettings, WorkingHourItem } from "@/types";
 import { toPlainText, type PortableTextBlock } from "@portabletext/react";
 
 type BuildMetadataParams = {
@@ -28,11 +28,12 @@ export function portableTextToPlainText(value?: PortableTextBlock[], maxLength =
 export interface LayoutData {
   settings: SiteSettings;
   navigation: Navigation;
+  workingHours?: WorkingHourItem[];
 }
 
 export const getLayoutData = cache(
   (locale: Locale = "tr"): Promise<LayoutData> =>
-    cachedFetch<LayoutData>(layoutQuery, { locale }, { next: { tags: ["layout"] } })
+    cachedFetch<LayoutData>(layoutQuery, { locale }, { next: { tags: ["layout", "contact"] } })
 );
 
 export async function buildMetadata(

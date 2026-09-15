@@ -51,7 +51,12 @@ export default async function SiteLayout({
         locale={locale}
       />
       <main id="main">{children}</main>
-      <Footer settings={data?.settings} navigation={data?.navigation} locale={locale} />
+      <Footer
+        settings={data?.settings}
+        navigation={data?.navigation}
+        workingHours={data?.workingHours}
+        locale={locale}
+      />
       {contact?.whatsappNumber && (
         <WhatsAppButton number={contact.whatsappNumber} />
       )}

@@ -100,6 +100,7 @@ export interface SiteSettings {
 export interface NavItem {
   label: string;
   href: string;
+  description?: string;
   openInNewTab?: boolean;
   subLinks?: NavItem[];
 }
