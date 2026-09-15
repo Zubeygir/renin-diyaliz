@@ -41,13 +41,13 @@ export function ServicesSection({
         {services && services.length > 0 ? (
           <div className="space-y-12">
             <AnimateGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {services.slice(0, 3).map((service: Service) => {
+              {services.slice(0, 3).map((service: Service, i) => {
                 const serviceHref = locale === "en"
                   ? `/en/services/${service.slug?.current}`
                   : `/hizmetler/${service.slug?.current}`;
 
                 return (
-                  <StaggerItem key={service.slug?.current}>
+                  <StaggerItem key={service.slug?.current ?? i}>
                     <Link href={serviceHref} prefetch={false} className="group block">
                       <article className="border rounded-xl overflow-hidden bg-card hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-1">
                         {service.mainImage && (

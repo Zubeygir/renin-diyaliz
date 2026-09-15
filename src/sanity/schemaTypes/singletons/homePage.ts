@@ -8,8 +8,10 @@ export const homePageType = defineType({
     { name: "hero", title: "Hero Bölümü" },
     { name: "about", title: "Hakkımızda Önizleme" },
     { name: "services", title: "Hizmetler Önizleme" },
-    { name: "projects", title: "Projeler Önizleme" },
+    { name: "serviceArea", title: "Servis Ağı / Kapsama Alanı" },
+    { name: "partners", title: "Anlaşmalı Kurumlar" },
     { name: "blog", title: "Blog Önizleme" },
+    { name: "contactCta", title: "İletişim Kapanış Bloğu" },
     { name: "seo", title: "SEO Ayarları" },
   ],
   fields: [
@@ -311,16 +313,49 @@ export const homePageType = defineType({
       of: [{ type: "reference", to: [{ type: "service" }] }],
     }),
 
-    // Projects Preview Group
-    defineField({ name: "projectsTitle", title: "Projeler Bölüm Başlığı", type: "localizedString", group: "projects" }),
-    defineField({ name: "projectsSubtitle", title: "Projeler Bölüm Alt Başlığı", type: "localizedText", group: "projects" }),
+    // Service Area / Coverage Preview Group
     defineField({
-      name: "featuredProjects",
-      title: "Öne Çıkan Projeler",
-      description: "Ana sayfada gösterilecek projeleri seçin ve sıralayın.",
-      type: "array",
-      group: "projects",
-      of: [{ type: "reference", to: [{ type: "project" }] }],
+      name: "serviceAreaTitle",
+      title: "Servis Ağı Bölüm Başlığı",
+      type: "localizedString",
+      group: "serviceArea",
+      initialValue: {
+        tr: "Servis Ağımız",
+        en: "Our Service Network",
+      },
+    }),
+    defineField({
+      name: "serviceAreaSubtitle",
+      title: "Servis Ağı Bölüm Alt Başlığı",
+      type: "localizedText",
+      group: "serviceArea",
+      initialValue: {
+        tr: "Hastalarımızın evlerinden merkezimize güvenli ulaşımı için hizmet bölgelerimiz.",
+        en: "Our service regions for the safe transport of our patients to and from our center.",
+      },
+    }),
+    defineField({
+      name: "serviceAreaImage",
+      title: "Servis Ağı Görseli (Opsiyonel)",
+      description:
+        "Gerçek harita animasyonu eklenene kadar gösterilecek statik görsel. Boş bırakılırsa yerine nötr bir görsel alan gösterilir.",
+      type: "image",
+      group: "serviceArea",
+      options: { hotspot: true },
+      fields: [defineField({ name: "alt", title: "Alt Metni", type: "string" })],
+    }),
+
+    // Partners Preview Group
+    defineField({
+      name: "partnersTitle",
+      title: "Anlaşmalı Kurumlar Bölüm Başlığı",
+      description: "İnce bir logo şeridinin üstünde gösterilen kısa etiket.",
+      type: "localizedString",
+      group: "partners",
+      initialValue: {
+        tr: "Anlaşmalı Kurumlarımız",
+        en: "Our Partner Institutions",
+      },
     }),
 
     // Blog Preview Group
@@ -351,6 +386,38 @@ export const homePageType = defineType({
       type: "array",
       group: "blog",
       of: [{ type: "reference", to: [{ type: "blogPost" }] }],
+    }),
+
+    // Contact CTA Group
+    defineField({
+      name: "ctaTitle",
+      title: "Kapanış Başlığı",
+      type: "localizedString",
+      group: "contactCta",
+      initialValue: {
+        tr: "Sorularınız İçin Bize Ulaşın",
+        en: "Get in Touch With Us",
+      },
+    }),
+    defineField({
+      name: "ctaSubtitle",
+      title: "Kapanış Alt Metni",
+      type: "localizedText",
+      group: "contactCta",
+      initialValue: {
+        tr: "Randevu ve bilgi talepleriniz için merkezimizle iletişime geçebilirsiniz.",
+        en: "You can contact our center for appointments and information requests.",
+      },
+    }),
+    defineField({
+      name: "ctaButtonLabel",
+      title: "Buton Metni",
+      type: "localizedString",
+      group: "contactCta",
+      initialValue: {
+        tr: "İletişime Geçin",
+        en: "Contact Us",
+      },
     }),
 
     // SEO Group

@@ -25,6 +25,7 @@ import { serviceType } from "./documents/service";
 import { projectType } from "./documents/project";
 import { staffMemberType } from "./documents/staffMember";
 import { galleryItemType } from "./documents/galleryItem";
+import { partnerType } from "./documents/partner";
 
 export const schemaTypes = [
   // Objects
@@ -57,4 +58,5 @@ export const schemaTypes = [
   projectType,
   staffMemberType,
   galleryItemType,
+  partnerType,
 ];

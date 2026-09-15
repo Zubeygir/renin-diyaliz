@@ -107,13 +107,10 @@ export const homePageQuery = groq`*[_type == "homePage"][0] {
     "slug": coalesce(slug[$locale].current, slug.tr.current, slug.current),
     mainImage ${imageFields}
   },
-  "projectsTitle": coalesce(projectsTitle[$locale], projectsTitle.tr, projectsTitle),
-  "projectsSubtitle": coalesce(projectsSubtitle[$locale], projectsSubtitle.tr, projectsSubtitle),
-  featuredProjects[]-> {
-    "title": coalesce(title[$locale], title.tr, title),
-    "slug": coalesce(slug[$locale].current, slug.tr.current, slug.current),
-    mainImage ${imageFields}
-  },
+  "serviceAreaTitle": coalesce(serviceAreaTitle[$locale], serviceAreaTitle.tr, serviceAreaTitle),
+  "serviceAreaSubtitle": coalesce(serviceAreaSubtitle[$locale], serviceAreaSubtitle.tr, serviceAreaSubtitle),
+  serviceAreaImage ${imageFields},
+  "partnersTitle": coalesce(partnersTitle[$locale], partnersTitle.tr, partnersTitle),
   "blogTitle": coalesce(blogTitle[$locale], blogTitle.tr, blogTitle),
   "blogSubtitle": coalesce(blogSubtitle[$locale], blogSubtitle.tr, blogSubtitle),
   featuredPosts[]-> {
@@ -127,6 +124,9 @@ export const homePageQuery = groq`*[_type == "homePage"][0] {
     },
     mainImage ${imageFields}
   },
+  "ctaTitle": coalesce(ctaTitle[$locale], ctaTitle.tr, ctaTitle),
+  "ctaSubtitle": coalesce(ctaSubtitle[$locale], ctaSubtitle.tr, ctaSubtitle),
+  "ctaButtonLabel": coalesce(ctaButtonLabel[$locale], ctaButtonLabel.tr, ctaButtonLabel),
   seo
 }`;
 
@@ -176,6 +176,13 @@ export const staffPageQuery = groq`*[_type == "staffPage"][0] {
   "ctaLabel": coalesce(ctaLabel[$locale], ctaLabel.tr, ctaLabel),
   "ctaLink": coalesce(ctaLink[$locale], ctaLink.tr, ctaLink),
   seo
+}`;
+
+export const partnerListQuery = groq`*[_type == "partner"] | order(order asc) {
+  _id,
+  name,
+  logo ${imageFields},
+  link
 }`;
 
 export const staffPreviewQuery = groq`*[_type == "staffMember"] | order(order asc) [0...4] {
@@ -439,12 +446,6 @@ export const serviceBySlugQuery = groq`*[_type == "service" && (slug[$locale].cu
 // ─── Projeler ──────────────────────────────────────────────────────────────────
 
 export const projectListQuery = groq`*[_type == "project"] | order(_createdAt asc) {
-  "title": coalesce(title[$locale], title.tr, title),
-  "slug": coalesce(slug[$locale].current, slug.tr.current, slug.current),
-  mainImage ${imageFields}
-}`;
-
-export const projectFallbackQuery = groq`*[_type == "project"] | order(_createdAt asc)[0...3] {
   "title": coalesce(title[$locale], title.tr, title),
   "slug": coalesce(slug[$locale].current, slug.tr.current, slug.current),
   mainImage ${imageFields}

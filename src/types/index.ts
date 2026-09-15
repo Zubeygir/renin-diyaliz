@@ -224,6 +224,13 @@ export interface StaffPreviewItem {
   photo?: SanityImage;
 }
 
+export interface Partner {
+  _id?: string;
+  name: string;
+  logo?: SanityImage;
+  link?: string;
+}
+
 export interface GalleryPage extends BasePage {
   pageTitle: string;
   pageSubtitle?: string;
@@ -300,9 +307,13 @@ export interface HomePage {
   servicesTitle?: string;
   servicesSubtitle?: string;
   featuredServices?: Service[];
-  projectsTitle?: string;
-  projectsSubtitle?: string;
-  featuredProjects?: Project[];
+  serviceAreaTitle?: string;
+  serviceAreaSubtitle?: string;
+  serviceAreaImage?: SanityImage;
+  partnersTitle?: string;
+  ctaTitle?: string;
+  ctaSubtitle?: string;
+  ctaButtonLabel?: string;
   blogTitle?: string;
   blogSubtitle?: string;
   featuredPosts?: BlogPost[];

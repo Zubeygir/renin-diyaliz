@@ -3,18 +3,20 @@ import { cachedFetch } from "@/sanity/lib/client";
 import {
   homePageQuery,
   serviceFallbackQuery,
-  projectFallbackQuery,
   blogFallbackQuery,
   staffPreviewQuery,
+  partnerListQuery,
 } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
 import { isValidLocale, DEFAULT_LOCALE, Locale } from "@/lib/i18n";
 import { HeroSection } from "@/components/home/HeroSection";
 import { AboutSection } from "@/components/home/AboutSection";
 import { ServicesSection } from "@/components/home/ServicesSection";
-import { ProjectsSection } from "@/components/home/ProjectsSection";
+import { ServiceAreaSection } from "@/components/home/ServiceAreaSection";
+import { PartnersSection } from "@/components/home/PartnersSection";
 import { BlogSection } from "@/components/home/BlogSection";
-import { HomePage as HomePageType, Service, Project, BlogPost, StaffPreviewItem } from "@/types";
+import { ContactCtaSection } from "@/components/home/ContactCtaSection";
+import { HomePage as HomePageType, Service, BlogPost, StaffPreviewItem, Partner } from "@/types";
 
 export async function generateMetadata({
   params,
@@ -56,30 +58,23 @@ export default async function HomePage({
 
   // 2. Determine if fallback queries are needed
   const needsFallbackServices = !data?.featuredServices || data.featuredServices.length === 0;
-  const needsFallbackProjects = !data?.featuredProjects || data.featuredProjects.length === 0;
   const needsFallbackPosts = !data?.featuredPosts || data.featuredPosts.length === 0;
 
   // 3. Fetch fallbacks in parallel if necessary
-  const [fallbackServices, fallbackProjects, fallbackPosts, teamPreview] = await Promise.all([
+  const [fallbackServices, fallbackPosts, teamPreview, partners] = await Promise.all([
     needsFallbackServices
       ? cachedFetch<Service[]>(serviceFallbackQuery, { locale }, { next: { tags: ["service:list"] } })
-      : Promise.resolve([]),
-    needsFallbackProjects
-      ? cachedFetch<Project[]>(projectFallbackQuery, { locale }, { next: { tags: ["project:list"] } })
       : Promise.resolve([]),
     needsFallbackPosts
       ? cachedFetch<BlogPost[]>(blogFallbackQuery, { locale }, { next: { tags: ["blog:list", "blog:categories"] } })
       : Promise.resolve([]),
     cachedFetch<StaffPreviewItem[]>(staffPreviewQuery, { locale }, { next: { tags: ["staff:list"] } }),
+    cachedFetch<Partner[]>(partnerListQuery, { locale }, { next: { tags: ["partner:list"] } }),
   ]);
 
   const servicesToDisplay = data?.featuredServices && data.featuredServices.length > 0
     ? data.featuredServices
     : fallbackServices;
-
-  const projectsToDisplay = data?.featuredProjects && data.featuredProjects.length > 0
-    ? data.featuredProjects
-    : fallbackProjects;
 
   const postsToDisplay = data?.featuredPosts && data.featuredPosts.length > 0
     ? data.featuredPosts
@@ -111,19 +106,29 @@ export default async function HomePage({
         locale={locale}
       />
 
-      {/* 4. Öne Çıkan Projeler */}
-      <ProjectsSection
-        title={data?.projectsTitle}
-        subtitle={data?.projectsSubtitle}
-        projects={projectsToDisplay}
-        locale={locale}
+      {/* 4. Servis Ağı / Kapsama Alanı */}
+      <ServiceAreaSection
+        title={data?.serviceAreaTitle}
+        subtitle={data?.serviceAreaSubtitle}
+        image={data?.serviceAreaImage}
       />
 
-      {/* 5. Son Blog Yazıları */}
+      {/* 5. Anlaşmalı Kurumlar */}
+      <PartnersSection title={data?.partnersTitle} partners={partners} />
+
+      {/* 6. Son Blog Yazıları */}
       <BlogSection
         title={data?.blogTitle}
         subtitle={data?.blogSubtitle}
         posts={postsToDisplay}
+        locale={locale}
+      />
+
+      {/* 7. İletişim CTA */}
+      <ContactCtaSection
+        title={data?.ctaTitle}
+        subtitle={data?.ctaSubtitle}
+        buttonLabel={data?.ctaButtonLabel}
         locale={locale}
       />
     </div>

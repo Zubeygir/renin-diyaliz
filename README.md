@@ -88,6 +88,7 @@ _type in [
   "project",
   "staffMember",
   "galleryItem",
+  "partner",
   "faq"
 ]
 ```

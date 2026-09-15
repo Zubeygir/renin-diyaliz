@@ -41,7 +41,7 @@ Mevcut kod boilerplate'in jenerik 5 section'ını kullanıyor (Hero, Hakkımızd
 ## Durum
 
 - [x] Header / Footer
-- [ ] Ana Sayfa
+- [x] Ana Sayfa
 - [ ] Hakkımızda
 - [ ] Misyon / Vizyon / Değerler / Kalite Politikası
 - [ ] Organizasyon Şeması
