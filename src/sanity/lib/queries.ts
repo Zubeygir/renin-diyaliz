@@ -78,7 +78,18 @@ export const homePageQuery = groq`*[_type == "homePage"][0] {
       "slug": coalesce(slug[$locale].current, slug.tr.current, slug.current)
     }
   },
+  "heroCtaLabel2": coalesce(heroCtaLabel2[$locale], heroCtaLabel2.tr, heroCtaLabel2),
+  heroCtaLink2 {
+    linkType,
+    "manual": coalesce(manual[$locale], manual.tr, manual),
+    internal->{
+      _type,
+      "slug": coalesce(slug[$locale].current, slug.tr.current, slug.current)
+    }
+  },
   heroImage ${imageFields},
+  heroVideo { asset->{ _id, url, mimeType } },
+  heroVideoWebm { asset->{ _id, url, mimeType } },
   "aboutTitle": coalesce(aboutTitle[$locale], aboutTitle.tr, aboutTitle),
   "aboutSubtitle": coalesce(aboutSubtitle[$locale], aboutSubtitle.tr, aboutSubtitle),
   "aboutText": coalesce(aboutText[$locale], aboutText.tr, aboutText),
@@ -165,6 +176,13 @@ export const staffPageQuery = groq`*[_type == "staffPage"][0] {
   "ctaLabel": coalesce(ctaLabel[$locale], ctaLabel.tr, ctaLabel),
   "ctaLink": coalesce(ctaLink[$locale], ctaLink.tr, ctaLink),
   seo
+}`;
+
+export const staffPreviewQuery = groq`*[_type == "staffMember"] | order(order asc) [0...4] {
+  _id,
+  name,
+  "role": coalesce(role[$locale], role.tr, role),
+  photo ${imageFields}
 }`;
 
 export const staffListQuery = groq`*[_type == "staffMember"] | order(group asc, order asc) {

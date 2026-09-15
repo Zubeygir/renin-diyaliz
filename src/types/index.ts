@@ -24,6 +24,15 @@ export interface SanityImage {
   crop?: { top: number; bottom: number; left: number; right: number };
 }
 
+export interface SanityFile {
+  asset?: {
+    _ref?: string;
+    _id?: string;
+    url?: string;
+    mimeType?: string;
+  };
+}
+
 export type Locale = "tr" | "en";
 
 export interface SanitySlug {
@@ -208,6 +217,13 @@ export interface StaffMember {
   seo?: SeoSettings;
 }
 
+export interface StaffPreviewItem {
+  _id?: string;
+  name: string;
+  role?: string;
+  photo?: SanityImage;
+}
+
 export interface GalleryPage extends BasePage {
   pageTitle: string;
   pageSubtitle?: string;
@@ -268,8 +284,12 @@ export interface HomePage {
   heroTitle: string;
   heroSubtitle?: string;
   heroImage?: SanityImage;
+  heroVideo?: SanityFile;
+  heroVideoWebm?: SanityFile;
   heroCtaLabel?: string;
   heroCtaLink?: CtaLink;
+  heroCtaLabel2?: string;
+  heroCtaLink2?: CtaLink;
   aboutTitle?: string;
   aboutSubtitle?: string;
   aboutText?: PortableTextBlock[];

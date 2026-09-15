@@ -117,7 +117,8 @@ export function Header({
   return (
     <header
       className={cn(
-        "sticky top-0 z-40 w-full transition-colors duration-300",
+        "top-0 z-40 w-full transition-colors duration-300",
+        isHomepage ? "fixed" : "sticky",
         isTransparent
           ? "border-b border-transparent bg-transparent"
           : "border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
@@ -150,25 +151,28 @@ export function Header({
         <div className="hidden md:flex items-center gap-6">
           <nav className="flex items-center gap-6">
             {links.map((item, i) => (
-              <DesktopNavItem key={i} item={item} active={isActive(item)} />
+              <DesktopNavItem key={i} item={item} active={isActive(item)} light={isTransparent} />
             ))}
           </nav>
-          <div className="h-5 w-[1px] bg-border/60" />
+          <div className={cn("h-5 w-[1px]", isTransparent ? "bg-white/30" : "bg-border/60")} />
           {contactInfo?.phone && (
             <a
               href={`tel:${contactInfo.phone.replace(/\s+/g, "")}`}
-              className="hidden lg:flex items-center gap-1.5 text-sm font-medium text-foreground/70 hover:text-primary transition-colors"
+              className={cn(
+                "hidden lg:flex items-center gap-1.5 text-sm font-medium transition-colors hover:text-primary",
+                isTransparent ? "text-white/85" : "text-foreground/70"
+              )}
             >
               <RiPhoneLine size={15} className="shrink-0" />
               {contactInfo.phone}
             </a>
           )}
-          <LanguageSwitcher currentLocale={locale} />
+          <LanguageSwitcher currentLocale={locale} light={isTransparent} />
         </div>
 
         {/* Mobile Controls */}
         <div className="flex items-center gap-2 md:hidden">
-          <LanguageSwitcher currentLocale={locale} />
+          <LanguageSwitcher currentLocale={locale} light={isTransparent} />
           <Button
             variant="ghost"
             size="icon"
@@ -176,6 +180,7 @@ export function Header({
             aria-label={menuOpen ? dict.nav.close : dict.nav.menu}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
+            className={isTransparent ? "text-white hover:bg-white/10 hover:text-white" : undefined}
           >
             {menuOpen ? <RiCloseLine size={20} /> : <RiMenu3Line size={20} />}
           </Button>
@@ -283,7 +288,7 @@ export function Header({
   );
 }
 
-function DesktopNavItem({ item, active }: { item: NavItem; active: boolean }) {
+function DesktopNavItem({ item, active, light = false }: { item: NavItem; active: boolean; light?: boolean }) {
   const pathname = usePathname();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -303,7 +308,7 @@ function DesktopNavItem({ item, active }: { item: NavItem; active: boolean }) {
           rel={item.openInNewTab ? "noopener noreferrer" : undefined}
           className={cn(
             "text-sm font-medium transition-colors hover:text-primary",
-            reallyActive ? "text-primary font-semibold" : "text-foreground/70"
+            reallyActive ? "text-primary font-semibold" : light ? "text-white/85" : "text-foreground/70"
           )}
         >
           {item.label}
@@ -327,7 +332,7 @@ function DesktopNavItem({ item, active }: { item: NavItem; active: boolean }) {
         onMouseEnter={() => router.prefetch(resolveHref(item))}
         className={cn(
           "flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary",
-          reallyActive ? "text-primary font-semibold" : "text-foreground/70"
+          reallyActive ? "text-primary font-semibold" : light ? "text-white/85" : "text-foreground/70"
         )}
       >
         {item.label}

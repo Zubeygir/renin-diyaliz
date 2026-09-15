@@ -5,6 +5,7 @@ import {
   serviceFallbackQuery,
   projectFallbackQuery,
   blogFallbackQuery,
+  staffPreviewQuery,
 } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
 import { isValidLocale, DEFAULT_LOCALE, Locale } from "@/lib/i18n";
@@ -13,7 +14,7 @@ import { AboutSection } from "@/components/home/AboutSection";
 import { ServicesSection } from "@/components/home/ServicesSection";
 import { ProjectsSection } from "@/components/home/ProjectsSection";
 import { BlogSection } from "@/components/home/BlogSection";
-import { HomePage as HomePageType, Service, Project, BlogPost } from "@/types";
+import { HomePage as HomePageType, Service, Project, BlogPost, StaffPreviewItem } from "@/types";
 
 export async function generateMetadata({
   params,
@@ -59,7 +60,7 @@ export default async function HomePage({
   const needsFallbackPosts = !data?.featuredPosts || data.featuredPosts.length === 0;
 
   // 3. Fetch fallbacks in parallel if necessary
-  const [fallbackServices, fallbackProjects, fallbackPosts] = await Promise.all([
+  const [fallbackServices, fallbackProjects, fallbackPosts, teamPreview] = await Promise.all([
     needsFallbackServices
       ? cachedFetch<Service[]>(serviceFallbackQuery, { locale }, { next: { tags: ["service:list"] } })
       : Promise.resolve([]),
@@ -69,6 +70,7 @@ export default async function HomePage({
     needsFallbackPosts
       ? cachedFetch<BlogPost[]>(blogFallbackQuery, { locale }, { next: { tags: ["blog:list", "blog:categories"] } })
       : Promise.resolve([]),
+    cachedFetch<StaffPreviewItem[]>(staffPreviewQuery, { locale }, { next: { tags: ["staff:list"] } }),
   ]);
 
   const servicesToDisplay = data?.featuredServices && data.featuredServices.length > 0
@@ -97,6 +99,7 @@ export default async function HomePage({
         ctaLabel={data?.aboutCtaLabel}
         ctaLink={data?.aboutCtaLink}
         stats={data?.stats}
+        teamPreview={teamPreview}
         locale={locale}
       />
 

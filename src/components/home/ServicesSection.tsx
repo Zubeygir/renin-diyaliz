@@ -2,6 +2,7 @@ import { FadeIn } from "@/components/ui/FadeIn";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { AnimateGroup } from "@/components/ui/AnimateGroup";
+import { StaggerItem } from "@/components/ui/StaggerItem";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Service, Locale } from "@/types";
@@ -46,33 +47,35 @@ export function ServicesSection({
                   : `/hizmetler/${service.slug?.current}`;
 
                 return (
-                  <Link key={service.slug?.current} href={serviceHref} prefetch={false} className="group block">
-                    <article className="border rounded-xl overflow-hidden bg-card hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-1">
-                      {service.mainImage && (
-                        <div className="relative aspect-video overflow-hidden">
-                          <SanityImage
-                            image={service.mainImage}
-                            fill
-                            sizes="(max-width: 768px) 100vw, 33vw"
-                            className="object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
+                  <StaggerItem key={service.slug?.current}>
+                    <Link href={serviceHref} prefetch={false} className="group block">
+                      <article className="border rounded-xl overflow-hidden bg-card hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-1">
+                        {service.mainImage && (
+                          <div className="relative aspect-video overflow-hidden">
+                            <SanityImage
+                              image={service.mainImage}
+                              fill
+                              sizes="(max-width: 768px) 100vw, 33vw"
+                              className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                          </div>
+                        )}
+                        <div className="p-6 flex-grow flex flex-col justify-between">
+                          <div>
+                            <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                              {service.title}
+                            </h3>
+                          </div>
+                          <div className="mt-6">
+                            <span className="text-primary font-semibold text-xs tracking-wider uppercase group-hover:underline underline-offset-4 flex items-center">
+                              {dict.common.viewDetail}
+                              <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
+                            </span>
+                          </div>
                         </div>
-                      )}
-                      <div className="p-6 flex-grow flex flex-col justify-between">
-                        <div>
-                          <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors line-clamp-2">
-                            {service.title}
-                          </h3>
-                        </div>
-                        <div className="mt-6">
-                          <span className="text-primary font-semibold text-xs tracking-wider uppercase group-hover:underline underline-offset-4 flex items-center">
-                            {dict.common.viewDetail}
-                            <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
-                          </span>
-                        </div>
-                      </div>
-                    </article>
-                  </Link>
+                      </article>
+                    </Link>
+                  </StaggerItem>
                 );
               })}
             </AnimateGroup>

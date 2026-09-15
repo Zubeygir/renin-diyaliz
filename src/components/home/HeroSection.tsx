@@ -2,15 +2,20 @@ import { FadeIn } from "@/components/ui/FadeIn";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { SanityImage as SanityImageType, CtaLink, Locale } from "@/types";
+import { urlForImage } from "@/sanity/lib/image";
+import { SanityImage as SanityImageType, SanityFile, CtaLink, Locale } from "@/types";
 
 interface HeroSectionProps {
   data: {
     heroImage?: SanityImageType;
+    heroVideo?: SanityFile;
+    heroVideoWebm?: SanityFile;
     heroTitle?: string;
     heroSubtitle?: string;
     heroCtaLabel?: string;
     heroCtaLink?: CtaLink;
+    heroCtaLabel2?: string;
+    heroCtaLink2?: CtaLink;
   };
   locale?: Locale;
 }
@@ -34,8 +39,10 @@ export function resolveLink(linkData?: CtaLink, locale: Locale = "tr") {
 }
 
 export function HeroSection({ data, locale = "tr" }: HeroSectionProps) {
+  const posterUrl = data?.heroImage ? urlForImage(data.heroImage)?.width(1920).quality(80).url() : undefined;
+
   return (
-    <section className="relative min-h-[80vh] flex items-center">
+    <section className="relative min-h-dvh flex items-center">
       {data?.heroImage && (
         <div className="absolute inset-0 z-0">
           <SanityImage
@@ -46,6 +53,23 @@ export function HeroSection({ data, locale = "tr" }: HeroSectionProps) {
             className="object-cover"
             priority
           />
+          {(data?.heroVideo?.asset?.url || data?.heroVideoWebm?.asset?.url) && (
+            <video
+              className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
+              poster={posterUrl}
+              autoPlay
+              muted
+              loop
+              playsInline
+            >
+              {data.heroVideoWebm?.asset?.url && (
+                <source src={data.heroVideoWebm.asset.url} type="video/webm" />
+              )}
+              {data.heroVideo?.asset?.url && (
+                <source src={data.heroVideo.asset.url} type="video/mp4" />
+              )}
+            </video>
+          )}
           <div className="absolute inset-0 bg-black/50" />
         </div>
       )}
@@ -62,11 +86,28 @@ export function HeroSection({ data, locale = "tr" }: HeroSectionProps) {
               {data.heroSubtitle}
             </p>
           )}
-          {data?.heroCtaLabel && (
-            <div className="pt-2">
-              <Button size="lg" render={<Link href={resolveLink(data?.heroCtaLink, locale)} prefetch={false} />}>
-                {data.heroCtaLabel}
-              </Button>
+          {(data?.heroCtaLabel || data?.heroCtaLabel2) && (
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              {data?.heroCtaLabel && (
+                <Button
+                  size="lg"
+                  variant="ghost"
+                  className="border border-white/50 bg-white/0 text-white backdrop-blur-sm hover:bg-white/10 hover:text-white"
+                  render={<Link href={resolveLink(data?.heroCtaLink, locale)} prefetch={false} />}
+                >
+                  {data.heroCtaLabel}
+                </Button>
+              )}
+              {data?.heroCtaLabel2 && (
+                <Button
+                  size="lg"
+                  variant="ghost"
+                  className="border border-white/50 bg-white/0 text-white backdrop-blur-sm hover:bg-white/10 hover:text-white"
+                  render={<Link href={resolveLink(data?.heroCtaLink2, locale)} prefetch={false} />}
+                >
+                  {data.heroCtaLabel2}
+                </Button>
+              )}
             </div>
           )}
         </FadeIn>

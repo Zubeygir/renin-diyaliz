@@ -9,11 +9,13 @@ import { useAlternateUrls } from "@/components/providers/AlternateUrlsContext";
 interface LanguageSwitcherProps {
   currentLocale: Locale;
   className?: string;
+  light?: boolean;
 }
 
 export function LanguageSwitcher({
   currentLocale,
   className,
+  light = false,
 }: LanguageSwitcherProps) {
   const pathname = usePathname();
   const { alternateUrls } = useAlternateUrls();
@@ -75,11 +77,11 @@ export function LanguageSwitcher({
       className={cn("inline-flex items-center gap-1.5 text-xs select-none", className)}
       aria-label="Dil seçimi / Language selection"
     >
-      <LanguageLink locale="tr" active={currentLocale === "tr"} href={getTargetUrl("tr")}>
+      <LanguageLink locale="tr" active={currentLocale === "tr"} href={getTargetUrl("tr")} light={light}>
         TR
       </LanguageLink>
-      <span className="text-border">/</span>
-      <LanguageLink locale="en" active={currentLocale === "en"} href={getTargetUrl("en")}>
+      <span className={light ? "text-white/40" : "text-border"}>/</span>
+      <LanguageLink locale="en" active={currentLocale === "en"} href={getTargetUrl("en")} light={light}>
         EN
       </LanguageLink>
     </div>
@@ -89,11 +91,13 @@ export function LanguageSwitcher({
 function LanguageLink({
   href,
   active,
+  light,
   children,
 }: {
   locale: Locale;
   href: string;
   active: boolean;
+  light?: boolean;
   children: React.ReactNode;
 }) {
   return (
@@ -101,11 +105,19 @@ function LanguageLink({
       href={href}
       className={cn(
         "relative py-1 transition-colors leading-none",
-        active ? "font-semibold text-foreground" : "text-foreground/55 hover:text-foreground"
+        light
+          ? active
+            ? "font-semibold text-white"
+            : "text-white/70 hover:text-white"
+          : active
+            ? "font-semibold text-foreground"
+            : "text-foreground/55 hover:text-foreground"
       )}
     >
       {children}
-      {active && <span className="absolute inset-x-0 -bottom-0.5 h-[1.5px] rounded-full bg-primary" />}
+      {active && (
+        <span className={cn("absolute inset-x-0 -bottom-0.5 h-[1.5px] rounded-full", light ? "bg-white" : "bg-primary")} />
+      )}
     </Link>
   );
 }

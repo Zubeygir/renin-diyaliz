@@ -36,15 +36,36 @@ export const homePageType = defineType({
     }),
     defineField({
       name: "heroImage",
-      title: "Hero Görseli",
+      title: "Hero Poster / Yedek Görseli",
+      description:
+        "Video yüklenene kadar veya video eklenmemişse gösterilir. Video kesintisiz oynamaya başlayana kadar boş ekran görünmemesi için zorunludur.",
       type: "image",
       group: "hero",
       options: { hotspot: true },
       fields: [defineField({ name: "alt", title: "Alt Metni", type: "string", validation: (Rule) => Rule.required() })],
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "heroVideo",
+      title: "Hero Video (MP4)",
+      description:
+        "Anasayfa hero bölümünde otomatik oynayan arka plan videosu. MP4 formatında, tercihen sıkıştırılmış (~15-20MB altı) yükleyin. Video eklenmezse poster görseli gösterilir.",
+      type: "file",
+      group: "hero",
+      options: { accept: "video/mp4" },
+    }),
+    defineField({
+      name: "heroVideoWebm",
+      title: "Hero Video (WebM - Opsiyonel)",
+      description:
+        "Aynı videonun WebM formatındaki sürümü. Genelde MP4'e göre daha küçük dosya boyutu sağlar. Eklenirse tarayıcı destekliyorsa öncelikli olarak bu oynatılır, desteklemiyorsa MP4'e geçilir.",
+      type: "file",
+      group: "hero",
+      options: { accept: "video/webm" },
     }),
     defineField({
       name: "heroCtaLabel",
-      title: "Hero Buton Metni",
+      title: "1. Buton Metni",
       type: "localizedString",
       group: "hero",
       initialValue: {
@@ -54,7 +75,58 @@ export const homePageType = defineType({
     }),
     defineField({
       name: "heroCtaLink",
-      title: "Hero Buton Linki",
+      title: "1. Buton Linki",
+      type: "object",
+      group: "hero",
+      fields: [
+        defineField({
+          name: "linkType",
+          title: "Link Tipi",
+          type: "string",
+          options: {
+            list: [
+              { title: "İç Sayfa (Önerilen)", value: "internal" },
+              { title: "Manuel Link", value: "manual" },
+            ],
+            layout: "radio",
+          },
+          initialValue: "internal",
+        }),
+        defineField({
+          name: "internal",
+          title: "İç Sayfa Seç",
+          type: "reference",
+          to: [
+            { type: "service" },
+            { type: "project" },
+            { type: "blogPost" },
+            { type: "aboutPage" },
+            { type: "contactPage" },
+          ],
+          hidden: ({ parent }) => parent?.linkType !== "internal",
+        }),
+        defineField({
+          name: "manual",
+          title: "Manuel Link",
+          type: "localizedString",
+          description: "Örn: /blog, /galeri veya https://google.com",
+          hidden: ({ parent }) => parent?.linkType !== "manual",
+        }),
+      ],
+    }),
+    defineField({
+      name: "heroCtaLabel2",
+      title: "2. Buton Metni",
+      type: "localizedString",
+      group: "hero",
+      initialValue: {
+        tr: "İletişim",
+        en: "Contact",
+      },
+    }),
+    defineField({
+      name: "heroCtaLink2",
+      title: "2. Buton Linki",
       type: "object",
       group: "hero",
       fields: [
