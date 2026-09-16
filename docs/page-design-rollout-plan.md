@@ -50,3 +50,7 @@ Mevcut kod boilerplate'in jenerik 5 section'ını kullanıyor (Hero, Hakkımızd
 - [x] Galeri
 - [x] Blog
 - [x] İletişim
+
+## Son Durum
+
+- Şu anda sayfaların genel tasarımları bitti. Cila yapılacak. Güzel bir cilaya ihtiyaç var içime sinmeyen yerler var.
