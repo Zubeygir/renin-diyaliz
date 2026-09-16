@@ -133,9 +133,6 @@ export const homePageQuery = groq`*[_type == "homePage"][0] {
     },
     mainImage ${imageFields}
   },
-  "ctaTitle": coalesce(ctaTitle[$locale], ctaTitle.tr, ctaTitle),
-  "ctaSubtitle": coalesce(ctaSubtitle[$locale], ctaSubtitle.tr, ctaSubtitle),
-  "ctaButtonLabel": coalesce(ctaButtonLabel[$locale], ctaButtonLabel.tr, ctaButtonLabel),
   seo
 }`;
 

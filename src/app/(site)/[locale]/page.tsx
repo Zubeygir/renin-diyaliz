@@ -15,7 +15,6 @@ import { ServicesSection } from "@/components/home/ServicesSection";
 import { ServiceAreaSection } from "@/components/home/ServiceAreaSection";
 import { PartnersSection } from "@/components/home/PartnersSection";
 import { BlogSection } from "@/components/home/BlogSection";
-import { ContactCtaSection } from "@/components/home/ContactCtaSection";
 import { HomePage as HomePageType, Service, BlogPost, StaffPreviewItem, Partner } from "@/types";
 
 export async function generateMetadata({
@@ -124,16 +123,6 @@ export default async function HomePage({
         title={data?.blogTitle}
         subtitle={data?.blogSubtitle}
         posts={postsToDisplay}
-        locale={locale}
-      />
-
-      {/* 7. İletişim kapanış bloğu — ink surface */}
-      <ContactCtaSection
-        title={data?.ctaTitle}
-        subtitle={data?.ctaSubtitle}
-        buttonLabel={data?.ctaButtonLabel}
-        contact={contact}
-        workingHours={workingHours}
         locale={locale}
       />
     </div>

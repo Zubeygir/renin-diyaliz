@@ -11,7 +11,6 @@ export const homePageType = defineType({
     { name: "serviceArea", title: "Servis Ağı / Kapsama Alanı" },
     { name: "partners", title: "Anlaşmalı Kurumlar" },
     { name: "blog", title: "Blog Önizleme" },
-    { name: "contactCta", title: "İletişim Kapanış Bloğu" },
     { name: "seo", title: "SEO Ayarları" },
   ],
   fields: [
@@ -429,38 +428,6 @@ export const homePageType = defineType({
       type: "array",
       group: "blog",
       of: [{ type: "reference", to: [{ type: "blogPost" }] }],
-    }),
-
-    // Contact CTA Group
-    defineField({
-      name: "ctaTitle",
-      title: "Kapanış Başlığı",
-      type: "localizedString",
-      group: "contactCta",
-      initialValue: {
-        tr: "Bize Ulaşın",
-        en: "Contact Us",
-      },
-    }),
-    defineField({
-      name: "ctaSubtitle",
-      title: "Kapanış Alt Metni",
-      type: "localizedText",
-      group: "contactCta",
-      initialValue: {
-        tr: "Yeni hasta kabulü, servis ve SGK/özel sigorta süreçleri için merkezimizi arayabilirsiniz.",
-        en: "Call our center for new patient admission, transport and SGK/private insurance procedures.",
-      },
-    }),
-    defineField({
-      name: "ctaButtonLabel",
-      title: "İletişim Sayfası Link Metni",
-      type: "localizedString",
-      group: "contactCta",
-      initialValue: {
-        tr: "İletişim sayfası ve sık sorulan sorular",
-        en: "Contact page and FAQ",
-      },
     }),
 
     // SEO Group

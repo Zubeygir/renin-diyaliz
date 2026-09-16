@@ -51,7 +51,7 @@ export function BlogSection({
     >
       {/* One featured post carries the image; the rest are text rows */}
       <AnimateGroup stagger={0.12} className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-10">
-        <StaggerItem>
+        <StaggerItem className="min-w-0">
           <Link href={postHref(featured, locale)} prefetch={false} className="group block">
             {featured.mainImage && (
               <div className="relative aspect-[16/10] overflow-hidden rounded-md bg-muted">
@@ -69,7 +69,7 @@ export function BlogSection({
                 <time dateTime={featured.publishedAt}>{formatDate(featured.publishedAt, dateLocale)}</time>
               )}
             </div>
-            <h3 className="mt-2 font-heading text-2xl font-semibold group-hover:text-primary transition-colors">
+            <h3 className="mt-2 font-heading text-2xl font-semibold break-words group-hover:text-primary transition-colors">
               {featured.title}
             </h3>
             {featured.excerpt && (
@@ -85,7 +85,7 @@ export function BlogSection({
         </StaggerItem>
 
         {rest.length > 0 && (
-          <div className="divide-y divide-border border-t border-border md:border-t-0 md:[&>*:first-child>a]:pt-0">
+          <div className="min-w-0 divide-y divide-border border-t border-border md:border-t-0 md:[&>*:first-child>a]:pt-0">
             {rest.map((post, i) => (
               <StaggerItem key={post.slug ?? i}>
                 <Link
@@ -99,7 +99,7 @@ export function BlogSection({
                       <time dateTime={post.publishedAt}>{formatDate(post.publishedAt, dateLocale)}</time>
                     )}
                   </div>
-                  <h3 className="mt-2 font-heading text-xl font-semibold group-hover:text-primary transition-colors">
+                  <h3 className="mt-2 font-heading text-xl font-semibold break-words group-hover:text-primary transition-colors">
                     {post.title}
                   </h3>
                   {post.excerpt && (

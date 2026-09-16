@@ -317,9 +317,6 @@ export interface HomePage {
   serviceAreaImage?: SanityFile;
   partnersTitle?: string;
   partnersNote?: string;
-  ctaTitle?: string;
-  ctaSubtitle?: string;
-  ctaButtonLabel?: string;
   blogTitle?: string;
   blogSubtitle?: string;
   featuredPosts?: BlogPost[];

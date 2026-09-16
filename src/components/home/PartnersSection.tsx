@@ -16,17 +16,13 @@ function PartnerLogo({ partner, className }: { partner: Partner; className?: str
   if (!partner.logo) return null;
 
   // Logos stay in color: for SGK and insurers recognition is the point.
+  // fill + objectFit=contain: the only sizing mode that's provably guaranteed to never crop,
+  // regardless of the source logo's own aspect ratio.
   const logo = (
-    <SanityImage
-      image={partner.logo}
-      width={160}
-      height={64}
-      fit="max"
-      className="h-9 md:h-11 w-auto max-w-[140px] object-contain"
-    />
+    <SanityImage image={partner.logo} fill fit="max" objectFit="contain" />
   );
 
-  const cell = cn("flex items-center justify-center bg-background", className);
+  const cell = cn("relative flex items-center justify-center overflow-hidden bg-background", className);
 
   return partner.link ? (
     <a
@@ -64,7 +60,7 @@ export function PartnersSection({ title, note, partners = [] }: PartnersSectionP
               <PartnerLogo
                 key={`${partner._id}-${i}`}
                 partner={partner}
-                className={i >= withLogo.length ? "motion-reduce:hidden" : undefined}
+                className={cn("h-11 w-28 shrink-0", i >= withLogo.length && "motion-reduce:hidden")}
               />
             ))}
           </div>
@@ -73,7 +69,7 @@ export function PartnersSection({ title, note, partners = [] }: PartnersSectionP
         // Hairline grid: 1px gaps over the border color read as rules, not cards
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-px bg-border border border-border">
           {withLogo.map((partner) => (
-            <PartnerLogo key={partner._id} partner={partner} className="aspect-[5/3] p-6" />
+            <PartnerLogo key={partner._id} partner={partner} className="aspect-[5/3] px-4 py-1" />
           ))}
         </div>
       )}
