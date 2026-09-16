@@ -174,6 +174,7 @@ export interface AboutPage extends BasePage {
   body?: PortableTextBlock[];
   mainImage?: SanityImage;
   facts?: Array<{ label?: string; value?: string }>;
+  stats?: StatItem[];
 }
 
 export interface MissionVisionPage extends BasePage {

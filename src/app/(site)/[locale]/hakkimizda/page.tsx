@@ -6,6 +6,7 @@ import { buildMetadata } from "@/lib/seo";
 import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
 import { RichText } from "@/components/ui/RichText";
 import { PageTitle } from "@/components/layout/PageTitle";
+import { StatValue } from "@/components/home/StatValue";
 import { AboutPage as AboutPageType } from "@/types";
 
 export async function generateMetadata({
@@ -52,6 +53,7 @@ export default async function AboutPage({
 
   const title = data?.heroTitle || data?.pageTitle || dict.nav.about;
   const facts = data?.facts ?? [];
+  const stats = data?.stats ?? [];
 
   return (
     <div className="flex flex-col gap-10 md:gap-14 pb-20">
@@ -99,6 +101,19 @@ export default async function AboutPage({
             </div>
           </main>
         </div>
+
+        {stats.length > 0 && (
+          <dl className="mt-12 flex flex-nowrap gap-x-4 sm:gap-x-8 gap-y-6 border-t border-border pt-8">
+            {stats.map((stat, i) => (
+              <div key={i} className="flex-1 min-w-0">
+                <dd className="font-heading text-3xl md:text-4xl font-semibold text-primary tracking-[-0.02em]">
+                  <StatValue value={stat.value} countUp={stat.countUp} />
+                </dd>
+                <dt className="mt-1 text-sm text-muted-foreground">{stat.label}</dt>
+              </div>
+            ))}
+          </dl>
+        )}
       </div>
     </div>
   );

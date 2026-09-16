@@ -148,6 +148,11 @@ export const aboutPageQuery = groq`*[_type == "aboutPage"][0] {
     "label": coalesce(label[$locale], label.tr, label),
     "value": coalesce(value[$locale], value.tr, value)
   },
+  stats[] {
+    value,
+    countUp,
+    "label": coalesce(label[$locale], label.tr, label)
+  },
   seo
 }`;
 

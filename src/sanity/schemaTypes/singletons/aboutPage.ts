@@ -178,6 +178,47 @@ export const aboutPageType = defineType({
         { label: { tr: "Kalite Standartları", en: "Quality Standards" }, value: { tr: "SKS Diyaliz Seti Uyumu", en: "SKS Dialysis Standards Compliance" } },
       ],
     }),
+    defineField({
+      name: "stats",
+      title: "Rakamlarla Biz / İstatistikler",
+      type: "array",
+      group: "content",
+      description: "Sayfa altında gösterilecek sayaç/istatistik kutuları (Örn: 50+1, 2000, 7/24).",
+      initialValue: [
+        {
+          value: "50+1",
+          label: { tr: "Yatak ve Diyaliz Kapasitesi", en: "Bed & Dialysis Capacity" },
+        },
+        {
+          value: "2000",
+          label: { tr: "Yılından Bu Yana Hizmet", en: "Serving Since 2000" },
+        },
+        {
+          value: "SKS",
+          label: { tr: "Sağlıkta Kalite Standartları", en: "Healthcare Quality Standards" },
+        },
+      ],
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({ name: "value", title: "Değer / Sayı", type: "string", description: "Örn: 50+1 veya 2000" }),
+            defineField({ name: "label", title: "Etiket", type: "localizedString", description: "Örn: Cihaz Kapasitesi" }),
+            defineField({
+              name: "countUp",
+              title: "Sayaç Animasyonu",
+              type: "boolean",
+              description: "Açılırsa değerin başındaki sayı 0'dan sayarak belirir (yalnızca sayı ile başlayan değerlerde çalışır).",
+              initialValue: false,
+            }),
+          ],
+          preview: {
+            select: { title: "value", subtitle: "label.tr" },
+          },
+        },
+      ],
+    }),
+
     // SEO Group
     defineField({ name: "seo", title: "SEO", type: "seo", group: "seo" }),
   ],
