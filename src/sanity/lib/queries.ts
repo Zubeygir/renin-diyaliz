@@ -168,7 +168,8 @@ export const missionVisionPageQuery = groq`*[_type == "missionVisionPage"][0] {
   "valuesTitle": coalesce(valuesTitle[$locale], valuesTitle.tr, valuesTitle),
   "values": values[] { "value": coalesce(@[$locale], @.tr, @) }.value,
   "qualityPolicyTitle": coalesce(qualityPolicyTitle[$locale], qualityPolicyTitle.tr, qualityPolicyTitle),
-  "qualityPolicyText": coalesce(qualityPolicyText[$locale], qualityPolicyText.tr, qualityPolicyText),
+  "qualityPolicyIntro": coalesce(qualityPolicyIntro[$locale], qualityPolicyIntro.tr, qualityPolicyIntro),
+  "qualityPolicyItems": qualityPolicyItems[] { "value": coalesce(@[$locale], @.tr, @) }.value,
   seo
 }`;
 

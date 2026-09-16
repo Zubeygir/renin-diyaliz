@@ -186,7 +186,8 @@ export interface MissionVisionPage extends BasePage {
   valuesTitle?: string;
   values?: string[];
   qualityPolicyTitle?: string;
-  qualityPolicyText?: PortableTextBlock[];
+  qualityPolicyIntro?: string;
+  qualityPolicyItems?: string[];
 }
 
 export interface OrgChartPage extends BasePage {

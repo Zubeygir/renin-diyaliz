@@ -4,7 +4,6 @@ import { missionVisionPageQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
 import { isValidLocale, DEFAULT_LOCALE, Locale } from "@/lib/i18n";
 import { PageTitle } from "@/components/layout/PageTitle";
-import { RichText } from "@/components/ui/RichText";
 import { MissionVisionPage as MissionVisionPageType } from "@/types";
 
 export async function generateMetadata({
@@ -56,7 +55,7 @@ export default async function MissionVisionPage({
     { id: "misyon", label: missionTitle, show: Boolean(data?.missionText) },
     { id: "vizyon", label: visionTitle, show: Boolean(data?.visionText) },
     { id: "degerler", label: valuesTitle, show: Boolean(data?.values && data.values.length > 0) },
-    { id: "kalite-politikasi", label: qualityTitle, show: Boolean(data?.qualityPolicyText) },
+    { id: "kalite-politikasi", label: qualityTitle, show: Boolean(data?.qualityPolicyIntro || (data?.qualityPolicyItems && data.qualityPolicyItems.length > 0)) },
   ].filter((item) => item.show);
 
   return (
@@ -93,7 +92,7 @@ export default async function MissionVisionPage({
             {/* Misyon */}
             {data?.missionText && (
               <section id="misyon" className="scroll-mt-28 space-y-4">
-                <h2 className="font-heading text-2xl font-semibold text-foreground tracking-[-0.015em]">
+                <h2 className="font-heading text-2xl font-semibold text-foreground">
                   {missionTitle}
                 </h2>
                 <p className="text-base sm:text-lg text-foreground/85 leading-relaxed whitespace-pre-line max-w-[68ch]">
@@ -105,7 +104,7 @@ export default async function MissionVisionPage({
             {/* Vizyon */}
             {data?.visionText && (
               <section id="vizyon" className="scroll-mt-28 space-y-4 pt-8 border-t border-border">
-                <h2 className="font-heading text-2xl font-semibold text-foreground tracking-[-0.015em]">
+                <h2 className="font-heading text-2xl font-semibold text-foreground">
                   {visionTitle}
                 </h2>
                 <p className="text-base sm:text-lg text-foreground/85 leading-relaxed whitespace-pre-line max-w-[68ch]">
@@ -117,14 +116,14 @@ export default async function MissionVisionPage({
             {/* Değerler: Büyük puntolu divide-y satırlar */}
             {data?.values && data.values.length > 0 && (
               <section id="degerler" className="scroll-mt-28 space-y-6 pt-8 border-t border-border">
-                <h2 className="font-heading text-2xl font-semibold text-foreground tracking-[-0.015em]">
+                <h2 className="font-heading text-2xl font-semibold text-foreground">
                   {valuesTitle}
                 </h2>
                 <ul className="divide-y divide-border border-y border-border">
                   {data.values.map((value, i) => (
                     <li
                       key={i}
-                      className="py-4 font-heading text-lg sm:text-xl font-medium text-foreground leading-snug"
+                      className="py-4 text-base sm:text-lg font-medium text-foreground leading-snug"
                     >
                       {value}
                     </li>
@@ -134,14 +133,28 @@ export default async function MissionVisionPage({
             )}
 
             {/* Kalite Politikası */}
-            {data?.qualityPolicyText && (
-              <section id="kalite-politikasi" className="scroll-mt-28 space-y-6 pt-8 border-t border-border">
-                <h2 className="font-heading text-2xl font-semibold text-foreground tracking-[-0.015em]">
+            {(data?.qualityPolicyIntro || (data?.qualityPolicyItems && data.qualityPolicyItems.length > 0)) && (
+              <section id="kalite-politikasi" className="scroll-mt-28 space-y-4 pt-8 border-t border-border">
+                <h2 className="font-heading text-2xl font-semibold text-foreground">
                   {qualityTitle}
                 </h2>
-                <div className="max-w-[68ch] text-foreground/85 leading-relaxed [&_ul]:divide-y [&_ul]:divide-border [&_ul]:border-y [&_ul]:border-border [&_ul]:list-none [&_ul]:pl-0 [&_li]:py-3 [&_li]:text-sm sm:[&_li]:text-base">
-                  <RichText value={data.qualityPolicyText} />
-                </div>
+                {data?.qualityPolicyIntro && (
+                  <p className="text-base sm:text-lg text-foreground/85 leading-relaxed whitespace-pre-line max-w-[68ch]">
+                    {data.qualityPolicyIntro}
+                  </p>
+                )}
+                {data?.qualityPolicyItems && data.qualityPolicyItems.length > 0 && (
+                  <ul className="divide-y divide-border border-y border-border">
+                    {data.qualityPolicyItems.map((item, i) => (
+                      <li
+                        key={i}
+                        className="py-4 text-base sm:text-lg font-medium text-foreground leading-snug"
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </section>
             )}
           </main>
