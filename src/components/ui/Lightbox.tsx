@@ -32,11 +32,16 @@ function prefetchLightboxImage(image: SanityImageType) {
   }
 }
 
-interface LightboxGalleryProps {
-  images: SanityImageType[];
+export interface LightboxImage {
+  image: SanityImageType;
+  caption?: string;
 }
 
-export function LightboxGallery({ images }: LightboxGalleryProps) {
+interface LightboxGalleryProps {
+  items: LightboxImage[];
+}
+
+export function LightboxGallery({ items }: LightboxGalleryProps) {
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [direction, setDirection] = useState(0);
 
@@ -44,10 +49,10 @@ export function LightboxGallery({ images }: LightboxGalleryProps) {
     setDirection(newDirection);
     setSelectedImage((prev) => {
       if (prev === null) return 0;
-      if (newDirection === 1) return prev < images.length - 1 ? prev + 1 : 0;
-      return prev > 0 ? prev - 1 : images.length - 1;
+      if (newDirection === 1) return prev < items.length - 1 ? prev + 1 : 0;
+      return prev > 0 ? prev - 1 : items.length - 1;
     });
-  }, [images.length]);
+  }, [items.length]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -80,20 +85,20 @@ export function LightboxGallery({ images }: LightboxGalleryProps) {
     }),
   };
 
-  if (!images || images.length === 0) return null;
+  if (!items || items.length === 0) return null;
 
   return (
     <>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-16">
-        {images.map((image, i) => (
+        {items.map((item, i) => (
           <div
             key={i}
-            className="group relative cursor-pointer overflow-hidden rounded-sm aspect-[4/3] bg-backgroundLight"
+            className="group relative cursor-pointer overflow-hidden rounded-sm aspect-[4/3] bg-muted"
             onClick={() => setSelectedImage(i)}
-            onMouseEnter={() => prefetchLightboxImage(image)}
+            onMouseEnter={() => prefetchLightboxImage(item.image)}
           >
             <SanityImage
-              image={image}
+              image={item.image}
               width={800}
               height={600}
               sizes="(max-width: 768px) 50vw, 33vw"
@@ -122,7 +127,7 @@ export function LightboxGallery({ images }: LightboxGalleryProps) {
             <div className="absolute top-0 left-0 right-0 p-6 md:p-10 flex justify-between items-center z-10">
               <div className="text-white font-display text-sm tracking-[0.2em] uppercase opacity-70">
                 {selectedImage + 1}{" "}
-                <span className="mx-2 text-white/30">/</span> {images.length}
+                <span className="mx-2 text-white/30">/</span> {items.length}
               </div>
               <button
                 className="w-12 h-12 flex items-center justify-center text-white/50 hover:text-white transition-colors cursor-pointer group"
@@ -139,7 +144,7 @@ export function LightboxGallery({ images }: LightboxGalleryProps) {
             </div>
 
             {/* Navigation Arrows */}
-            {images.length > 1 && (
+            {items.length > 1 && (
               <>
                 <button
                   className="hidden md:flex absolute left-4 md:left-10 top-1/2 -translate-y-1/2 w-16 h-16 items-center justify-center text-white/40 hover:text-white transition-all cursor-pointer z-20 group"
@@ -198,7 +203,7 @@ export function LightboxGallery({ images }: LightboxGalleryProps) {
                 onClick={(e) => e.stopPropagation()}
               >
                 <SanityImage
-                  image={images[selectedImage]}
+                  image={items[selectedImage].image}
                   fill
                   fit="max"
                   quality={90}
@@ -208,6 +213,15 @@ export function LightboxGallery({ images }: LightboxGalleryProps) {
                 />
               </motion.div>
             </div>
+
+            {/* Caption */}
+            {items[selectedImage].caption && (
+              <div className="absolute bottom-6 md:bottom-10 left-0 right-0 flex justify-center px-6 z-10">
+                <p className="text-white/70 text-sm text-center max-w-xl">
+                  {items[selectedImage].caption}
+                </p>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

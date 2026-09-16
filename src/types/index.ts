@@ -49,7 +49,7 @@ export interface RawSlug {
 export interface BlogCategory {
   _id: string;
   title: string;
-  slug: SanitySlug;
+  slug?: string;
 }
 
 export interface BlogAuthor {
@@ -62,7 +62,7 @@ export interface BlogPost {
   _createdAt?: string;
   _updatedAt?: string;
   title: string;
-  slug: SanitySlug;
+  slug?: string;
   rawSlug?: RawSlug;
   excerpt?: string;
   publishedAt?: string;
@@ -124,7 +124,7 @@ export interface Service {
   _createdAt?: string;
   _updatedAt?: string;
   title: string;
-  slug: SanitySlug;
+  slug?: string;
   rawSlug?: RawSlug;
   mainImage?: SanityImage;
   body?: PortableTextBlock[];

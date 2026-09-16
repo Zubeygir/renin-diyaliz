@@ -38,8 +38,14 @@ export interface Dictionary {
     title: string;
     subtitle: string;
     phone: string;
+    phoneLabel: string;
+    mobileLabel: string;
     email: string;
     address: string;
+    workingHoursTitle: string;
+    workingHoursSubtitle: string;
+    faqTitle: string;
+    faqSubtitle: string;
     form: {
       name: string;
       namePlaceholder: string;
@@ -67,6 +73,21 @@ export interface Dictionary {
       hemsirelik: string;
       teknik: string;
     };
+  };
+  services: {
+    backToServices: string;
+    noServicesFound: string;
+  };
+  gallery: {
+    noImagesFound: string;
+  };
+  blog: {
+    backToBlog: string;
+    allCategories: string;
+    noPostsFound: string;
+    tags: string;
+    preparedBy: string;
+    lastUpdated: string;
   };
   footer: {
     quickLinks: string;
@@ -118,8 +139,14 @@ export const dictionaries: Record<Locale, Dictionary> = {
       title: "İletişim",
       subtitle: "Sorularınız ve randevu talepleriniz için bize her zaman ulaşabilirsiniz.",
       phone: "Telefon",
+      phoneLabel: "Telefon (Sabit Hat)",
+      mobileLabel: "Mobil / Danışma",
       email: "E-posta",
       address: "Adres",
+      workingHoursTitle: "Çalışma ve Seans Saatleri",
+      workingHoursSubtitle: "Haftalık diyaliz seansları ve merkezin açık olduğu saatler.",
+      faqTitle: "Sık Sorulan Sorular",
+      faqSubtitle: "Diyaliz tedavisi, servis hizmeti ve SGK anlaşmaları hakkında merak edilenler.",
       form: {
         name: "Ad Soyad",
         namePlaceholder: "Adınız ve soyadınız",
@@ -147,6 +174,21 @@ export const dictionaries: Record<Locale, Dictionary> = {
         hemsirelik: "Hemşirelik Kadrosu",
         teknik: "Teknik & İdari Personel",
       },
+    },
+    services: {
+      backToServices: "Hizmetlere Dön",
+      noServicesFound: "Henüz eklenmiş bir hizmet bulunmuyor.",
+    },
+    gallery: {
+      noImagesFound: "Henüz eklenmiş bir görsel bulunmuyor.",
+    },
+    blog: {
+      backToBlog: "Blog'a Dön",
+      allCategories: "Tümü",
+      noPostsFound: "Henüz eklenmiş bir yazı bulunmuyor.",
+      tags: "Etiketler:",
+      preparedBy: "{author} tarafından hazırlanmıştır",
+      lastUpdated: "Son güncelleme:",
     },
     footer: {
       quickLinks: "Hızlı Bağlantılar",
@@ -196,8 +238,14 @@ export const dictionaries: Record<Locale, Dictionary> = {
       title: "Contact",
       subtitle: "You can always reach out to us for your inquiries and appointment requests.",
       phone: "Phone",
+      phoneLabel: "Phone (Landline)",
+      mobileLabel: "Mobile / Helpline",
       email: "Email",
       address: "Address",
+      workingHoursTitle: "Working & Treatment Hours",
+      workingHoursSubtitle: "Our center operates on a regular schedule throughout the week.",
+      faqTitle: "Frequently Asked Questions",
+      faqSubtitle: "Answers to common questions about treatment, transport, and coverage.",
       form: {
         name: "Full Name",
         namePlaceholder: "Your full name",
@@ -225,6 +273,21 @@ export const dictionaries: Record<Locale, Dictionary> = {
         hemsirelik: "Nursing Staff",
         teknik: "Technical & Administrative Staff",
       },
+    },
+    services: {
+      backToServices: "Back to Services",
+      noServicesFound: "No services listed yet.",
+    },
+    gallery: {
+      noImagesFound: "No gallery images found yet.",
+    },
+    blog: {
+      backToBlog: "Back to Blog",
+      allCategories: "All",
+      noPostsFound: "No articles published yet.",
+      tags: "Tags:",
+      preparedBy: "Prepared by {author}",
+      lastUpdated: "Last updated:",
     },
     footer: {
       quickLinks: "Quick Links",

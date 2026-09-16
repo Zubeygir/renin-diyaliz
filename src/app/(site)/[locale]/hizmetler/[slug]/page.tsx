@@ -3,12 +3,13 @@ import { notFound } from "next/navigation";
 import { cachedFetch } from "@/sanity/lib/client";
 import { serviceBySlugQuery, serviceSlugsQuery } from "@/sanity/lib/queries";
 import { buildMetadata, portableTextToPlainText } from "@/lib/seo";
-import { isValidLocale, DEFAULT_LOCALE, Locale } from "@/lib/i18n";
+import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
 import { RichText } from "@/components/ui/RichText";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { Button } from "@/components/ui/button";
 import { SetAlternateUrls } from "@/components/providers/AlternateUrlsContext";
+import { RiArrowLeftLine } from "react-icons/ri";
 import Link from "next/link";
 import { Service } from "@/types";
 import { JsonLd, serviceJsonLd } from "@/components/seo/JsonLd";
@@ -61,6 +62,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ServicePage({ params }: Props) {
   const { locale: rawLocale, slug } = await params;
   const locale: Locale = isValidLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
+  const dict = getDictionary(locale);
 
   const service = await cachedFetch<Service | null>(
     serviceBySlugQuery,
@@ -76,23 +78,27 @@ export default async function ServicePage({ params }: Props) {
   const enPath = `/en/services/${enSlug}`;
 
   const allServicesHref = locale === "en" ? "/en/services" : "/hizmetler";
-  const backLabel = locale === "en" ? "← Back to Services" : "← Hizmetlere Dön";
 
   return (
     <>
       <SetAlternateUrls tr={trPath} en={enPath} />
       <JsonLd data={serviceJsonLd(service)} />
-      <article className="container mx-auto px-4 py-16 max-w-3xl break-words overflow-x-hidden">
+      <article className="container mx-auto px-4 py-12 md:py-16 max-w-3xl break-words overflow-x-hidden">
         <FadeIn direction="up">
-          <Button variant="ghost" className="mb-8 -ml-2" render={<Link href={allServicesHref} prefetch={false} />}>
-            {backLabel}
+          <Button
+            variant="ghost"
+            className="mb-8 -ml-2 gap-1.5"
+            render={<Link href={allServicesHref} prefetch={false} />}
+          >
+            <RiArrowLeftLine size={16} />
+            {dict.services.backToServices}
           </Button>
-          <h1 className="text-4xl font-bold mb-8">{service.title}</h1>
+          <h1 className="text-4xl font-bold tracking-tight mb-8">{service.title}</h1>
         </FadeIn>
 
         {service.mainImage && (
           <FadeIn delay={0.15}>
-            <div className="relative h-64 md:h-96 rounded-xl overflow-hidden mb-12">
+            <div className="relative h-64 md:h-96 rounded-xl overflow-hidden border mb-12">
               <SanityImage
                 image={service.mainImage}
                 fill

@@ -37,7 +37,7 @@ export function BlogFilter({ posts, categories, locale = "tr" }: BlogFilterProps
   };
 
   const filteredPosts = currentCategory
-    ? posts.filter((post) => post.category?.slug?.current === currentCategory)
+    ? posts.filter((post) => post.category?.slug === currentCategory)
     : posts;
 
   return (
@@ -50,14 +50,14 @@ export function BlogFilter({ posts, categories, locale = "tr" }: BlogFilterProps
               size="sm"
               onClick={() => setCategory(null)}
             >
-              {locale === "en" ? "All" : "Tümü"}
+              {dict.blog.allCategories}
             </Button>
             {categories.map((cat: BlogCategory) => (
               <Button
                 key={cat._id}
-                variant={currentCategory === cat.slug?.current ? "default" : "outline"}
+                variant={currentCategory === cat.slug ? "default" : "outline"}
                 size="sm"
-                onClick={() => setCategory(cat.slug?.current || null)}
+                onClick={() => setCategory(cat.slug || null)}
               >
                 {cat.title}
               </Button>
@@ -67,17 +67,17 @@ export function BlogFilter({ posts, categories, locale = "tr" }: BlogFilterProps
       </FadeIn>
 
       {filteredPosts?.length > 0 ? (
-        <AnimateGroup key={currentCategory || "all"} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <AnimateGroup key={currentCategory || "all"} className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8">
           {filteredPosts.map((post: BlogPost) => {
             const postHref = locale === "en"
-              ? `/en/blog/${post.slug?.current}`
-              : `/blog/${post.slug?.current}`;
+              ? `/en/blog/${post.slug}`
+              : `/blog/${post.slug}`;
 
             return (
-              <Link key={post.slug?.current} href={postHref} prefetch={false} className="group block">
-                <article className="border rounded-lg overflow-hidden bg-card hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+              <Link key={post.slug} href={postHref} prefetch={false} className="group block h-full">
+                <article className="h-full flex flex-col overflow-hidden rounded-xl border bg-card transition-colors duration-300 hover:border-primary/40">
                   {post.mainImage && (
-                    <div className="relative h-48 overflow-hidden">
+                    <div className="relative aspect-video overflow-hidden">
                       <SanityImage
                         image={post.mainImage}
                         fill
@@ -86,28 +86,31 @@ export function BlogFilter({ posts, categories, locale = "tr" }: BlogFilterProps
                       />
                     </div>
                   )}
-                  <div className="p-5 flex-grow flex flex-col">
-                    <div className="flex items-center gap-2 mb-3">
-                      {post.category && (
-                        <span className="text-xs font-medium px-2 py-1 bg-secondary text-secondary-foreground rounded-full">
-                          {post.category.title}
-                        </span>
-                      )}
-                      {post.publishedAt && (
-                        <time className="text-xs text-muted-foreground block">
-                          {formatDate(post.publishedAt, dateLocale)}
-                        </time>
+                  <div className="p-6 flex-grow flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 mb-3">
+                        {post.category && (
+                          <span className="text-xs font-medium px-2 py-1 bg-secondary text-secondary-foreground rounded-full">
+                            {post.category.title}
+                          </span>
+                        )}
+                        {post.publishedAt && (
+                          <time className="text-xs text-muted-foreground block">
+                            {formatDate(post.publishedAt, dateLocale)}
+                          </time>
+                        )}
+                      </div>
+                      <h2 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                        {post.title}
+                      </h2>
+                      {post.excerpt && (
+                        <p className="text-sm text-muted-foreground line-clamp-3">{post.excerpt}</p>
                       )}
                     </div>
-                    <h2 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors line-clamp-2">
-                      {post.title}
-                    </h2>
-                    {post.excerpt && (
-                      <p className="text-sm text-muted-foreground line-clamp-3 mb-4">{post.excerpt}</p>
-                    )}
-                    <div className="mt-auto pt-4 border-t flex items-center justify-between">
-                      <span className="text-primary font-medium text-xs tracking-wider uppercase group-hover:underline">
-                        {dict.common.readMore} →
+                    <div className="mt-6">
+                      <span className="text-primary font-semibold text-sm tracking-wider uppercase flex items-center">
+                        {dict.common.readMore}
+                        <span className="ml-1">→</span>
                       </span>
                     </div>
                   </div>
@@ -119,7 +122,7 @@ export function BlogFilter({ posts, categories, locale = "tr" }: BlogFilterProps
       ) : (
         <FadeIn>
           <p className="text-muted-foreground text-center py-16">
-            {locale === "en" ? "No articles found in this category." : "Henüz bu kategoride yazı bulunmuyor."}
+            {dict.blog.noPostsFound}
           </p>
         </FadeIn>
       )}

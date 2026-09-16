@@ -45,13 +45,13 @@ export function BlogSection({
             <AnimateGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {posts.slice(0, 3).map((post: BlogPost, i) => {
                 const postHref = locale === "en"
-                  ? `/en/blog/${post.slug?.current}`
-                  : `/blog/${post.slug?.current}`;
+                  ? `/en/blog/${post.slug}`
+                  : `/blog/${post.slug}`;
 
                 return (
-                  <StaggerItem key={post.slug?.current ?? i}>
-                    <Link href={postHref} prefetch={false} className="group block">
-                      <article className="border rounded-xl overflow-hidden bg-card hover:shadow-xl transition-all duration-300 h-full flex flex-col hover:-translate-y-1">
+                  <StaggerItem key={post.slug ?? i}>
+                    <Link href={postHref} prefetch={false} className="group block h-full">
+                      <article className="h-full flex flex-col overflow-hidden rounded-xl border bg-card transition-colors duration-300 hover:border-primary/40">
                         {post.mainImage && (
                           <div className="relative aspect-video overflow-hidden">
                             <SanityImage
@@ -86,9 +86,9 @@ export function BlogSection({
                             )}
                           </div>
                           <div className="mt-6">
-                            <span className="text-primary font-semibold text-xs tracking-wider uppercase group-hover:underline underline-offset-4 flex items-center">
+                            <span className="text-primary font-semibold text-xs tracking-wider uppercase flex items-center">
                               {dict.common.readMore}
-                              <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
+                              <span className="ml-1">→</span>
                             </span>
                           </div>
                         </div>

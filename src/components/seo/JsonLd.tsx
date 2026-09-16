@@ -36,7 +36,7 @@ export function websiteJsonLd(settings?: SiteSettings) {
 }
 
 export function articleJsonLd(post?: BlogPost, settings?: SiteSettings) {
-  const url = `${getSiteUrl()}/blog/${post?.slug?.current}`;
+  const url = `${getSiteUrl()}/blog/${post?.slug}`;
   const publisherName = settings?.siteName || "Site Adı";
 
   return {
@@ -108,7 +108,7 @@ export function serviceJsonLd(service?: Service) {
     "@context": "https://schema.org",
     "@type": "Service",
     name: service?.title,
-    url: `${getSiteUrl()}/hizmetler/${service?.slug?.current}`,
+    url: `${getSiteUrl()}/hizmetler/${service?.slug}`,
     ...(service?.mainImage?.asset?.url && { image: service.mainImage.asset.url }),
   };
 }

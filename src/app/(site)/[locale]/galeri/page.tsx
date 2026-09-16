@@ -4,10 +4,8 @@ import { galleryPageQuery, galleryListQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
 import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
 import { PageHero } from "@/components/layout/PageHero";
-import { SanityImage } from "@/components/ui/SanityImage";
 import { FadeIn } from "@/components/ui/FadeIn";
-import { AnimateGroup } from "@/components/ui/AnimateGroup";
-import { StaggerItem } from "@/components/ui/StaggerItem";
+import { LightboxGallery } from "@/components/ui/Lightbox";
 import { GalleryPage as GalleryPageType, GalleryItem } from "@/types";
 
 export async function generateMetadata({
@@ -61,24 +59,15 @@ export default async function GalleryHubPage({
 
       <div className="container mx-auto px-4">
         {items && items.length > 0 ? (
-          <AnimateGroup className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {items.map((item) => (
-              <StaggerItem key={item._id} className="relative aspect-[4/3] rounded-lg overflow-hidden">
-                {item.image?.asset && (
-                  <SanityImage
-                    image={item.image}
-                    fill
-                    sizes="(max-width: 768px) 50vw, 33vw"
-                    className="object-cover"
-                  />
-                )}
-              </StaggerItem>
-            ))}
-          </AnimateGroup>
+          <LightboxGallery
+            items={items
+              .filter((item) => item.image?.asset)
+              .map((item) => ({ image: item.image!, caption: item.caption }))}
+          />
         ) : (
           <FadeIn>
             <p className="text-muted-foreground text-center py-16">
-              {locale === "en" ? "No gallery images found." : "Henüz eklenmiş bir görsel bulunmuyor."}
+              {dict.gallery.noImagesFound}
             </p>
           </FadeIn>
         )}

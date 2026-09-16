@@ -83,7 +83,7 @@ export default async function ContactPage({
                       <RiPhoneLine className="size-6" />
                     </span>
                     <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
-                      {locale === "en" ? "Phone (Landline)" : "Telefon (Sabit Hat)"}
+                      {dict.contact.phoneLabel}
                     </span>
                     <span className="text-sm font-medium text-foreground">{contact.phone}</span>
                   </a>
@@ -98,7 +98,7 @@ export default async function ContactPage({
                       <RiPhoneLine className="size-6" />
                     </span>
                     <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
-                      {locale === "en" ? "Mobile / Helpline" : "Mobil / Danışma"}
+                      {dict.contact.mobileLabel}
                     </span>
                     <span className="text-sm font-medium text-foreground">{contact.phone2}</span>
                   </a>
@@ -135,17 +135,28 @@ export default async function ContactPage({
                     <span className="text-sm font-medium text-foreground">{contact.whatsappNumber}</span>
                   </a>
                 )}
+              </div>
+            </FadeIn>
+          )}
 
+          {/* Harita İframe + Adres */}
+          {contact?.mapIframe && (
+            <FadeIn delay={0.15}>
+              <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-sm">
+                <div
+                  className="w-full [&_iframe]:w-full [&_iframe]:h-[380px] [&_iframe]:border-0"
+                  dangerouslySetInnerHTML={{ __html: contact.mapIframe }}
+                />
                 {contact?.address && (
-                  <div className="flex flex-col items-center text-center p-6 rounded-xl border border-border bg-card">
-                    <span className="p-3 rounded-full bg-primary/10 text-primary mb-3">
-                      <RiMapPinLine className="size-6" />
-                    </span>
-                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
-                      {dict.contact.address}
-                    </span>
-                    <span className="text-sm font-medium text-foreground">{contact.address}</span>
-                  </div>
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(contact.address)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 p-4 text-sm text-muted-foreground hover:text-primary border-t border-border transition-colors"
+                  >
+                    <RiMapPinLine className="size-4 shrink-0" />
+                    {contact.address}
+                  </a>
                 )}
               </div>
             </FadeIn>
@@ -153,7 +164,7 @@ export default async function ContactPage({
 
           {/* Çalışma Saatleri */}
           {data?.workingHours && data.workingHours.length > 0 && (
-            <FadeIn delay={0.15}>
+            <FadeIn delay={0.2}>
               <div className="rounded-2xl border border-border bg-card p-6 md:p-8 space-y-4">
                 <div className="flex items-center gap-3">
                   <span className="p-3 rounded-full bg-primary/10 text-primary">
@@ -161,12 +172,10 @@ export default async function ContactPage({
                   </span>
                   <div>
                     <h2 className="text-lg font-bold text-foreground">
-                      {locale === "en" ? "Working & Treatment Hours" : "Çalışma ve Seans Saatleri"}
+                      {dict.contact.workingHoursTitle}
                     </h2>
                     <p className="text-sm text-muted-foreground">
-                      {locale === "en"
-                        ? "Our center operates on a regular schedule throughout the week."
-                        : "Haftalık diyaliz seansları ve merkezin açık olduğu saatler."}
+                      {dict.contact.workingHoursSubtitle}
                     </p>
                   </div>
                 </div>
@@ -188,7 +197,7 @@ export default async function ContactPage({
           {/* İletişim Formu */}
           {data?.showForm && (
             <div className="max-w-2xl mx-auto">
-              <FadeIn delay={0.15}>
+              <FadeIn delay={0.25}>
                 <ContactForm
                   formTitle={data?.formTitle}
                   successMessage={data?.successMessage}
@@ -198,27 +207,13 @@ export default async function ContactPage({
             </div>
           )}
 
-          {/* Harita İframe */}
-          {contact?.mapIframe && (
-            <FadeIn delay={0.2}>
-              <div
-                className="w-full rounded-2xl overflow-hidden border border-border shadow-sm [&_iframe]:w-full [&_iframe]:h-[380px] [&_iframe]:border-0"
-                dangerouslySetInnerHTML={{ __html: contact.mapIframe }}
-              />
-            </FadeIn>
-          )}
-
           {/* Sık Sorulan Sorular (SSS) */}
           {data?.faqs && data.faqs.length > 0 && (
-            <FadeIn delay={0.25}>
+            <FadeIn delay={0.3}>
               <div className="space-y-6 pt-6">
                 <SectionHeading
-                  title={locale === "en" ? "Frequently Asked Questions" : "Sık Sorulan Sorular"}
-                  subtitle={
-                    locale === "en"
-                      ? "Answers to common questions about treatment, transport, and coverage."
-                      : "Diyaliz tedavisi, servis hizmeti ve SGK anlaşmaları hakkında merak edilenler."
-                  }
+                  title={dict.contact.faqTitle}
+                  subtitle={dict.contact.faqSubtitle}
                 />
                 <FAQ items={data.faqs} />
               </div>

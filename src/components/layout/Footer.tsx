@@ -132,9 +132,16 @@ export function Footer({
                   </li>
                 )}
                 {contact?.address && (
-                  <li className="flex items-start gap-3 text-sm text-muted-foreground">
-                    <RiMapPinLine className="mt-0.5 shrink-0" />
-                    <span className="leading-relaxed">{contact.address}</span>
+                  <li>
+                    <a
+                      href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(contact.address)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-start gap-3 text-sm text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      <RiMapPinLine className="mt-0.5 shrink-0" />
+                      <span className="leading-relaxed">{contact.address}</span>
+                    </a>
                   </li>
                 )}
               </ul>
