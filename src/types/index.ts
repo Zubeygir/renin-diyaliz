@@ -287,6 +287,7 @@ export type ProjectsPage = InnerPageWithCta;
 export interface StatItem {
   value: string;
   label: string;
+  countUp?: boolean;
 }
 
 export interface HomePage {

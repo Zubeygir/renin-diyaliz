@@ -98,6 +98,7 @@ export const homePageQuery = groq`*[_type == "homePage"][0] {
   "aboutCtaLink": coalesce(aboutCtaLink[$locale], aboutCtaLink.tr, aboutCtaLink),
   stats[] {
     value,
+    countUp,
     "label": coalesce(label[$locale], label.tr, label)
   },
   "servicesTitle": coalesce(servicesTitle[$locale], servicesTitle.tr, servicesTitle),

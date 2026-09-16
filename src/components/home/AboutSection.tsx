@@ -1,6 +1,7 @@
 import { SplitSection } from "@/components/ui/SplitSection";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { RichText } from "@/components/ui/RichText";
+import { StatValue } from "@/components/home/StatValue";
 import Link from "next/link";
 import { SanityImage as SanityImageType, Locale, StatItem, StaffPreviewItem } from "@/types";
 import { getDictionary } from "@/lib/i18n";
@@ -74,13 +75,13 @@ export function AboutSection({
         )}
       </div>
 
-      {/* Facts: a definition list, static. Counting up to a founding year says nothing. */}
+      {/* Facts: a definition list. Static by default per design-language.md; countUp is an opt-in per-item Sanity toggle. */}
       {stats && stats.length > 0 && (
-        <dl className="mt-12 grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-6 border-t border-border pt-8">
+        <dl className="mt-12 flex flex-nowrap gap-x-4 sm:gap-x-8 gap-y-6 border-t border-border pt-8">
           {stats.map((stat, i) => (
-            <div key={i}>
+            <div key={i} className="flex-1 min-w-0">
               <dd className="font-heading text-3xl md:text-4xl font-semibold text-primary tracking-[-0.02em]">
-                {stat.value}
+                <StatValue value={stat.value} countUp={stat.countUp} />
               </dd>
               <dt className="mt-1 text-sm text-muted-foreground">{stat.label}</dt>
             </div>

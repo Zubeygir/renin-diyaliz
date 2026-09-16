@@ -275,6 +275,13 @@ export const homePageType = defineType({
           fields: [
             defineField({ name: "value", title: "Değer / Sayı", type: "string", description: "Örn: 50+1 veya 2000" }),
             defineField({ name: "label", title: "Etiket", type: "localizedString", description: "Örn: Cihaz Kapasitesi" }),
+            defineField({
+              name: "countUp",
+              title: "Sayaç Animasyonu",
+              type: "boolean",
+              description: "Açılırsa değerin başındaki sayı 0'dan sayarak belirir (yalnızca sayı ile başlayan değerlerde çalışır).",
+              initialValue: false,
+            }),
           ],
           preview: {
             select: { title: "value", subtitle: "label.tr" },
