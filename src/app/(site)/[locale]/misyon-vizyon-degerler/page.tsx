@@ -3,8 +3,7 @@ import { cachedFetch } from "@/sanity/lib/client";
 import { missionVisionPageQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
 import { isValidLocale, DEFAULT_LOCALE, Locale } from "@/lib/i18n";
-import { PageHero } from "@/components/layout/PageHero";
-import { FadeIn } from "@/components/ui/FadeIn";
+import { PageTitle } from "@/components/layout/PageTitle";
 import { RichText } from "@/components/ui/RichText";
 import { MissionVisionPage as MissionVisionPageType } from "@/types";
 
@@ -48,64 +47,105 @@ export default async function MissionVisionPage({
   );
 
   const defaultTitle = locale === "en" ? "Mission, Vision & Values" : "Misyon, Vizyon, Değerler ve Kalite Politikası";
+  const missionTitle = data?.missionTitle || (locale === "en" ? "Our Mission" : "Misyonumuz");
+  const visionTitle = data?.visionTitle || (locale === "en" ? "Our Vision" : "Vizyonumuz");
+  const valuesTitle = data?.valuesTitle || (locale === "en" ? "Core Values" : "Temel Değerlerimiz");
+  const qualityTitle = data?.qualityPolicyTitle || (locale === "en" ? "Quality Policy" : "Kalite Politikamız");
+
+  const navItems = [
+    { id: "misyon", label: missionTitle, show: Boolean(data?.missionText) },
+    { id: "vizyon", label: visionTitle, show: Boolean(data?.visionText) },
+    { id: "degerler", label: valuesTitle, show: Boolean(data?.values && data.values.length > 0) },
+    { id: "kalite-politikasi", label: qualityTitle, show: Boolean(data?.qualityPolicyText) },
+  ].filter((item) => item.show);
 
   return (
-    <div className="flex flex-col gap-12 md:gap-16 pb-16">
-      <PageHero
+    <div className="flex flex-col gap-10 md:gap-14 pb-20">
+      <PageTitle
         title={data?.heroTitle || data?.pageTitle || defaultTitle}
         subtitle={data?.heroSubtitle}
-        backgroundImage={data?.heroImage}
       />
 
-      <div className="container mx-auto px-4 max-w-4xl flex flex-col gap-12 md:gap-16">
-        {(data?.missionText || data?.visionText) && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          {/* Sol Kolon: Sayfa İçi Anchor Navigasyon (Sticky) */}
+          <aside className="lg:col-span-4 lg:sticky lg:top-28 lg:self-start">
+            <div className="border border-border rounded-md p-6 bg-card">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+                {locale === "en" ? "Page Contents" : "Sayfa Başlıkları"}
+              </p>
+              <nav className="flex flex-col space-y-2">
+                {navItems.map((item) => (
+                  <a
+                    key={item.id}
+                    href={`#${item.id}`}
+                    className="text-sm font-medium text-muted-foreground hover:text-foreground hover:translate-x-0.5 transition-all py-1 border-l-2 border-transparent hover:border-primary pl-2.5 -ml-2.5"
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </nav>
+            </div>
+          </aside>
+
+          {/* Sağ Kolon: İçerik Bölümleri */}
+          <main className="lg:col-span-8 min-w-0 space-y-16">
+            {/* Misyon */}
             {data?.missionText && (
-              <FadeIn direction="up">
-                <h2 className="text-2xl font-bold tracking-tight mb-3">
-                  {data.missionTitle || (locale === "en" ? "Our Mission" : "Misyonumuz")}
+              <section id="misyon" className="scroll-mt-28 space-y-4">
+                <h2 className="font-heading text-2xl font-semibold text-foreground tracking-[-0.015em]">
+                  {missionTitle}
                 </h2>
-                <p className="text-lg text-foreground/80 leading-relaxed whitespace-pre-line">{data.missionText}</p>
-              </FadeIn>
+                <p className="text-base sm:text-lg text-foreground/85 leading-relaxed whitespace-pre-line max-w-[68ch]">
+                  {data.missionText}
+                </p>
+              </section>
             )}
+
+            {/* Vizyon */}
             {data?.visionText && (
-              <FadeIn direction="up" delay={0.1}>
-                <h2 className="text-2xl font-bold tracking-tight mb-3">
-                  {data.visionTitle || (locale === "en" ? "Our Vision" : "Vizyonumuz")}
+              <section id="vizyon" className="scroll-mt-28 space-y-4 pt-8 border-t border-border">
+                <h2 className="font-heading text-2xl font-semibold text-foreground tracking-[-0.015em]">
+                  {visionTitle}
                 </h2>
-                <p className="text-lg text-foreground/80 leading-relaxed whitespace-pre-line">{data.visionText}</p>
-              </FadeIn>
+                <p className="text-base sm:text-lg text-foreground/85 leading-relaxed whitespace-pre-line max-w-[68ch]">
+                  {data.visionText}
+                </p>
+              </section>
             )}
-          </div>
-        )}
 
-        {data?.values && data.values.length > 0 && (
-          <FadeIn direction="up">
-            <h2 className="text-2xl font-bold tracking-tight mb-4">
-              {data.valuesTitle || (locale === "en" ? "Core Values" : "Temel Değerlerimiz")}
-            </h2>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {data.values.map((value, i) => (
-                <li key={i} className="flex items-start gap-3 text-muted-foreground">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                  {value}
-                </li>
-              ))}
-            </ul>
-          </FadeIn>
-        )}
+            {/* Değerler: Büyük puntolu divide-y satırlar */}
+            {data?.values && data.values.length > 0 && (
+              <section id="degerler" className="scroll-mt-28 space-y-6 pt-8 border-t border-border">
+                <h2 className="font-heading text-2xl font-semibold text-foreground tracking-[-0.015em]">
+                  {valuesTitle}
+                </h2>
+                <ul className="divide-y divide-border border-y border-border">
+                  {data.values.map((value, i) => (
+                    <li
+                      key={i}
+                      className="py-4 font-heading text-lg sm:text-xl font-medium text-foreground leading-snug"
+                    >
+                      {value}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
 
-        {data?.qualityPolicyText && (
-          <FadeIn direction="up">
-            <h2 className="text-2xl font-bold tracking-tight mb-4">
-              {data.qualityPolicyTitle || (locale === "en" ? "Quality Policy" : "Kalite Politikamız")}
-            </h2>
-            <RichText
-              value={data.qualityPolicyText}
-              className="[&_ul]:sm:columns-2 [&_ul]:sm:gap-x-10 [&_li]:break-inside-avoid"
-            />
-          </FadeIn>
-        )}
+            {/* Kalite Politikası */}
+            {data?.qualityPolicyText && (
+              <section id="kalite-politikasi" className="scroll-mt-28 space-y-6 pt-8 border-t border-border">
+                <h2 className="font-heading text-2xl font-semibold text-foreground tracking-[-0.015em]">
+                  {qualityTitle}
+                </h2>
+                <div className="max-w-[68ch] text-foreground/85 leading-relaxed [&_ul]:divide-y [&_ul]:divide-border [&_ul]:border-y [&_ul]:border-border [&_ul]:list-none [&_ul]:pl-0 [&_li]:py-3 [&_li]:text-sm sm:[&_li]:text-base">
+                  <RichText value={data.qualityPolicyText} />
+                </div>
+              </section>
+            )}
+          </main>
+        </div>
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { cachedFetch } from "@/sanity/lib/client";
 import { projectsPageQuery, projectListQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
 import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
-import { PageHero } from "@/components/layout/PageHero";
+import { PageTitle } from "@/components/layout/PageTitle";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { AnimateGroup } from "@/components/ui/AnimateGroup";
@@ -53,12 +53,10 @@ export default async function ProjectsHubPage({
   ]);
 
   return (
-    <div className="flex flex-col gap-12 md:gap-16 pb-16">
-      {/* Page Hero */}
-      <PageHero
+    <div className="flex flex-col gap-10 md:gap-14 pb-20">
+      <PageTitle
         title={pageData?.heroTitle || pageData?.pageTitle || dict.nav.projects}
         subtitle={pageData?.heroSubtitle || pageData?.pageSubtitle}
-        backgroundImage={pageData?.heroImage}
       />
 
       <div className="container mx-auto px-4">

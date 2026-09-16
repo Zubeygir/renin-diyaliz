@@ -20,23 +20,22 @@ export function FAQ({ items, className = "" }: { items: FAQItem[], className?: s
       {/* Automate FAQPage Structured Data injection */}
       <JsonLd data={faqPageJsonLd(items)} />
 
-      <div className={`space-y-4 ${className}`}>
+      <div className={`divide-y divide-border border-b border-border ${className}`}>
         {items.map((item, index) => (
-          <div 
-            key={index} 
-            className={`border rounded-xl transition-all duration-300 ${activeIndex === index ? "bg-muted/30 border-primary/20 shadow-sm" : "bg-card hover:bg-muted/20"}`}
-          >
+          <div key={index}>
             <button
               onClick={() => setActiveIndex(activeIndex === index ? null : index)}
-              className="flex w-full items-center justify-between p-5 text-left transition-all"
+              className="flex w-full items-center justify-between py-5 text-left transition-colors group cursor-pointer"
               aria-expanded={activeIndex === index}
             >
-              <span className="font-semibold text-lg md:text-xl pr-4">{item.question}</span>
-              <div className={`shrink-0 rounded-full p-1 transition-colors ${activeIndex === index ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>
+              <span className="font-heading text-base sm:text-lg font-medium text-foreground pr-4 group-hover:text-primary transition-colors">
+                {item.question}
+              </span>
+              <div className="shrink-0 text-muted-foreground group-hover:text-foreground transition-colors">
                 {activeIndex === index ? (
-                  <RiSubtractLine size={24} />
+                  <RiSubtractLine size={20} />
                 ) : (
-                  <RiAddLine size={24} />
+                  <RiAddLine size={20} />
                 )}
               </div>
             </button>
@@ -47,10 +46,10 @@ export function FAQ({ items, className = "" }: { items: FAQItem[], className?: s
               animate={{ 
                 height: activeIndex === index ? "auto" : 0
               }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
               className="overflow-hidden"
             >
-              <div className="p-5 pt-0 text-muted-foreground text-base leading-relaxed">
+              <div className="pb-5 pt-1 text-muted-foreground text-sm sm:text-base leading-relaxed max-w-[70ch]">
                 {item.answer}
               </div>
             </motion.div>

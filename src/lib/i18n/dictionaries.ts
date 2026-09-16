@@ -20,6 +20,7 @@ export interface Dictionary {
     errorDesc: string;
     workingHours: string;
     workingHoursVal: string;
+    getDirections: string;
   };
   nav: {
     home: string;
@@ -121,6 +122,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
       errorDesc: "Beklenmedik bir sorun meydana geldi. Lütfen tekrar deneyin.",
       workingHours: "Çalışma Saatleri",
       workingHoursVal: "Pazartesi - Cumartesi: 07:00 - 19:00",
+      getDirections: "Yol Tarifi",
     },
     nav: {
       home: "Ana Sayfa",
@@ -220,6 +222,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
       errorDesc: "An unexpected error occurred. Please try again.",
       workingHours: "Working Hours",
       workingHoursVal: "Monday - Saturday: 07:00 - 19:00",
+      getDirections: "Get Directions",
     },
     nav: {
       home: "Home",

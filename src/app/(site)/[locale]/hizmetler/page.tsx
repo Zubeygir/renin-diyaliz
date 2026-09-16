@@ -1,15 +1,11 @@
 import { Metadata } from "next";
+import Link from "next/link";
 import { cachedFetch } from "@/sanity/lib/client";
 import { servicesPageQuery, serviceListQuery } from "@/sanity/lib/queries";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, getLayoutData } from "@/lib/seo";
 import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
-import { PageHero } from "@/components/layout/PageHero";
+import { PageTitle } from "@/components/layout/PageTitle";
 import { SanityImage } from "@/components/ui/SanityImage";
-import { FadeIn } from "@/components/ui/FadeIn";
-import { AnimateGroup } from "@/components/ui/AnimateGroup";
-import { StaggerItem } from "@/components/ui/StaggerItem";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { ServicesPage as ServicesPageType, Service } from "@/types";
 
 export async function generateMetadata({
@@ -48,80 +44,125 @@ export default async function ServicesHubPage({
   const locale: Locale = isValidLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
   const dict = getDictionary(locale);
 
-  const [services, pageData] = await Promise.all([
+  const [services, pageData, layoutData] = await Promise.all([
     cachedFetch<Service[]>(serviceListQuery, { locale }, { next: { tags: ["service:list"] } }),
     cachedFetch<ServicesPageType>(servicesPageQuery, { locale }, { next: { tags: ["servicesPage"] } }),
+    getLayoutData(locale),
   ]);
 
+  const phone = layoutData?.settings?.contactInfo?.phone;
+
   return (
-    <div className="flex flex-col gap-12 md:gap-16 pb-16">
-      {/* Page Hero */}
-      <PageHero
+    <div className="flex flex-col gap-10 md:gap-14 pb-20">
+      <PageTitle
         title={pageData?.heroTitle || pageData?.pageTitle || dict.nav.services}
         subtitle={pageData?.heroSubtitle || pageData?.pageSubtitle}
-        backgroundImage={pageData?.heroImage}
       />
 
       <div className="container mx-auto px-4">
         {services && services.length > 0 ? (
-          <AnimateGroup className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8">
-            {services.map((service: Service) => {
-              const serviceHref = locale === "en"
-                ? `/en/services/${service.slug}`
-                : `/hizmetler/${service.slug}`;
+          <div className="divide-y divide-border border-y border-border">
+            {services.map((service: Service, idx: number) => {
+              const serviceHref = service.slug
+                ? (locale === "en"
+                    ? `/en/services/${service.slug}`
+                    : `/hizmetler/${service.slug}`)
+                : "#";
 
               return (
-                <StaggerItem key={service.slug}>
-                  <Link href={serviceHref} prefetch={false} className="group block h-full">
-                    <article className="h-full flex flex-col overflow-hidden rounded-xl border bg-card transition-colors duration-300 hover:border-primary/40">
-                      {service.mainImage && (
-                        <div className="relative aspect-video overflow-hidden">
+                <article key={service._id ?? service.slug ?? idx} className="py-10 sm:py-12 first:pt-8 last:pb-8">
+                  <Link
+                    href={serviceHref}
+                    prefetch={false}
+                    className="group grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
+                  >
+                    <div className="lg:col-span-5">
+                      <div className="relative aspect-[4/3] w-full rounded-md overflow-hidden bg-muted border border-border">
+                        {service.mainImage && (
                           <SanityImage
                             image={service.mainImage}
                             fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            sizes="(max-width: 1024px) 100vw, 480px"
+                            className="object-cover transition-opacity duration-300 group-hover:opacity-90"
                           />
-                        </div>
-                      )}
-                      <div className="p-6 flex-grow flex flex-col justify-between">
-                        <div>
-                          <h2 className="font-bold text-xl mb-3 group-hover:text-primary transition-colors line-clamp-2">
-                            {service.title}
-                          </h2>
-                        </div>
-                        <div className="mt-6">
-                          <span className="text-primary font-semibold text-sm tracking-wider uppercase flex items-center">
-                            {dict.common.viewDetail}
-                            <span className="ml-1">→</span>
-                          </span>
-                        </div>
+                        )}
                       </div>
-                    </article>
+                    </div>
+
+                    <div className="lg:col-span-7">
+                      <h2 className="font-heading text-2xl sm:text-3xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                        {service.title}
+                      </h2>
+                      {service.excerpt && (
+                        <p className="text-muted-foreground text-base sm:text-lg leading-relaxed mt-4 line-clamp-3">
+                          {service.excerpt}
+                        </p>
+                      )}
+                      <div className="mt-6">
+                        <span className="text-primary font-medium text-sm inline-flex items-center gap-1 group-hover:underline">
+                          {dict.common.viewDetail}
+                          <span className="transition-transform group-hover:translate-x-0.5">→</span>
+                        </span>
+                      </div>
+                    </div>
                   </Link>
-                </StaggerItem>
+                </article>
               );
             })}
-          </AnimateGroup>
+          </div>
         ) : (
-          <FadeIn>
-            <p className="text-muted-foreground text-center py-16">
-              {dict.services.noServicesFound}
-            </p>
-          </FadeIn>
+          <p className="text-muted-foreground text-center py-16">
+            {dict.services.noServicesFound}
+          </p>
         )}
 
-        {/* CTA Section */}
-        {pageData?.ctaLabel && pageData?.ctaLink && (
-          <FadeIn className="mt-16 md:mt-24 p-8 md:p-12 rounded-lg bg-primary/5 border border-primary/20 text-center max-w-2xl mx-auto">
-            {pageData?.pageSubtitle && (
-              <p className="text-muted-foreground mb-8">{pageData.pageSubtitle}</p>
+        {/* SGK, Servis ve İletişim Bilgi Bloğu (Jenerik CTA kutusu yerine) */}
+        <div className="mt-16 pt-10 border-t border-border grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-6 rounded-md border border-border bg-card">
+            <h3 className="font-heading font-semibold text-base text-foreground mb-2">
+              {locale === "en" ? "Social Security (SGK)" : "Sosyal Güvence (SGK)"}
+            </h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {locale === "en"
+                ? "Hemodialysis treatments are provided in full compliance with SGK and contracted private health insurances."
+                : "Merkezimizdeki tüm hemodiyaliz tedavileri SGK ve anlaşmalı özel sağlık sigortaları kapsamında yürütülmektedir."}
+            </p>
+          </div>
+
+          <div className="p-6 rounded-md border border-border bg-card">
+            <h3 className="font-heading font-semibold text-base text-foreground mb-2">
+              {locale === "en" ? "Patient Transport" : "Hasta Nakil / Servis"}
+            </h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {locale === "en"
+                ? "Scheduled door-to-door transportation for patients along defined district routes on treatment days."
+                : "Tedavi günlerinde hastalarımızın ulaşımı, belirlenen ilçe güzergâhlarında ücretsiz servis araçlarımızla sağlanır."}
+            </p>
+          </div>
+
+          <div className="p-6 rounded-md border border-border bg-card flex flex-col justify-between">
+            <div>
+              <h3 className="font-heading font-semibold text-base text-foreground mb-2">
+                {locale === "en" ? "Direct Consultation" : "Tedavi ve Başvuru"}
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {locale === "en"
+                  ? "Contact our clinical coordinators directly for admission and session scheduling."
+                  : "Tedavi kabul süreçleri ve seans planlaması için merkezimizle doğrudan irtibat kurabilirsiniz."}
+              </p>
+            </div>
+            {phone && (
+              <div className="pt-4 border-t border-border mt-4">
+                <a
+                  href={`tel:${phone.replace(/\s+/g, "")}`}
+                  className="font-heading font-semibold text-lg text-primary hover:underline tabular-nums"
+                >
+                  {phone}
+                </a>
+              </div>
             )}
-            <Button size="lg" render={<Link href={pageData.ctaLink} prefetch={false} />}>
-              {pageData.ctaLabel}
-            </Button>
-          </FadeIn>
-        )}
+          </div>
+        </div>
       </div>
     </div>
   );

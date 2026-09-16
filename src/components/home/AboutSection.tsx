@@ -1,9 +1,6 @@
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { FadeIn } from "@/components/ui/FadeIn";
+import { SplitSection } from "@/components/ui/SplitSection";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { RichText } from "@/components/ui/RichText";
-import { Button } from "@/components/ui/button";
-import { CountUp } from "@/components/ui/CountUp";
 import Link from "next/link";
 import { SanityImage as SanityImageType, Locale, StatItem, StaffPreviewItem } from "@/types";
 import { getDictionary } from "@/lib/i18n";
@@ -33,107 +30,108 @@ export function AboutSection({
   locale = "tr",
 }: AboutSectionProps) {
   const dict = getDictionary(locale);
-  const displayTitle = title || dict.nav.about;
-  const displayCtaLabel = ctaLabel || dict.common.readMore;
   const defaultHref = locale === "en" ? "/en/about" : "/hakkimizda";
-  const displayCtaLink = ctaLink || defaultHref;
   const staffHref = locale === "en" ? "/en/team" : "/kadromuz";
 
   return (
-    <section className="py-20 md:py-28 overflow-hidden bg-background">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-
-          {/* Sol Kolon: Metinler */}
-          <div className="lg:col-span-8 space-y-6">
-            <SectionHeading
-              title={displayTitle}
-              subtitle={subtitle}
-              align="left"
+    <SplitSection
+      title={title || dict.nav.about}
+      className="bg-background"
+      aside={
+        <>
+          {subtitle && <p className="max-w-[40ch]">{subtitle}</p>}
+          <Link
+            href={ctaLink || defaultHref}
+            prefetch={false}
+            className="mt-4 inline-block font-medium text-primary underline-offset-4 hover:underline"
+          >
+            {ctaLabel || dict.common.readMore} →
+          </Link>
+        </>
+      }
+    >
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-x-10 gap-y-8 items-start">
+        <div className="md:col-span-3">
+          {text && text.length > 0 && (
+            // First paragraph is the lede; the rest settle to body size
+            <RichText
+              value={text}
+              className="text-foreground/90 [&>p:first-child]:text-lede [&>p:first-child]:text-foreground"
             />
-
-            {text && text.length > 0 && (
-              <FadeIn delay={0.15}>
-                <RichText value={text} className="text-muted-foreground" />
-              </FadeIn>
-            )}
-
-            {stats && stats.length > 0 && (
-              <FadeIn delay={0.2}>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4 border-t border-border">
-                  {stats.map((stat, i) => (
-                    <div key={i} className="space-y-1">
-                      <div className="font-heading text-2xl sm:text-3xl font-bold text-primary">
-                        <CountUp value={stat.value} />
-                      </div>
-                      <div className="text-xs sm:text-sm text-muted-foreground">{stat.label}</div>
-                    </div>
-                  ))}
-                </div>
-              </FadeIn>
-            )}
-
-            <FadeIn delay={0.25} className="pt-4">
-              <Button size="lg" render={<Link href={displayCtaLink} prefetch={false} />}>
-                {displayCtaLabel}
-              </Button>
-            </FadeIn>
-
-            {teamPreview && teamPreview.length > 0 && (
-              <FadeIn delay={0.3} className="flex flex-wrap items-center gap-4 pt-6 border-t border-border">
-                <div className="flex items-center -space-x-3">
-                  {teamPreview.map((member, i) => (
-                    <Link
-                      key={member._id ?? i}
-                      href={staffHref}
-                      prefetch={false}
-                      title={member.name}
-                      className="relative h-11 w-11 sm:h-12 sm:w-12 rounded-full overflow-hidden border-2 border-background bg-muted ring-1 ring-border transition-transform hover:z-10 hover:scale-105"
-                    >
-                      {member.photo ? (
-                        <SanityImage image={member.photo} fill sizes="48px" className="object-cover" />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center text-xs font-semibold text-muted-foreground">
-                          {member.name
-                            .split(" ")
-                            .map((part) => part[0])
-                            .slice(0, 2)
-                            .join("")}
-                        </div>
-                      )}
-                    </Link>
-                  ))}
-                </div>
-                <Link
-                  href={staffHref}
-                  prefetch={false}
-                  className="text-sm font-semibold text-primary hover:underline underline-offset-4"
-                >
-                  {dict.nav.staff} →
-                </Link>
-              </FadeIn>
-            )}
-          </div>
-
-          {/* Sağ Kolon: Görsel */}
-          {image && (
-            <div className="lg:col-span-4 relative">
-              <FadeIn direction="left" delay={0.3} className="relative max-w-xs mx-auto lg:max-w-none">
-                <div className="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-primary/20 to-transparent blur-2xl z-0" />
-                <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl z-10 border bg-card">
-                  <SanityImage
-                    image={image}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 40vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-              </FadeIn>
-            </div>
           )}
-
         </div>
+        {image && (
+          <div className="md:col-span-2">
+            <div className="relative aspect-[3/4] overflow-hidden rounded-md bg-muted">
+              <SanityImage
+                image={image}
+                fill
+                sizes="(max-width: 768px) 100vw, 30vw"
+                className="object-cover"
+              />
+            </div>
+          </div>
+        )}
       </div>
-    </section>
+
+      {/* Facts: a definition list, static. Counting up to a founding year says nothing. */}
+      {stats && stats.length > 0 && (
+        <dl className="mt-12 grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-6 border-t border-border pt-8">
+          {stats.map((stat, i) => (
+            <div key={i}>
+              <dd className="font-heading text-3xl md:text-4xl font-semibold text-primary tracking-[-0.02em]">
+                {stat.value}
+              </dd>
+              <dt className="mt-1 text-sm text-muted-foreground">{stat.label}</dt>
+            </div>
+          ))}
+        </dl>
+      )}
+
+      {teamPreview && teamPreview.length > 0 && (
+        <div className="mt-12 border-t border-border pt-8">
+          <div className="flex items-baseline justify-between gap-6">
+            <h3 className="font-heading text-lg font-semibold">{dict.nav.staff}</h3>
+            <Link
+              href={staffHref}
+              prefetch={false}
+              className="text-sm font-medium text-primary underline-offset-4 hover:underline whitespace-nowrap"
+            >
+              {dict.common.viewAll} →
+            </Link>
+          </div>
+          <ul className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-6">
+            {teamPreview.slice(0, 4).map((member, i) => (
+              <li key={member._id ?? i}>
+                <Link href={staffHref} prefetch={false} className="group block">
+                  <div className="relative aspect-square overflow-hidden rounded-md bg-muted">
+                    {member.photo ? (
+                      <SanityImage
+                        image={member.photo}
+                        fill
+                        sizes="(max-width: 640px) 45vw, 160px"
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center font-heading text-2xl font-semibold text-muted-foreground">
+                        {member.name
+                          .split(" ")
+                          .map((part) => part[0])
+                          .slice(0, 2)
+                          .join("")}
+                      </div>
+                    )}
+                  </div>
+                  <p className="mt-3 font-medium leading-snug group-hover:text-primary transition-colors">
+                    {member.name}
+                  </p>
+                  {member.role && <p className="text-sm text-muted-foreground">{member.role}</p>}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </SplitSection>
   );
 }

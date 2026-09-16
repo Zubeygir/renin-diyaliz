@@ -6,13 +6,11 @@ import { buildMetadata, getLayoutData } from "@/lib/seo";
 import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
 import { RichText } from "@/components/ui/RichText";
 import { SanityImage } from "@/components/ui/SanityImage";
-import { FadeIn } from "@/components/ui/FadeIn";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd, articleJsonLd } from "@/components/seo/JsonLd";
 import { formatDate } from "@/lib/utils";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { SetAlternateUrls } from "@/components/providers/AlternateUrlsContext";
-import { RiArrowLeftLine } from "react-icons/ri";
 import { BlogPost } from "@/types";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
@@ -107,18 +105,17 @@ export default async function BlogPostPage({ params }: Props) {
       <SetAlternateUrls tr={trPath} en={enPath} />
       <JsonLd data={articleJsonLd(post, layoutData?.settings)} />
 
-      <article className="container mx-auto px-4 py-12 md:py-16 max-w-3xl break-words overflow-x-hidden">
-        <FadeIn direction="up">
-          <Button
-            variant="ghost"
-            className="mb-8 -ml-2 gap-1.5"
-            render={<Link href={blogIndexHref} prefetch={false} />}
-          >
-            <RiArrowLeftLine size={16} />
-            {dict.blog.backToBlog}
-          </Button>
+      <article className="container mx-auto px-4 py-8 md:py-12 pb-20 max-w-4xl break-words overflow-x-hidden">
+        <Breadcrumbs
+          items={[
+            { label: dict.nav.blog, href: blogIndexHref },
+            { label: post.title, href: locale === "en" ? enPath : trPath, active: true },
+          ]}
+          className="mb-8"
+        />
 
-          <div className="flex items-center gap-3 mb-4">
+        <header className="mb-8">
+          <div className="flex items-center gap-3 text-xs sm:text-sm text-muted-foreground mb-3">
             {post.category && (
               <Link
                 href={
@@ -127,117 +124,87 @@ export default async function BlogPostPage({ params }: Props) {
                     : blogIndexHref
                 }
                 prefetch={false}
-                className="text-xs font-medium px-3 py-1 bg-primary/10 text-primary rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
+                className="font-medium text-primary hover:underline"
               >
                 {post.category.title}
               </Link>
             )}
+            {post.category && post.publishedAt && <span>•</span>}
             {post.publishedAt && (
-              <time className="text-sm text-muted-foreground block">
+              <time dateTime={post.publishedAt} className="tabular-nums">
                 {formatDate(post.publishedAt, dateLocale)}
               </time>
             )}
           </div>
 
-          <h1 className="text-4xl font-bold tracking-tight mb-4 pt-2">{post.title}</h1>
+          <h1 className="font-heading text-3xl sm:text-4xl lg:text-[2.75rem] font-semibold tracking-[-0.025em] text-foreground leading-[1.15]">
+            {post.title}
+          </h1>
 
           {(authorText || post._updatedAt) && (
-            <div className="text-sm text-muted-foreground mb-6 flex flex-wrap gap-x-4 gap-y-1">
-              {authorText && (
-                <span>{dict.blog.preparedBy.replace("{author}", authorText)}</span>
+            <div className="border-y border-border py-3 my-6 flex flex-wrap items-center justify-between text-xs sm:text-sm text-muted-foreground gap-3">
+              {authorText ? (
+                <span className="font-medium text-foreground/80">
+                  {dict.blog.preparedBy.replace("{author}", authorText)}
+                </span>
+              ) : (
+                <span />
               )}
               {post._updatedAt && (
-                <span>
+                <span className="tabular-nums">
                   {dict.blog.lastUpdated} {formatDate(post._updatedAt, dateLocale)}
                 </span>
               )}
             </div>
           )}
-        </FadeIn>
+        </header>
 
         {post.mainImage && (
-          <FadeIn delay={0.15}>
-            <div className="relative h-64 md:h-96 rounded-xl overflow-hidden border mb-12">
-              <SanityImage
-                image={post.mainImage}
-                fill
-                sizes="(max-width: 768px) 100vw, 800px"
-                className="object-cover"
-                priority
-              />
-            </div>
-          </FadeIn>
+          <div className="relative aspect-[16/9] w-full rounded-md overflow-hidden border border-border mb-12 bg-muted">
+            <SanityImage
+              image={post.mainImage}
+              fill
+              sizes="(max-width: 1024px) 100vw, 896px"
+              className="object-cover"
+              priority
+            />
+          </div>
         )}
 
-        <FadeIn delay={0.25}>
+        <div className="prose prose-slate max-w-[68ch] leading-relaxed text-foreground/90 space-y-6 text-base sm:text-lg">
           <RichText value={post.body} />
-        </FadeIn>
+        </div>
 
-        {post.seoTags && post.seoTags.length > 0 && (
-          <FadeIn delay={0.3}>
-            <div className="mt-16 pt-8 border-t">
-              <h3 className="text-sm font-semibold mb-3 text-muted-foreground">
-                {dict.blog.tags}
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {post.seoTags.map((tag: string) => (
-                  <span key={tag} className="text-sm bg-secondary px-3 py-1 rounded-md text-secondary-foreground">
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </FadeIn>
-        )}
-
+        {/* İlgili Yazılar: Kart yerine 3 sade metin satırı */}
         {relatedPosts?.length > 0 && (
-          <FadeIn delay={0.4}>
-            <div className="mt-20 pt-10 border-t border-border">
-              <h2 className="text-2xl font-bold tracking-tight mb-8">{dict.common.relatedPosts}</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {relatedPosts.map((rPost: BlogPost) => {
-                  const rPostHref = locale === "en"
-                    ? `/en/blog/${rPost.slug}`
-                    : `/blog/${rPost.slug}`;
+          <div className="mt-16 pt-10 border-t border-border">
+            <h2 className="font-heading text-xl font-semibold text-foreground mb-6">
+              {dict.common.relatedPosts}
+            </h2>
+            <ul className="divide-y divide-border border-y border-border">
+              {relatedPosts.map((rPost: BlogPost) => {
+                const rPostHref =
+                  locale === "en" ? `/en/blog/${rPost.slug}` : `/blog/${rPost.slug}`;
 
-                  return (
-                    <Link key={rPost.slug} href={rPostHref} prefetch={false} className="group block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl">
-                      <article className="h-full flex flex-col overflow-hidden rounded-xl border bg-card transition-colors duration-300 hover:border-primary/40">
-                        {rPost.mainImage && (
-                          <div className="relative aspect-video overflow-hidden">
-                            <SanityImage
-                              image={rPost.mainImage}
-                              fill
-                              sizes="(max-width: 768px) 100vw, 33vw"
-                              className="object-cover transition-transform duration-700 group-hover:scale-105"
-                            />
-                          </div>
-                        )}
-                        <div className="p-6 flex-grow flex flex-col justify-between">
-                          <div>
-                            {rPost.publishedAt && (
-                              <time className="text-xs text-muted-foreground mb-2 tracking-widest uppercase block">
-                                {formatDate(rPost.publishedAt, dateLocale)}
-                              </time>
-                            )}
-                            <h3 className="text-lg font-bold group-hover:text-primary transition-colors line-clamp-2">
-                              {rPost.title}
-                            </h3>
-                          </div>
-                          <div className="mt-6">
-                            <span className="text-primary font-semibold text-xs tracking-wider uppercase flex items-center">
-                              {dict.common.readMore}
-                              <span className="ml-1">→</span>
-                            </span>
-                          </div>
-                        </div>
-                      </article>
+                return (
+                  <li key={rPost.slug} className="py-4 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+                    <Link
+                      href={rPostHref}
+                      prefetch={false}
+                      className="font-heading font-medium text-base sm:text-lg text-foreground hover:text-primary transition-colors leading-snug"
+                    >
+                      {rPost.title}
                     </Link>
-                  );
-                })}
-              </div>
-            </div>
-          </FadeIn>
+                    {rPost.publishedAt && (
+                      <time dateTime={rPost.publishedAt} className="text-xs text-muted-foreground tabular-nums shrink-0">
+                        {formatDate(rPost.publishedAt, dateLocale)}
+                      </time>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         )}
       </article>
     </>

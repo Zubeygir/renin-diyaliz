@@ -1,86 +1,82 @@
-"use client";
-
-import { useCallback } from "react";
-import useEmblaCarousel from "embla-carousel-react";
-import { RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
-import { FadeIn } from "@/components/ui/FadeIn";
+import { SplitSection } from "@/components/ui/SplitSection";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { Partner } from "@/types";
+import { cn } from "@/lib/utils";
 
 interface PartnersSectionProps {
   title?: string;
+  note?: string;
   partners?: Partner[];
 }
 
-export function PartnersSection({ title, partners = [] }: PartnersSectionProps) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", dragFree: true, containScroll: "trimSnaps" });
+// Above this count a static grid gets too tall; switch to a paused-on-hover marquee.
+const MARQUEE_THRESHOLD = 12;
 
-  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
-  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+function PartnerLogo({ partner, className }: { partner: Partner; className?: string }) {
+  if (!partner.logo) return null;
 
-  if (!partners || partners.length === 0) return null;
+  // Logos stay in color: for SGK and insurers recognition is the point.
+  const logo = (
+    <SanityImage
+      image={partner.logo}
+      width={160}
+      height={64}
+      fit="max"
+      className="h-9 md:h-11 w-auto max-w-[140px] object-contain"
+    />
+  );
+
+  const cell = cn("flex items-center justify-center bg-background", className);
+
+  return partner.link ? (
+    <a
+      href={partner.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={partner.name}
+      className={cn(cell, "transition-colors hover:bg-muted/60")}
+    >
+      {logo}
+    </a>
+  ) : (
+    <div aria-label={partner.name} className={cell}>
+      {logo}
+    </div>
+  );
+}
+
+export function PartnersSection({ title, note, partners = [] }: PartnersSectionProps) {
+  const withLogo = partners.filter((p) => p.logo);
+  if (!title || withLogo.length === 0) return null;
+
+  const useMarquee = withLogo.length > MARQUEE_THRESHOLD;
 
   return (
-    <section className="py-5 md:py-6 bg-background border-y border-border/60">
-      <div className="container mx-auto px-4">
-        <FadeIn>
-          {title && (
-            <h2 className="text-center text-xs font-semibold tracking-wider text-muted-foreground uppercase mb-4">
-              {title}
-            </h2>
-          )}
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={scrollPrev}
-              aria-label="Önceki"
-              className="hidden sm:flex shrink-0 items-center justify-center text-muted-foreground hover:text-primary transition-colors"
-            >
-              <RiArrowLeftSLine size={22} />
-            </button>
-
-            <div className="overflow-hidden cursor-grab active:cursor-grabbing flex-1" ref={emblaRef}>
-              <div className="flex gap-10 md:gap-14">
-                {partners.map((partner) => {
-                  const logoEl = partner.logo ? (
-                    <SanityImage
-                      image={partner.logo}
-                      width={140}
-                      height={56}
-                      fit="max"
-                      className="h-10 md:h-12 w-auto object-contain grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
-                    />
-                  ) : null;
-
-                  if (!logoEl) return null;
-
-                  return (
-                    <div key={partner._id} className="shrink-0 select-none">
-                      {partner.link ? (
-                        <a href={partner.link} target="_blank" rel="noopener noreferrer" aria-label={partner.name}>
-                          {logoEl}
-                        </a>
-                      ) : (
-                        <div aria-label={partner.name}>{logoEl}</div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={scrollNext}
-              aria-label="Sonraki"
-              className="hidden sm:flex shrink-0 items-center justify-center text-muted-foreground hover:text-primary transition-colors"
-            >
-              <RiArrowRightSLine size={22} />
-            </button>
+    <SplitSection
+      title={title}
+      className="bg-background border-t border-border"
+      aside={note ? <p className="max-w-[40ch]">{note}</p> : undefined}
+    >
+      {useMarquee ? (
+        <div className="overflow-hidden border-y border-border py-6 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+          <div className="flex w-max gap-12 animate-marquee hover:[animation-play-state:paused] motion-reduce:animate-none motion-reduce:w-auto motion-reduce:flex-wrap">
+            {[...withLogo, ...withLogo].map((partner, i) => (
+              <PartnerLogo
+                key={`${partner._id}-${i}`}
+                partner={partner}
+                className={i >= withLogo.length ? "motion-reduce:hidden" : undefined}
+              />
+            ))}
           </div>
-        </FadeIn>
-      </div>
-    </section>
+        </div>
+      ) : (
+        // Hairline grid: 1px gaps over the border color read as rules, not cards
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-px bg-border border border-border">
+          {withLogo.map((partner) => (
+            <PartnerLogo key={partner._id} partner={partner} className="aspect-[5/3] p-6" />
+          ))}
+        </div>
+      )}
+    </SplitSection>
   );
 }

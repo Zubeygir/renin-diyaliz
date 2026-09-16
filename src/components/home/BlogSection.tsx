@@ -1,9 +1,7 @@
-import { FadeIn } from "@/components/ui/FadeIn";
-import { SectionHeading } from "@/components/ui/SectionHeading";
+import { SplitSection } from "@/components/ui/SplitSection";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { AnimateGroup } from "@/components/ui/AnimateGroup";
 import { StaggerItem } from "@/components/ui/StaggerItem";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
 import { BlogPost, Locale } from "@/types";
@@ -16,6 +14,10 @@ interface BlogSectionProps {
   locale?: Locale;
 }
 
+function postHref(post: BlogPost, locale: Locale) {
+  return locale === "en" ? `/en/blog/${post.slug}` : `/blog/${post.slug}`;
+}
+
 export function BlogSection({
   title,
   subtitle,
@@ -23,91 +25,92 @@ export function BlogSection({
   locale = "tr",
 }: BlogSectionProps) {
   const dict = getDictionary(locale);
-  const displayTitle = title || dict.common.allArticles;
-  const displaySubtitle = subtitle;
   const allBlogHref = locale === "en" ? "/en/blog" : "/blog";
   const dateLocale = locale === "en" ? "en-US" : "tr-TR";
 
+  if (!posts || posts.length === 0) return null;
+
+  const [featured, ...rest] = posts.slice(0, 3);
+
   return (
-    <section className="py-20 md:py-28 bg-muted/40">
-      <div className="container mx-auto px-4">
-        
-        {/* Header */}
-        <SectionHeading
-          title={displayTitle}
-          subtitle={displaySubtitle}
-          className="mb-16"
-        />
+    <SplitSection
+      title={title || dict.nav.blog}
+      className="bg-muted/40"
+      aside={
+        <>
+          {subtitle && <p className="max-w-[40ch]">{subtitle}</p>}
+          <Link
+            href={allBlogHref}
+            prefetch={false}
+            className="mt-4 inline-block font-medium text-primary underline-offset-4 hover:underline"
+          >
+            {dict.common.allArticles} →
+          </Link>
+        </>
+      }
+    >
+      {/* One featured post carries the image; the rest are text rows */}
+      <AnimateGroup stagger={0.12} className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-10">
+        <StaggerItem>
+          <Link href={postHref(featured, locale)} prefetch={false} className="group block">
+            {featured.mainImage && (
+              <div className="relative aspect-[16/10] overflow-hidden rounded-md bg-muted">
+                <SanityImage
+                  image={featured.mainImage}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                  className="object-cover"
+                />
+              </div>
+            )}
+            <div className="mt-5 flex items-center gap-3 text-sm text-muted-foreground">
+              {featured.category && <span className="font-medium text-primary">{featured.category.title}</span>}
+              {featured.publishedAt && (
+                <time dateTime={featured.publishedAt}>{formatDate(featured.publishedAt, dateLocale)}</time>
+              )}
+            </div>
+            <h3 className="mt-2 font-heading text-2xl font-semibold group-hover:text-primary transition-colors">
+              {featured.title}
+            </h3>
+            {featured.excerpt && (
+              <p className="mt-3 text-muted-foreground line-clamp-3 max-w-[52ch]">{featured.excerpt}</p>
+            )}
+            {featured.author?.name && (
+              <p className="mt-4 text-sm text-muted-foreground">
+                {featured.author.name}
+                {featured.author.title && <span className="text-muted-foreground/70"> · {featured.author.title}</span>}
+              </p>
+            )}
+          </Link>
+        </StaggerItem>
 
-        {/* Content */}
-        {posts && posts.length > 0 ? (
-          <div className="space-y-12">
-            <AnimateGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {posts.slice(0, 3).map((post: BlogPost, i) => {
-                const postHref = locale === "en"
-                  ? `/en/blog/${post.slug}`
-                  : `/blog/${post.slug}`;
-
-                return (
-                  <StaggerItem key={post.slug ?? i}>
-                    <Link href={postHref} prefetch={false} className="group block h-full">
-                      <article className="h-full flex flex-col overflow-hidden rounded-xl border bg-card transition-colors duration-300 hover:border-primary/40">
-                        {post.mainImage && (
-                          <div className="relative aspect-video overflow-hidden">
-                            <SanityImage
-                              image={post.mainImage}
-                              fill
-                              sizes="(max-width: 768px) 100vw, 33vw"
-                              className="object-cover group-hover:scale-105 transition-transform duration-500"
-                            />
-                          </div>
-                        )}
-                        <div className="p-6 flex-grow flex flex-col justify-between">
-                          <div>
-                            <div className="flex items-center gap-2 mb-3">
-                              {post.category && (
-                                <span className="text-xs font-semibold px-2.5 py-0.5 bg-secondary text-secondary-foreground rounded-full">
-                                  {post.category.title}
-                                </span>
-                              )}
-                              {post.publishedAt && (
-                                <time className="text-xs text-muted-foreground">
-                                  {formatDate(post.publishedAt, dateLocale)}
-                                </time>
-                              )}
-                            </div>
-                            <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors line-clamp-2">
-                              {post.title}
-                            </h3>
-                            {post.excerpt && (
-                              <p className="text-sm text-muted-foreground line-clamp-3 mt-2">
-                                {post.excerpt}
-                              </p>
-                            )}
-                          </div>
-                          <div className="mt-6">
-                            <span className="text-primary font-semibold text-xs tracking-wider uppercase flex items-center">
-                              {dict.common.readMore}
-                              <span className="ml-1">→</span>
-                            </span>
-                          </div>
-                        </div>
-                      </article>
-                    </Link>
-                  </StaggerItem>
-                );
-              })}
-            </AnimateGroup>
-            
-            <FadeIn delay={0.2} className="text-center pt-4">
-              <Button variant="outline" size="lg" render={<Link href={allBlogHref} prefetch={false} />}>
-                {dict.common.allArticles}
-              </Button>
-            </FadeIn>
+        {rest.length > 0 && (
+          <div className="divide-y divide-border border-t border-border md:border-t-0 md:[&>*:first-child>a]:pt-0">
+            {rest.map((post, i) => (
+              <StaggerItem key={post.slug ?? i}>
+                <Link
+                  href={postHref(post, locale)}
+                  prefetch={false}
+                  className="group block py-6"
+                >
+                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                    {post.category && <span className="font-medium text-primary">{post.category.title}</span>}
+                    {post.publishedAt && (
+                      <time dateTime={post.publishedAt}>{formatDate(post.publishedAt, dateLocale)}</time>
+                    )}
+                  </div>
+                  <h3 className="mt-2 font-heading text-xl font-semibold group-hover:text-primary transition-colors">
+                    {post.title}
+                  </h3>
+                  {post.excerpt && (
+                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{post.excerpt}</p>
+                  )}
+                </Link>
+              </StaggerItem>
+            ))}
           </div>
-        ) : null}
-
-      </div>
-    </section>
+        )}
+      </AnimateGroup>
+    </SplitSection>
   );
 }

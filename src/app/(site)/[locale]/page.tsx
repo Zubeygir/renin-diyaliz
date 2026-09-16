@@ -7,7 +7,7 @@ import {
   staffPreviewQuery,
   partnerListQuery,
 } from "@/sanity/lib/queries";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, getLayoutData } from "@/lib/seo";
 import { isValidLocale, DEFAULT_LOCALE, Locale } from "@/lib/i18n";
 import { HeroSection } from "@/components/home/HeroSection";
 import { AboutSection } from "@/components/home/AboutSection";
@@ -49,12 +49,13 @@ export default async function HomePage({
   const { locale: rawLocale } = await params;
   const locale: Locale = isValidLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
 
-  // 1. Fetch homepage configuration
-  const data = await cachedFetch<HomePageType>(
-    homePageQuery,
-    { locale },
-    { next: { tags: ["home", "home:featured"] } }
-  );
+  // 1. Fetch homepage configuration (layout data is request-cached, already fetched by the layout)
+  const [data, layout] = await Promise.all([
+    cachedFetch<HomePageType>(homePageQuery, { locale }, { next: { tags: ["home", "home:featured"] } }),
+    getLayoutData(locale),
+  ]);
+  const contact = layout?.settings?.contactInfo;
+  const workingHours = layout?.workingHours;
 
   // 2. Determine if fallback queries are needed
   const needsFallbackServices = !data?.featuredServices || data.featuredServices.length === 0;
@@ -82,10 +83,10 @@ export default async function HomePage({
 
   return (
     <div className="flex flex-col w-full">
-      {/* 1. Hero Section */}
-      <HeroSection data={data} locale={locale} />
+      {/* 1. Hero + utility strip (phone, hours, address) */}
+      <HeroSection data={data} contact={contact} workingHours={workingHours} locale={locale} />
 
-      {/* 2. Hakkımızda Bölümü */}
+      {/* 2. Kurumsal */}
       <AboutSection
         title={data?.aboutTitle}
         subtitle={data?.aboutSubtitle}
@@ -98,7 +99,7 @@ export default async function HomePage({
         locale={locale}
       />
 
-      {/* 3. Öne Çıkan Hizmetler */}
+      {/* 3. Hizmetler */}
       <ServicesSection
         title={data?.servicesTitle}
         subtitle={data?.servicesSubtitle}
@@ -106,17 +107,19 @@ export default async function HomePage({
         locale={locale}
       />
 
-      {/* 4. Servis Ağı / Kapsama Alanı */}
+      {/* 4. Servis Ağı — teal surface */}
       <ServiceAreaSection
         title={data?.serviceAreaTitle}
         subtitle={data?.serviceAreaSubtitle}
+        districts={data?.serviceAreaDistricts}
+        note={data?.serviceAreaNote}
         media={data?.serviceAreaImage}
       />
 
       {/* 5. Anlaşmalı Kurumlar */}
-      <PartnersSection title={data?.partnersTitle} partners={partners} />
+      <PartnersSection title={data?.partnersTitle} note={data?.partnersNote} partners={partners} />
 
-      {/* 6. Son Blog Yazıları */}
+      {/* 6. Son Yazılar */}
       <BlogSection
         title={data?.blogTitle}
         subtitle={data?.blogSubtitle}
@@ -124,11 +127,13 @@ export default async function HomePage({
         locale={locale}
       />
 
-      {/* 7. İletişim CTA */}
+      {/* 7. İletişim kapanış bloğu — ink surface */}
       <ContactCtaSection
         title={data?.ctaTitle}
         subtitle={data?.ctaSubtitle}
         buttonLabel={data?.ctaButtonLabel}
+        contact={contact}
+        workingHours={workingHours}
         locale={locale}
       />
     </div>

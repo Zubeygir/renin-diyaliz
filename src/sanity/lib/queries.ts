@@ -105,12 +105,16 @@ export const homePageQuery = groq`*[_type == "homePage"][0] {
   featuredServices[]-> {
     "title": coalesce(title[$locale], title.tr, title),
     "slug": coalesce(slug[$locale].current, slug.tr.current, slug.current),
+    "excerpt": coalesce(excerpt[$locale], excerpt.tr, excerpt),
     mainImage ${imageFields}
   },
   "serviceAreaTitle": coalesce(serviceAreaTitle[$locale], serviceAreaTitle.tr, serviceAreaTitle),
   "serviceAreaSubtitle": coalesce(serviceAreaSubtitle[$locale], serviceAreaSubtitle.tr, serviceAreaSubtitle),
+  serviceAreaDistricts[] { "name": coalesce(@[$locale], @.tr) },
+  "serviceAreaNote": coalesce(serviceAreaNote[$locale], serviceAreaNote.tr, serviceAreaNote),
   serviceAreaImage { asset->{ _id, url, mimeType } },
   "partnersTitle": coalesce(partnersTitle[$locale], partnersTitle.tr, partnersTitle),
+  "partnersNote": coalesce(partnersNote[$locale], partnersNote.tr, partnersNote),
   "blogTitle": coalesce(blogTitle[$locale], blogTitle.tr, blogTitle),
   "blogSubtitle": coalesce(blogSubtitle[$locale], blogSubtitle.tr, blogSubtitle),
   featuredPosts[]-> {
@@ -118,6 +122,10 @@ export const homePageQuery = groq`*[_type == "homePage"][0] {
     "slug": coalesce(slug[$locale].current, slug.tr.current, slug.current),
     "excerpt": coalesce(excerpt[$locale], excerpt.tr, excerpt),
     publishedAt,
+    author {
+      name,
+      "title": coalesce(title[$locale], title.tr, title)
+    },
     category->{
       "title": coalesce(title[$locale], title.tr, title),
       "slug": coalesce(slug[$locale].current, slug.tr.current, slug.current)
@@ -138,6 +146,10 @@ export const aboutPageQuery = groq`*[_type == "aboutPage"][0] {
   "pageSubtitle": coalesce(pageSubtitle[$locale], pageSubtitle.tr, pageSubtitle),
   "body": coalesce(body[$locale], body.tr, body),
   mainImage ${imageFields},
+  facts[] {
+    "label": coalesce(label[$locale], label.tr, label),
+    "value": coalesce(value[$locale], value.tr, value)
+  },
   seo
 }`;
 
@@ -420,14 +432,24 @@ export const blogRelatedPostsQuery = groq`*[_type == "blogPost" && category._ref
 // ─── Hizmetler ─────────────────────────────────────────────────────────────────
 
 export const serviceListQuery = groq`*[_type == "service"] | order(_createdAt asc) {
+  _id,
   "title": coalesce(title[$locale], title.tr, title),
   "slug": coalesce(slug[$locale].current, slug.tr.current, slug.current),
+  "excerpt": coalesce(excerpt[$locale], excerpt.tr, excerpt),
   mainImage ${imageFields}
 }`;
 
+export const siblingServicesQuery = groq`*[_type == "service"] | order(_createdAt asc) {
+  _id,
+  "title": coalesce(title[$locale], title.tr, title),
+  "slug": coalesce(slug[$locale].current, slug.tr.current, slug.current)
+}`;
+
 export const serviceFallbackQuery = groq`*[_type == "service"] | order(_createdAt asc)[0...3] {
+  _id,
   "title": coalesce(title[$locale], title.tr, title),
   "slug": coalesce(slug[$locale].current, slug.tr.current, slug.current),
+  "excerpt": coalesce(excerpt[$locale], excerpt.tr, excerpt),
   mainImage ${imageFields}
 }`;
 

@@ -126,6 +126,7 @@ export interface Service {
   title: string;
   slug?: string;
   rawSlug?: RawSlug;
+  excerpt?: string;
   mainImage?: SanityImage;
   body?: PortableTextBlock[];
   seo?: SeoSettings;
@@ -172,6 +173,7 @@ export interface AboutPage extends BasePage {
   pageSubtitle?: string;
   body?: PortableTextBlock[];
   mainImage?: SanityImage;
+  facts?: Array<{ label?: string; value?: string }>;
 }
 
 export interface MissionVisionPage extends BasePage {
@@ -309,8 +311,11 @@ export interface HomePage {
   featuredServices?: Service[];
   serviceAreaTitle?: string;
   serviceAreaSubtitle?: string;
+  serviceAreaDistricts?: { name: string }[];
+  serviceAreaNote?: string;
   serviceAreaImage?: SanityFile;
   partnersTitle?: string;
+  partnersNote?: string;
   ctaTitle?: string;
   ctaSubtitle?: string;
   ctaButtonLabel?: string;

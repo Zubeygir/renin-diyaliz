@@ -22,8 +22,8 @@ export const homePageType = defineType({
       type: "localizedString",
       group: "hero",
       initialValue: {
-        tr: "Deneyim ile Buluşan Tıbbi Hizmetler",
-        en: "Medical Services Meeting Experience",
+        tr: "Şişli'de 2000'den bu yana hemodiyaliz merkezi",
+        en: "A hemodialysis center in Şişli since 2000",
       },
     }),
     defineField({
@@ -32,8 +32,8 @@ export const homePageType = defineType({
       type: "localizedText",
       group: "hero",
       initialValue: {
-        tr: "Hastaların bakımına ve yaşam kalitesini artırmaya odaklanarak; 50+1 yatak ve diyaliz kapasitemiz, deneyimli doktorlarımız ve güncel teknolojiye sahip cihazlarımızla hizmet veriyoruz.",
-        en: "Focusing on patient care and improving quality of life; serving with our 50+1 bed and dialysis capacity, experienced physicians, and modern technology devices.",
+        tr: "50+1 diyaliz makinesi, izole hasta odaları, SGK ve özel sigorta anlaşmaları, hasta servis hizmeti. T.C. Sağlık Bakanlığı SKS Diyaliz Seti'ne göre çalışır.",
+        en: "50+1 dialysis machines, isolated patient rooms, SGK and private insurance agreements, patient transport service. Operates under the Ministry of Health SKS Dialysis Standards.",
       },
     }),
     defineField({
@@ -67,17 +67,17 @@ export const homePageType = defineType({
     }),
     defineField({
       name: "heroCtaLabel",
-      title: "1. Buton Metni",
+      title: "Birincil Buton Metni (dolu buton)",
       type: "localizedString",
       group: "hero",
       initialValue: {
-        tr: "Hizmetlerimiz",
-        en: "Our Services",
+        tr: "İletişime Geçin",
+        en: "Contact Us",
       },
     }),
     defineField({
       name: "heroCtaLink",
-      title: "1. Buton Linki",
+      title: "Birincil Buton Linki",
       type: "object",
       group: "hero",
       fields: [
@@ -118,17 +118,17 @@ export const homePageType = defineType({
     }),
     defineField({
       name: "heroCtaLabel2",
-      title: "2. Buton Metni",
+      title: "İkincil Link Metni (metin link)",
       type: "localizedString",
       group: "hero",
       initialValue: {
-        tr: "İletişim",
-        en: "Contact",
+        tr: "Hizmetlerimiz",
+        en: "Our Services",
       },
     }),
     defineField({
       name: "heroCtaLink2",
-      title: "2. Buton Linki",
+      title: "İkincil Link",
       type: "object",
       group: "hero",
       fields: [
@@ -335,10 +335,37 @@ export const homePageType = defineType({
       },
     }),
     defineField({
+      name: "serviceAreaDistricts",
+      title: "Hizmet Verilen İlçeler",
+      description: "Servis aracının hasta aldığı ilçeler. Sadece gerçekten hizmet verilen bölgeleri girin.",
+      type: "array",
+      group: "serviceArea",
+      of: [{ type: "localizedString" }],
+      initialValue: [
+        { _type: "localizedString", tr: "Şişli", en: "Şişli" },
+        { _type: "localizedString", tr: "Beşiktaş", en: "Beşiktaş" },
+        { _type: "localizedString", tr: "Kağıthane", en: "Kağıthane" },
+        { _type: "localizedString", tr: "Beyoğlu", en: "Beyoğlu" },
+        { _type: "localizedString", tr: "Sarıyer", en: "Sarıyer" },
+        { _type: "localizedString", tr: "Eyüpsultan", en: "Eyüpsultan" },
+      ],
+    }),
+    defineField({
+      name: "serviceAreaNote",
+      title: "Servis Notu",
+      description: "Servis hizmetinin koşulları (gün, saat, planlama). Kısa ve olgusal.",
+      type: "localizedText",
+      group: "serviceArea",
+      initialValue: {
+        tr: "Servis hizmeti seans günlerinde, önceden planlanan güzergâhlarda sunulur. Bölgeniz listede yoksa merkezimizi arayarak bilgi alabilirsiniz.",
+        en: "Transport is provided on session days along pre-planned routes. If your district is not listed, call our center for information.",
+      },
+    }),
+    defineField({
       name: "serviceAreaImage",
-      title: "Servis Ağı Görseli / Videosu (Opsiyonel)",
+      title: "Harita Görseli / Videosu (Opsiyonel)",
       description:
-        "Statik görsel veya harita animasyonu videosu (MP4/WebM). Boş bırakılırsa yerine nötr bir görsel alan gösterilir.",
+        "Hizmet bölgelerini gösteren statik harita görseli veya harita animasyonu videosu (MP4/WebM). Boş bırakılırsa bölüm sadece ilçe listesiyle gösterilir.",
       type: "file",
       group: "serviceArea",
       options: { accept: "image/*,video/mp4,video/webm" },
@@ -348,12 +375,22 @@ export const homePageType = defineType({
     defineField({
       name: "partnersTitle",
       title: "Anlaşmalı Kurumlar Bölüm Başlığı",
-      description: "İnce bir logo şeridinin üstünde gösterilen kısa etiket.",
       type: "localizedString",
       group: "partners",
       initialValue: {
-        tr: "Anlaşmalı Kurumlarımız",
-        en: "Our Partner Institutions",
+        tr: "Anlaşmalı Kurumlar",
+        en: "Partner Institutions",
+      },
+    }),
+    defineField({
+      name: "partnersNote",
+      title: "Anlaşmalı Kurumlar Notu",
+      description: "Logoların yanında gösterilen kısa olgusal açıklama.",
+      type: "localizedText",
+      group: "partners",
+      initialValue: {
+        tr: "Merkezimiz SGK ile anlaşmalıdır. Aşağıdaki özel sağlık sigortaları ve kurumlarla da anlaşmamız bulunmaktadır.",
+        en: "Our center is contracted with SGK. We also have agreements with the private health insurers and institutions listed below.",
       },
     }),
 
@@ -394,8 +431,8 @@ export const homePageType = defineType({
       type: "localizedString",
       group: "contactCta",
       initialValue: {
-        tr: "Sorularınız İçin Bize Ulaşın",
-        en: "Get in Touch With Us",
+        tr: "Bize Ulaşın",
+        en: "Contact Us",
       },
     }),
     defineField({
@@ -404,18 +441,18 @@ export const homePageType = defineType({
       type: "localizedText",
       group: "contactCta",
       initialValue: {
-        tr: "Randevu ve bilgi talepleriniz için merkezimizle iletişime geçebilirsiniz.",
-        en: "You can contact our center for appointments and information requests.",
+        tr: "Yeni hasta kabulü, servis ve SGK/özel sigorta süreçleri için merkezimizi arayabilirsiniz.",
+        en: "Call our center for new patient admission, transport and SGK/private insurance procedures.",
       },
     }),
     defineField({
       name: "ctaButtonLabel",
-      title: "Buton Metni",
+      title: "İletişim Sayfası Link Metni",
       type: "localizedString",
       group: "contactCta",
       initialValue: {
-        tr: "İletişime Geçin",
-        en: "Contact Us",
+        tr: "İletişim sayfası ve sık sorulan sorular",
+        en: "Contact page and FAQ",
       },
     }),
 

@@ -1,12 +1,11 @@
 import { Metadata } from "next";
+import Link from "next/link";
 import { cachedFetch } from "@/sanity/lib/client";
 import { aboutPageQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
 import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
-import { FadeIn } from "@/components/ui/FadeIn";
-import { SanityImage } from "@/components/ui/SanityImage";
 import { RichText } from "@/components/ui/RichText";
-import { PageHero } from "@/components/layout/PageHero";
+import { PageTitle } from "@/components/layout/PageTitle";
 import { AboutPage as AboutPageType } from "@/types";
 
 export async function generateMetadata({
@@ -52,57 +51,53 @@ export default async function AboutPage({
   );
 
   const title = data?.heroTitle || data?.pageTitle || dict.nav.about;
-  const contentTitle = data?.pageTitle || dict.nav.about;
+  const facts = data?.facts ?? [];
 
   return (
-    <div className="flex flex-col gap-12 md:gap-16 pb-16">
-      {/* Page Hero */}
-      <PageHero
+    <div className="flex flex-col gap-10 md:gap-14 pb-20">
+      <PageTitle
         title={title}
         subtitle={data?.heroSubtitle || data?.pageSubtitle}
-        backgroundImage={data?.heroImage}
+        image={data?.mainImage || data?.heroImage}
       />
 
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          {/* Sol Kolon: Metin İçeriği */}
-          <div className="lg:col-span-7">
-            <FadeIn direction="up">
-              <h2 className="text-3xl font-bold tracking-tight mb-6">
-                {contentTitle}
-              </h2>
-            </FadeIn>
-
-            {data?.pageSubtitle && (
-              <FadeIn delay={0.15}>
-                <p className="text-lg md:text-xl text-foreground/80 leading-relaxed mb-6">
-                  {data.pageSubtitle}
-                </p>
-              </FadeIn>
+          {/* Sol Kolon: Kurumsal Künye dl (Sticky) */}
+          <aside className="lg:col-span-4 lg:sticky lg:top-28 lg:self-start space-y-6">
+            {facts.length > 0 && (
+              <div className="border border-border rounded-md p-6 bg-card">
+                <h2 className="font-heading text-base font-semibold text-foreground mb-4">
+                  {locale === "en" ? "Institutional Facts" : "Kurumsal Künye"}
+                </h2>
+                <dl className="divide-y divide-border text-sm">
+                  {facts.map((fact, idx) => (
+                    <div key={idx} className="py-2.5 flex flex-col gap-0.5">
+                      <dt className="text-xs text-muted-foreground font-medium">{fact.label}</dt>
+                      <dd className="text-sm font-medium text-foreground">{fact.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
             )}
 
-            <FadeIn delay={0.2}>
+            <div className="pt-1">
+              <Link
+                href={locale === "en" ? "/en/mission-vision-values" : "/misyon-vizyon-degerler"}
+                className="inline-flex items-center text-sm font-medium text-primary hover:underline gap-1.5"
+              >
+                {locale === "en" ? "Mission, Vision & Quality Policy" : "Misyon, Vizyon ve Kalite Politikası"}
+                <span>→</span>
+              </Link>
+            </div>
+          </aside>
+
+          {/* Sağ Kolon: Detaylı Metin İçeriği */}
+          <main className="lg:col-span-8 min-w-0">
+            <div className="max-w-[68ch] space-y-6 text-base leading-relaxed text-foreground/90">
               <RichText value={data?.body} />
-            </FadeIn>
-          </div>
-
-          {/* Sağ Kolon: Görsel */}
-          <div className="lg:col-span-5 lg:sticky lg:top-24">
-            {data?.mainImage && (
-              <FadeIn direction="left" delay={0.3} className="relative max-w-sm mx-auto lg:max-w-none">
-                <div className="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-primary/20 to-transparent blur-2xl z-0" />
-                <div className="relative aspect-[4/3] sm:aspect-[3/2] lg:aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl z-10 border bg-card">
-                  <SanityImage
-                    image={data.mainImage}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 40vw"
-                    className="object-cover"
-                    priority
-                  />
-                </div>
-              </FadeIn>
-            )}
-          </div>
+            </div>
+          </main>
         </div>
       </div>
     </div>

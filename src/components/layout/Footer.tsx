@@ -82,7 +82,7 @@ export function Footer({
           {/* Sayfalar */}
           {footerLinks.length > 0 && (
             <div className="md:col-span-3 md:col-start-6">
-              <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-5">
+              <p className="text-sm font-medium text-foreground mb-4">
                 {dict.footer.quickLinks}
               </p>
               <nav className="space-y-3">
@@ -105,7 +105,7 @@ export function Footer({
           {/* İletişim */}
           <div className="md:col-span-3 md:col-start-10 space-y-6">
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-5">
+              <p className="text-sm font-medium text-foreground mb-4">
                 {dict.footer.contact}
               </p>
               <ul className="space-y-3">

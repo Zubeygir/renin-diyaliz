@@ -6,7 +6,25 @@ export const serviceType = defineType({
   type: "document",
   fields: [
     defineField({ name: "title", title: "Başlık", type: "localizedString" }),
-    defineField({ name: "slug", title: "Slug", type: "localizedSlug" }),
+    defineField({
+      name: "slug",
+      title: "Slug",
+      type: "localizedSlug",
+      validation: (Rule) =>
+        Rule.required().custom((value) => {
+          const val = value as { tr?: { current?: string }; en?: { current?: string } } | undefined;
+          if (!val?.tr?.current) {
+            return "Hizmetin yayına alınabilmesi için Türkçe slug (TR) zorunludur. 'Generate' butonuna basarak oluşturabilirsiniz.";
+          }
+          return true;
+        }),
+    }),
+    defineField({
+      name: "excerpt",
+      title: "Kısa Açıklama",
+      description: "Ana sayfa ve hizmet listesinde başlığın altında gösterilen 1-2 cümlelik olgusal özet.",
+      type: "localizedText",
+    }),
     defineField({
       name: "mainImage",
       title: "Ana Görsel",

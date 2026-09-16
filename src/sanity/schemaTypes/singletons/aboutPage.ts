@@ -1,4 +1,4 @@
-import { defineField, defineType } from "sanity";
+import { defineField, defineType, defineArrayMember } from "sanity";
 
 export const aboutPageType = defineType({
   name: "aboutPage",
@@ -149,6 +149,34 @@ export const aboutPageType = defineType({
       group: "content",
       options: { hotspot: true },
       fields: [defineField({ name: "alt", title: "Alt Metni", type: "string", validation: (Rule) => Rule.required() })],
+    }),
+    defineField({
+      name: "facts",
+      title: "Kurumsal Künye Bilgileri",
+      type: "array",
+      group: "content",
+      of: [
+        defineArrayMember({
+          type: "object",
+          name: "factItem",
+          title: "Künye Maddesi",
+          fields: [
+            defineField({ name: "label", title: "Etiket", type: "localizedString" }),
+            defineField({ name: "value", title: "Değer", type: "localizedString" }),
+          ],
+          preview: {
+            select: { title: "label.tr", subtitle: "value.tr" },
+          },
+        }),
+      ],
+      initialValue: [
+        { label: { tr: "Kuruluş", en: "Established" }, value: { tr: "2000", en: "2000" } },
+        { label: { tr: "İşleten Şirket", en: "Operating Entity" }, value: { tr: "Nefro-Med Sağlık Hizmetleri A.Ş.", en: "Nefro-Med Saglik Hizmetleri A.S." } },
+        { label: { tr: "Cihaz Kapasitesi", en: "Device Capacity" }, value: { tr: "50+1 Hemodiyaliz Makinesi", en: "50+1 Hemodialysis Machines" } },
+        { label: { tr: "Tedavi Odaları", en: "Treatment Rooms" }, value: { tr: "Genel ve İzole Odalar (Hepatit B / C)", en: "General & Isolated Rooms (Hepatitis B / C)" } },
+        { label: { tr: "Sosyal Güvence", en: "Social Security" }, value: { tr: "SGK / Özel Sigorta Anlaşmalı", en: "Contracted with SGK & Private Insurances" } },
+        { label: { tr: "Kalite Standartları", en: "Quality Standards" }, value: { tr: "SKS Diyaliz Seti Uyumu", en: "SKS Dialysis Standards Compliance" } },
+      ],
     }),
     // SEO Group
     defineField({ name: "seo", title: "SEO", type: "seo", group: "seo" }),

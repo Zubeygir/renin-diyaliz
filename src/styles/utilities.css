@@ -3,3 +3,8 @@
 @keyframes spinner-reveal {
   to { opacity: 1; }
 }
+
+/* Partner logo marquee: list is duplicated in markup, so -50% loops seamlessly. */
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}

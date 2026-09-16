@@ -2,10 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { AnimateGroup } from "@/components/ui/AnimateGroup";
 import { SanityImage } from "@/components/ui/SanityImage";
-import { FadeIn } from "@/components/ui/FadeIn";
 import { formatDate } from "@/lib/utils";
 import { BlogPost, BlogCategory, Locale } from "@/types";
 import { getDictionary } from "@/lib/i18n";
@@ -40,92 +37,174 @@ export function BlogFilter({ posts, categories, locale = "tr" }: BlogFilterProps
     ? posts.filter((post) => post.category?.slug === currentCategory)
     : posts;
 
+  const [featuredPost, ...remainingPosts] = filteredPosts;
+
   return (
-    <>
-      <FadeIn direction="up">
-        {categories?.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-12">
-            <Button
-              variant={!currentCategory ? "default" : "outline"}
-              size="sm"
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      {/* Sol Kolon: Sticky Kategori Navigasyonu */}
+      <aside className="lg:col-span-4 lg:sticky lg:top-28 lg:self-start">
+        <div className="border border-border rounded-md p-6 bg-card">
+          <h2 className="font-heading text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+            {dict.blog.allCategories}
+          </h2>
+          <nav className="flex flex-col space-y-1">
+            <button
               onClick={() => setCategory(null)}
+              className={`flex items-center justify-between text-sm py-2 px-3 rounded text-left transition-colors cursor-pointer ${
+                !currentCategory
+                  ? "font-semibold text-foreground bg-primary/10 border-l-2 border-primary"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+              }`}
             >
-              {dict.blog.allCategories}
-            </Button>
-            {categories.map((cat: BlogCategory) => (
-              <Button
-                key={cat._id}
-                variant={currentCategory === cat.slug ? "default" : "outline"}
-                size="sm"
-                onClick={() => setCategory(cat.slug || null)}
+              <span>{dict.blog.allCategories}</span>
+              <span className="text-xs tabular-nums opacity-70">({posts.length})</span>
+            </button>
+
+            {categories.map((cat: BlogCategory) => {
+              const count = posts.filter((p) => p.category?.slug === cat.slug).length;
+              const isSelected = currentCategory === cat.slug;
+
+              return (
+                <button
+                  key={cat._id}
+                  onClick={() => setCategory(cat.slug || null)}
+                  className={`flex items-center justify-between text-sm py-2 px-3 rounded text-left transition-colors cursor-pointer ${
+                    isSelected
+                      ? "font-semibold text-foreground bg-primary/10 border-l-2 border-primary"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                  }`}
+                >
+                  <span className="truncate pr-2">{cat.title}</span>
+                  <span className="text-xs tabular-nums opacity-70">({count})</span>
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+      </aside>
+
+      {/* Sağ Kolon: İlk Yazı Büyük + Satır Listesi */}
+      <main className="lg:col-span-8 min-w-0">
+        {featuredPost ? (
+          <div className="space-y-12">
+            {/* Büyük Öne Çıkan İlk Yazı */}
+            <article className="group">
+              <Link
+                href={locale === "en" ? `/en/blog/${featuredPost.slug}` : `/blog/${featuredPost.slug}`}
+                prefetch={false}
+                className="block space-y-4"
               >
-                {cat.title}
-              </Button>
-            ))}
-          </div>
-        )}
-      </FadeIn>
-
-      {filteredPosts?.length > 0 ? (
-        <AnimateGroup key={currentCategory || "all"} className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-8">
-          {filteredPosts.map((post: BlogPost) => {
-            const postHref = locale === "en"
-              ? `/en/blog/${post.slug}`
-              : `/blog/${post.slug}`;
-
-            return (
-              <Link key={post.slug} href={postHref} prefetch={false} className="group block h-full">
-                <article className="h-full flex flex-col overflow-hidden rounded-xl border bg-card transition-colors duration-300 hover:border-primary/40">
-                  {post.mainImage && (
-                    <div className="relative aspect-video overflow-hidden">
-                      <SanityImage
-                        image={post.mainImage}
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
-                  )}
-                  <div className="p-6 flex-grow flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center gap-2 mb-3">
-                        {post.category && (
-                          <span className="text-xs font-medium px-2 py-1 bg-secondary text-secondary-foreground rounded-full">
-                            {post.category.title}
-                          </span>
-                        )}
-                        {post.publishedAt && (
-                          <time className="text-xs text-muted-foreground block">
-                            {formatDate(post.publishedAt, dateLocale)}
-                          </time>
-                        )}
-                      </div>
-                      <h2 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors line-clamp-2">
-                        {post.title}
-                      </h2>
-                      {post.excerpt && (
-                        <p className="text-sm text-muted-foreground line-clamp-3">{post.excerpt}</p>
-                      )}
-                    </div>
-                    <div className="mt-6">
-                      <span className="text-primary font-semibold text-sm tracking-wider uppercase flex items-center">
-                        {dict.common.readMore}
-                        <span className="ml-1">→</span>
-                      </span>
-                    </div>
+                {featuredPost.mainImage && (
+                  <div className="relative aspect-[16/10] w-full rounded-md overflow-hidden bg-muted border border-border">
+                    <SanityImage
+                      image={featuredPost.mainImage}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 760px"
+                      className="object-cover transition-opacity duration-300 group-hover:opacity-90"
+                      priority
+                    />
                   </div>
-                </article>
+                )}
+
+                <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                  {featuredPost.category && (
+                    <span className="font-medium text-primary">{featuredPost.category.title}</span>
+                  )}
+                  {featuredPost.category && featuredPost.publishedAt && <span>•</span>}
+                  {featuredPost.publishedAt && (
+                    <time dateTime={featuredPost.publishedAt}>
+                      {formatDate(featuredPost.publishedAt, dateLocale)}
+                    </time>
+                  )}
+                </div>
+
+                <h2 className="font-heading text-2xl sm:text-3xl font-semibold text-foreground group-hover:text-primary transition-colors leading-snug">
+                  {featuredPost.title}
+                </h2>
+
+                {featuredPost.excerpt && (
+                  <p className="text-muted-foreground text-base leading-relaxed line-clamp-3">
+                    {featuredPost.excerpt}
+                  </p>
+                )}
+
+                {featuredPost.author?.name && (
+                  <p className="text-xs text-muted-foreground pt-1">
+                    {featuredPost.author.title ? `${featuredPost.author.title} ` : ""}
+                    {featuredPost.author.name}
+                  </p>
+                )}
               </Link>
-            );
-          })}
-        </AnimateGroup>
-      ) : (
-        <FadeIn>
+            </article>
+
+            {/* Sonraki Yazılar (Divide-y Satırlar) */}
+            {remainingPosts.length > 0 && (
+              <div className="divide-y divide-border border-t border-border pt-2">
+                {remainingPosts.map((post: BlogPost) => {
+                  const postHref =
+                    locale === "en" ? `/en/blog/${post.slug}` : `/blog/${post.slug}`;
+
+                  return (
+                    <article key={post.slug} className="py-8 first:pt-6 last:pb-0">
+                      <Link
+                        href={postHref}
+                        prefetch={false}
+                        className="group grid grid-cols-1 sm:grid-cols-12 gap-6 items-center"
+                      >
+                        <div className="sm:col-span-4">
+                          <div className="relative aspect-[4/3] w-full rounded-md overflow-hidden bg-muted border border-border">
+                            {post.mainImage && (
+                              <SanityImage
+                                image={post.mainImage}
+                                fill
+                                sizes="(max-width: 640px) 100vw, 240px"
+                                className="object-cover transition-opacity duration-300 group-hover:opacity-90"
+                              />
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="sm:col-span-8">
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
+                            {post.category && (
+                              <span className="font-medium text-primary">{post.category.title}</span>
+                            )}
+                            {post.category && post.publishedAt && <span>•</span>}
+                            {post.publishedAt && (
+                              <time dateTime={post.publishedAt}>
+                                {formatDate(post.publishedAt, dateLocale)}
+                              </time>
+                            )}
+                          </div>
+
+                          <h3 className="font-heading text-lg sm:text-xl font-semibold text-foreground group-hover:text-primary transition-colors leading-snug">
+                            {post.title}
+                          </h3>
+
+                          {post.excerpt && (
+                            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mt-2 line-clamp-2">
+                              {post.excerpt}
+                            </p>
+                          )}
+
+                          <span className="text-primary text-xs font-medium inline-flex items-center gap-1 mt-3 group-hover:underline">
+                            {dict.common.readMore}
+                            <span className="transition-transform group-hover:translate-x-0.5">→</span>
+                          </span>
+                        </div>
+                      </Link>
+                    </article>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        ) : (
           <p className="text-muted-foreground text-center py-16">
             {dict.blog.noPostsFound}
           </p>
-        </FadeIn>
-      )}
-    </>
+        )}
+      </main>
+    </div>
   );
 }

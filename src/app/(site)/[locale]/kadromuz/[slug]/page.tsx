@@ -6,11 +6,9 @@ import { buildMetadata, portableTextToPlainText } from "@/lib/seo";
 import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
 import { RichText } from "@/components/ui/RichText";
 import { SanityImage } from "@/components/ui/SanityImage";
-import { FadeIn } from "@/components/ui/FadeIn";
-import { Button } from "@/components/ui/button";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SetAlternateUrls } from "@/components/providers/AlternateUrlsContext";
-import { RiUserLine, RiArrowLeftLine } from "react-icons/ri";
-import Link from "next/link";
+import { RiUserLine } from "react-icons/ri";
 import { StaffMember } from "@/types";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
@@ -86,127 +84,105 @@ export default async function StaffDetailPage({ params }: Props) {
   return (
     <>
       <SetAlternateUrls tr={trPath} en={enPath} />
-      <article className="container mx-auto px-4 py-12 md:py-16 max-w-4xl">
-        <FadeIn direction="up">
-          <Button
-            variant="ghost"
-            className="mb-8 -ml-2 gap-1.5"
-            render={<Link href={allStaffHref} prefetch={false} />}
-          >
-            <RiArrowLeftLine size={16} />
-            {dict.staff.backToStaff}
-          </Button>
-        </FadeIn>
+      <article className="container mx-auto px-4 py-8 md:py-12 pb-20">
+        <Breadcrumbs
+          items={[
+            { label: dict.nav.staff, href: allStaffHref },
+            { label: member.name, href: locale === "en" ? enPath : trPath, active: true },
+          ]}
+          className="mb-8"
+        />
 
-        {/* Profile Header */}
-        <FadeIn delay={0.1}>
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 md:gap-8 p-6 md:p-8 rounded-2xl bg-muted/40 border mb-12">
-            <div className="relative w-36 h-36 md:w-44 md:h-44 shrink-0 rounded-xl overflow-hidden bg-muted border flex items-center justify-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          {/* Sol Kolon: Portre + İsim + Unvan (Sticky) */}
+          <aside className="lg:col-span-4 lg:sticky lg:top-28 lg:self-start">
+            <div className="relative aspect-[4/5] w-full rounded-md overflow-hidden bg-muted border border-border flex items-center justify-center">
               {member.photo?.asset ? (
                 <SanityImage
                   image={member.photo}
                   fill
-                  sizes="(max-width: 768px) 144px, 176px"
+                  sizes="(max-width: 1024px) 100vw, 380px"
                   className="object-cover"
                   priority
                 />
               ) : (
-                <div className="flex flex-col items-center justify-center text-muted-foreground/40 select-none">
-                  <RiUserLine className="w-20 h-20" />
+                <div className="flex flex-col items-center justify-center text-muted-foreground/30 select-none">
+                  <RiUserLine className="w-16 h-16" />
                 </div>
               )}
             </div>
 
-            <div className="flex flex-col text-center sm:text-left justify-center flex-1">
-              <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">
+            <div className="mt-5">
+              <h1 className="font-heading text-2xl sm:text-3xl font-semibold tracking-[-0.02em] text-foreground">
                 {member.name}
               </h1>
-              <div className="flex flex-col items-center sm:items-start gap-2 sm:flex-row sm:gap-3">
-                <p className="text-base text-muted-foreground font-medium">
-                  {member.role}
-                </p>
-                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary">
-                  {dict.staff.groups[member.group]}
-                </span>
-              </div>
+              <p className="text-base text-muted-foreground font-medium mt-1">
+                {member.role}
+              </p>
+              <p className="text-sm text-primary font-medium mt-1">
+                {dict.staff.groups[member.group]}
+              </p>
             </div>
-          </div>
-        </FadeIn>
+          </aside>
 
-        {/* Conditional Content Sections */}
-        <div className="flex flex-col gap-10">
-          {/* Bio / About */}
-          {hasBio && (
-            <FadeIn delay={0.15}>
+          {/* Sağ Kolon: Biyografi, Eğitim, Sertifikalar, Diller */}
+          <main className="lg:col-span-8 min-w-0 space-y-10">
+            {/* Biyografi */}
+            {hasBio && (
               <section className="space-y-4">
-                <h2 className="text-xl font-bold tracking-tight">
+                <h2 className="font-heading text-lg font-semibold text-foreground border-b border-border pb-2.5">
                   {dict.staff.bio}
                 </h2>
-                <div className="text-muted-foreground leading-relaxed">
+                <div className="text-foreground/85 leading-relaxed space-y-4 text-base max-w-[68ch]">
                   <RichText value={member.bio} />
                 </div>
               </section>
-            </FadeIn>
-          )}
+            )}
 
-          {/* Education */}
-          {hasEducation && (
-            <FadeIn delay={0.2}>
-              <section className="space-y-4">
-                <h2 className="text-xl font-bold tracking-tight">
+            {/* Eğitim */}
+            {hasEducation && (
+              <section className="space-y-3 pt-6 border-t border-border">
+                <h2 className="font-heading text-lg font-semibold text-foreground">
                   {dict.staff.education}
                 </h2>
-                <ul className="space-y-2">
+                <ul className="divide-y divide-border border-y border-border text-sm sm:text-base text-foreground/85">
                   {member.education!.map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm md:text-base text-foreground/90">
-                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                    <li key={i} className="py-2.5">
                       {item}
                     </li>
                   ))}
                 </ul>
               </section>
-            </FadeIn>
-          )}
+            )}
 
-          {/* Skills / Specialties */}
-          {hasSkills && (
-            <FadeIn delay={0.25}>
-              <section className="space-y-4">
-                <h2 className="text-xl font-bold tracking-tight">
-                  {dict.staff.skills}
-                </h2>
-                <div className="flex flex-wrap gap-2">
-                  {member.skills!.map((skill, i) => (
-                    <span
-                      key={i}
-                      className="inline-flex items-center px-3 py-1.5 rounded-lg text-sm bg-muted text-foreground border font-medium"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </section>
-            </FadeIn>
-          )}
-
-          {/* Certificates */}
-          {hasCertificates && (
-            <FadeIn delay={0.3}>
-              <section className="space-y-4">
-                <h2 className="text-xl font-bold tracking-tight">
+            {/* Sertifikalar */}
+            {hasCertificates && (
+              <section className="space-y-3 pt-6 border-t border-border">
+                <h2 className="font-heading text-lg font-semibold text-foreground">
                   {dict.staff.certificates}
                 </h2>
-                <ul className="space-y-2">
+                <ul className="divide-y divide-border border-y border-border text-sm sm:text-base text-foreground/85">
                   {member.certificates!.map((cert, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm md:text-base text-foreground/90">
-                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                    <li key={i} className="py-2.5">
                       {cert}
                     </li>
                   ))}
                 </ul>
               </section>
-            </FadeIn>
-          )}
+            )}
+
+            {/* Yetenekler / Diller */}
+            {hasSkills && (
+              <section className="space-y-2 pt-6 border-t border-border">
+                <h2 className="font-heading text-lg font-semibold text-foreground">
+                  {dict.staff.skills}
+                </h2>
+                <p className="text-sm sm:text-base text-foreground/85">
+                  {member.skills!.join(", ")}
+                </p>
+              </section>
+            )}
+          </main>
         </div>
       </article>
     </>

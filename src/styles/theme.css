@@ -32,6 +32,15 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-teal-deep: var(--teal-deep);
+  --color-ink: var(--ink);
+  --text-display: clamp(2.5rem, 5vw, 4.25rem);
+  --text-display--line-height: 1.05;
+  --text-h2: clamp(1.75rem, 3vw, 2.5rem);
+  --text-h2--line-height: 1.15;
+  --text-lede: clamp(1.125rem, 1.5vw, 1.3125rem);
+  --text-lede--line-height: 1.55;
+  --animate-marquee: marquee 40s linear infinite;
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -60,6 +69,9 @@
   --border: oklch(0.9 0.01 195);
   --input: oklch(0.9 0.01 195);
   --ring: oklch(0.55 0.09 190);
+  /* Drenched surfaces: service area (teal) and closing contact block (near-black teal) */
+  --teal-deep: oklch(0.38 0.08 192);
+  --ink: oklch(0.22 0.03 200);
   --chart-1: oklch(0.809 0.105 251.813);
   --chart-2: oklch(0.623 0.214 259.815);
   --chart-3: oklch(0.546 0.245 262.881);
