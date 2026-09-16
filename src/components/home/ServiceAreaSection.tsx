@@ -28,7 +28,7 @@ export function ServiceAreaSection({ title, subtitle, districts, note, media }: 
           {subtitle && <p className="text-lede text-white/80 mt-4 max-w-[44ch]">{subtitle}</p>}
 
           {list.length > 0 && (
-            <ul className="mt-8 flex flex-wrap gap-2">
+            <ul className="mt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-2">
               {list.map((d, i) => (
                 <li
                   key={i}

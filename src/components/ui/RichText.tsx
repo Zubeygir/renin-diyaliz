@@ -84,10 +84,17 @@ const components: PortableTextComponents = {
   },
 };
 
-export function RichText({ value, className = "" }: { value?: PortableTextBlock[]; className?: string }) {
+interface RichTextProps {
+  value?: PortableTextBlock[];
+  className?: string;
+  /** "lg" (default) for full article pages; "base" for compact excerpts like homepage teasers. */
+  size?: "base" | "lg";
+}
+
+export function RichText({ value, className = "", size = "lg" }: RichTextProps) {
   if (!value) return null;
   return (
-    <div className={`prose prose-lg max-w-none break-words flow-root [--tw-prose-bullets:var(--color-primary)] [--tw-prose-counters:var(--color-primary)] ${className}`}>
+    <div className={`prose ${size === "lg" ? "prose-lg" : ""} max-w-none break-words flow-root [--tw-prose-bullets:var(--color-primary)] [--tw-prose-counters:var(--color-primary)] ${className}`}>
       <PortableText value={value} components={components} />
     </div>
   );

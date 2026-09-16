@@ -54,10 +54,10 @@ export function AboutSection({
       <div className="grid grid-cols-1 md:grid-cols-5 gap-x-10 gap-y-8 items-start">
         <div className="md:col-span-3">
           {text && text.length > 0 && (
-            // First paragraph is the lede; the rest settle to body size
             <RichText
               value={text}
-              className="text-foreground/90 [&>p:first-child]:text-lede [&>p:first-child]:text-foreground"
+              size="base"
+              className="text-foreground/90 text-base md:text-lg leading-relaxed"
             />
           )}
         </div>
