@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SplitSection } from "@/components/ui/SplitSection";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { Partner } from "@/types";
@@ -46,8 +47,51 @@ export function PartnersSection({ title, note, partners = [] }: PartnersSectionP
   const withLogo = partners.filter((p) => p.logo);
   const trackRef = useRef<HTMLDivElement>(null);
   const dragStart = useRef({ startX: 0, startScrollLeft: 0 });
+  const isPausedRef = useRef(false);
+
+  const scroll = (direction: "left" | "right") => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const cardWidth = (track.firstElementChild as HTMLElement)?.offsetWidth || 240;
+
+    if (direction === "right") {
+      const isAtEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 10;
+      if (isAtEnd) {
+        track.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        track.scrollBy({ left: cardWidth, behavior: "smooth" });
+      }
+    } else {
+      const isAtStart = track.scrollLeft <= 10;
+      if (isAtStart) {
+        track.scrollTo({ left: track.scrollWidth, behavior: "smooth" });
+      } else {
+        track.scrollBy({ left: -cardWidth, behavior: "smooth" });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (withLogo.length <= 1) return;
+
+    const interval = setInterval(() => {
+      if (!isPausedRef.current) {
+        scroll("right");
+      }
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [withLogo.length]);
 
   if (!title || withLogo.length === 0) return null;
+
+  const pause = () => {
+    isPausedRef.current = true;
+  };
+  const resume = () => {
+    isPausedRef.current = false;
+  };
 
   // Mouse drag only; touch keeps the browser's own native scrolling untouched.
   const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -55,6 +99,7 @@ export function PartnersSection({ title, note, partners = [] }: PartnersSectionP
     if (!track) return;
     e.preventDefault();
     dragStart.current = { startX: e.clientX, startScrollLeft: track.scrollLeft };
+    isPausedRef.current = true;
 
     const onMouseMove = (moveEvent: MouseEvent) => {
       track.scrollLeft = dragStart.current.startScrollLeft - (moveEvent.clientX - dragStart.current.startX);
@@ -64,6 +109,7 @@ export function PartnersSection({ title, note, partners = [] }: PartnersSectionP
       track.classList.add("snap-x", "snap-mandatory");
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseup", onMouseUp);
+      isPausedRef.current = false;
     };
 
     // Snap fights JS-driven scrollLeft: the browser treats every assignment as a
@@ -75,15 +121,47 @@ export function PartnersSection({ title, note, partners = [] }: PartnersSectionP
     window.addEventListener("mouseup", onMouseUp);
   };
 
+  const asideContent = (
+    <div className="flex flex-col gap-4">
+      {note && <p className="max-w-[40ch]">{note}</p>}
+      <div className="flex items-center gap-2 pt-1">
+        <button
+          type="button"
+          onClick={() => scroll("left")}
+          onMouseEnter={pause}
+          onMouseLeave={resume}
+          aria-label="Önceki"
+          className="inline-flex size-9 items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer"
+        >
+          <ChevronLeft className="size-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => scroll("right")}
+          onMouseEnter={pause}
+          onMouseLeave={resume}
+          aria-label="Sonraki"
+          className="inline-flex size-9 items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer"
+        >
+          <ChevronRight className="size-4" />
+        </button>
+      </div>
+    </div>
+  );
+
   return (
     <SplitSection
       title={title}
       className="bg-background border-t border-border"
-      aside={note ? <p className="max-w-[40ch]">{note}</p> : undefined}
+      aside={asideContent}
     >
       <div
         ref={trackRef}
         onMouseDown={onMouseDown}
+        onMouseEnter={pause}
+        onMouseLeave={resume}
+        onTouchStart={pause}
+        onTouchEnd={resume}
         className="flex gap-px overflow-x-auto snap-x snap-mandatory select-none bg-border border border-border cursor-grab active:cursor-grabbing [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [mask-image:linear-gradient(to_right,transparent,black_4%,black_96%,transparent)]"
       >
         {withLogo.map((partner) => (
