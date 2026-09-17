@@ -67,8 +67,6 @@ export default async function StaffHubPage({
       <div className="container mx-auto px-4 flex flex-col gap-16 md:gap-20">
         {groups.length > 0 ? (
           groups.map(({ group, members }) => {
-            const isDoctors = group === "hekimler";
-
             return (
               <section
                 key={group}
@@ -84,15 +82,9 @@ export default async function StaffHubPage({
                   </p>
                 </div>
 
-                {/* Sağ Kolon: Kart Grid'i (Hekimler 2-kolon, diğerleri 3-kolon) */}
+                {/* Sağ Kolon: Kart Grid'i */}
                 <div className="lg:col-span-8 min-w-0">
-                  <div
-                    className={
-                      isDoctors
-                        ? "grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8"
-                        : "grid grid-cols-2 sm:grid-cols-3 gap-6"
-                    }
-                  >
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
                     {members.map((member) => {
                       const staffHref =
                         member.hasDetailPage && member.slug
@@ -108,11 +100,7 @@ export default async function StaffHubPage({
                               <SanityImage
                                 image={member.photo}
                                 fill
-                                sizes={
-                                  isDoctors
-                                    ? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"
-                                    : "(max-width: 640px) 50vw, 260px"
-                                }
+                                sizes="(max-width: 640px) 50vw, 260px"
                                 className="object-cover transition-opacity duration-300 group-hover:opacity-90"
                               />
                             ) : (

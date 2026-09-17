@@ -4,6 +4,7 @@ import { missionVisionPageQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
 import { isValidLocale, DEFAULT_LOCALE, Locale } from "@/lib/i18n";
 import { PageTitle } from "@/components/layout/PageTitle";
+import { ScrollSpyNav } from "@/components/ui/ScrollSpyNav";
 import { MissionVisionPage as MissionVisionPageType } from "@/types";
 
 export async function generateMetadata({
@@ -73,17 +74,7 @@ export default async function MissionVisionPage({
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
                 {locale === "en" ? "Page Contents" : "Sayfa Başlıkları"}
               </p>
-              <nav className="flex flex-col space-y-2">
-                {navItems.map((item) => (
-                  <a
-                    key={item.id}
-                    href={`#${item.id}`}
-                    className="text-sm font-medium text-muted-foreground hover:text-foreground hover:translate-x-0.5 transition-all py-1 border-l-2 border-transparent hover:border-primary pl-2.5 -ml-2.5"
-                  >
-                    {item.label}
-                  </a>
-                ))}
-              </nav>
+              <ScrollSpyNav items={navItems} />
             </div>
           </aside>
 

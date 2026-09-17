@@ -174,7 +174,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
       groups: {
         hekimler: "Hekimlerimiz",
         hemsirelik: "Hemşirelik Kadrosu",
-        teknik: "Teknik & İdari Personel",
+        teknik: "Teknik Personel",
       },
     },
     services: {
@@ -274,7 +274,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
       groups: {
         hekimler: "Physicians",
         hemsirelik: "Nursing Staff",
-        teknik: "Technical & Administrative Staff",
+        teknik: "Technical Staff",
       },
     },
     services: {

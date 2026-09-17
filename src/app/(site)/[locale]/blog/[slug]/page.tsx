@@ -105,7 +105,7 @@ export default async function BlogPostPage({ params }: Props) {
       <SetAlternateUrls tr={trPath} en={enPath} />
       <JsonLd data={articleJsonLd(post, layoutData?.settings)} />
 
-      <article className="container mx-auto px-4 py-8 md:py-12 pb-20 max-w-4xl break-words overflow-x-hidden">
+      <article className="container mx-auto px-4 py-8 md:py-12 pb-20 break-words">
         <Breadcrumbs
           items={[
             { label: dict.nav.blog, href: blogIndexHref },
@@ -114,7 +114,49 @@ export default async function BlogPostPage({ params }: Props) {
           className="mb-8"
         />
 
-        <header className="mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          {relatedPosts?.length > 0 && (
+            <aside className="lg:col-span-3 lg:sticky lg:top-28 lg:self-start order-2 lg:order-1">
+              <div className="border border-border rounded-md p-6 bg-card">
+                <h3 className="font-heading font-semibold text-base text-foreground mb-3">
+                  {dict.common.relatedPosts}
+                </h3>
+                <nav className="divide-y divide-border">
+                  {relatedPosts.map((rPost: BlogPost) => {
+                    const rPostHref =
+                      locale === "en" ? `/en/blog/${rPost.slug}` : `/blog/${rPost.slug}`;
+
+                    return (
+                      <Link
+                        key={rPost.slug}
+                        href={rPostHref}
+                        prefetch={false}
+                        className="py-2.5 flex items-center justify-between gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors group"
+                      >
+                        <span className="min-w-0">
+                          <span className="block truncate group-hover:translate-x-0.5 transition-transform">
+                            {rPost.title}
+                          </span>
+                          {rPost.publishedAt && (
+                            <time dateTime={rPost.publishedAt} className="text-xs text-muted-foreground/70 tabular-nums">
+                              {formatDate(rPost.publishedAt, dateLocale)}
+                            </time>
+                          )}
+                        </span>
+                        <span className="text-primary text-xs shrink-0">→</span>
+                      </Link>
+                    );
+                  })}
+                </nav>
+              </div>
+            </aside>
+          )}
+
+          <main className={
+            (relatedPosts?.length > 0 ? "lg:col-span-9 " : "lg:col-span-12 ") + "order-1 lg:order-2 min-w-0"
+          }>
+
+        <header className="max-w-4xl mb-8">
           <div className="flex items-center gap-3 text-xs sm:text-sm text-muted-foreground mb-3">
             {post.category && (
               <Link
@@ -171,41 +213,11 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
         )}
 
-        <div className="prose prose-slate max-w-[68ch] leading-relaxed text-foreground/90 space-y-6 text-base sm:text-lg">
-          <RichText value={post.body} />
+            <div className="prose prose-slate max-w-[68ch] leading-relaxed text-foreground/90 space-y-6 text-base sm:text-lg">
+              <RichText value={post.body} />
+            </div>
+          </main>
         </div>
-
-        {/* İlgili Yazılar: Kart yerine 3 sade metin satırı */}
-        {relatedPosts?.length > 0 && (
-          <div className="mt-16 pt-10 border-t border-border">
-            <h2 className="font-heading text-xl font-semibold text-foreground mb-6">
-              {dict.common.relatedPosts}
-            </h2>
-            <ul className="divide-y divide-border border-y border-border">
-              {relatedPosts.map((rPost: BlogPost) => {
-                const rPostHref =
-                  locale === "en" ? `/en/blog/${rPost.slug}` : `/blog/${rPost.slug}`;
-
-                return (
-                  <li key={rPost.slug} className="py-4 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-                    <Link
-                      href={rPostHref}
-                      prefetch={false}
-                      className="font-heading font-medium text-base sm:text-lg text-foreground hover:text-primary transition-colors leading-snug"
-                    >
-                      {rPost.title}
-                    </Link>
-                    {rPost.publishedAt && (
-                      <time dateTime={rPost.publishedAt} className="text-xs text-muted-foreground tabular-nums shrink-0">
-                        {formatDate(rPost.publishedAt, dateLocale)}
-                      </time>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        )}
       </article>
     </>
   );

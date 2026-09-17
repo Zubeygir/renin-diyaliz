@@ -61,7 +61,7 @@ export default async function ServicesHubPage({
 
       <div className="container mx-auto px-4">
         {services && services.length > 0 ? (
-          <div className="divide-y divide-border border-y border-border">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
             {services.map((service: Service, idx: number) => {
               const serviceHref = service.slug
                 ? (locale === "en"
@@ -70,40 +70,32 @@ export default async function ServicesHubPage({
                 : "#";
 
               return (
-                <article key={service._id ?? service.slug ?? idx} className="py-10 sm:py-12 first:pt-8 last:pb-8">
-                  <Link
-                    href={serviceHref}
-                    prefetch={false}
-                    className="group grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
-                  >
-                    <div className="lg:col-span-5">
-                      <div className="relative aspect-[4/3] w-full rounded-md overflow-hidden bg-muted border border-border">
-                        {service.mainImage && (
-                          <SanityImage
-                            image={service.mainImage}
-                            fill
-                            sizes="(max-width: 1024px) 100vw, 480px"
-                            className="object-cover transition-opacity duration-300 group-hover:opacity-90"
-                          />
-                        )}
-                      </div>
+                <article key={service._id ?? service.slug ?? idx}>
+                  <Link href={serviceHref} prefetch={false} className="group block">
+                    <div className="relative aspect-[4/3] w-full rounded-md overflow-hidden bg-muted border border-border">
+                      {service.mainImage && (
+                        <SanityImage
+                          image={service.mainImage}
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          className="object-cover transition-opacity duration-300 group-hover:opacity-90"
+                        />
+                      )}
                     </div>
 
-                    <div className="lg:col-span-7">
-                      <h2 className="font-heading text-2xl sm:text-3xl font-semibold text-foreground group-hover:text-primary transition-colors">
-                        {service.title}
-                      </h2>
-                      {service.excerpt && (
-                        <p className="text-muted-foreground text-base sm:text-lg leading-relaxed mt-4 line-clamp-3">
-                          {service.excerpt}
-                        </p>
-                      )}
-                      <div className="mt-6">
-                        <span className="text-primary font-medium text-sm inline-flex items-center gap-1 group-hover:underline">
-                          {dict.common.viewDetail}
-                          <span className="transition-transform group-hover:translate-x-0.5">→</span>
-                        </span>
-                      </div>
+                    <h2 className="font-heading text-xl font-semibold text-foreground group-hover:text-primary transition-colors mt-5">
+                      {service.title}
+                    </h2>
+                    {service.excerpt && (
+                      <p className="text-muted-foreground text-sm sm:text-base leading-relaxed mt-2 line-clamp-2">
+                        {service.excerpt}
+                      </p>
+                    )}
+                    <div className="mt-4">
+                      <span className="text-primary font-medium text-sm inline-flex items-center gap-1 group-hover:underline">
+                        {dict.common.viewDetail}
+                        <span className="transition-transform group-hover:translate-x-0.5">→</span>
+                      </span>
                     </div>
                   </Link>
                 </article>
