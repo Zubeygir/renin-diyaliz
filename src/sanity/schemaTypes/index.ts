@@ -24,7 +24,6 @@ import { blogCategoryType } from "./documents/blogCategory";
 import { serviceType } from "./documents/service";
 import { projectType } from "./documents/project";
 import { staffMemberType } from "./documents/staffMember";
-import { galleryItemType } from "./documents/galleryItem";
 import { partnerType } from "./documents/partner";
 
 export const schemaTypes = [
@@ -57,6 +56,5 @@ export const schemaTypes = [
   serviceType,
   projectType,
   staffMemberType,
-  galleryItemType,
   partnerType,
 ];

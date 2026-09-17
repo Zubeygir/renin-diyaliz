@@ -62,7 +62,6 @@ const sitemapPageTypes = new Set([
 
 // Doküman türleri: kendi detay sayfası yok, sadece bir hub sayfasında liste olarak gösterilir.
 const listOnlyTags: Record<string, string> = {
-  galleryItem: "gallery:list",
   partner: "partner:list",
 };
 

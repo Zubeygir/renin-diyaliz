@@ -1,4 +1,4 @@
-import { defineField, defineType } from "sanity";
+import { defineField, defineType, defineArrayMember } from "sanity";
 
 export const galleryPageType = defineType({
   name: "galleryPage",
@@ -59,6 +59,47 @@ export const galleryPageType = defineType({
         tr: "Hijyenik koşullarda, hasta konforunu ve güvenliğini önceleyen modern tedavi salonlarımız.",
         en: "Our modern treatment halls prioritizing patient comfort and safety in hygienic conditions.",
       },
+    }),
+    defineField({
+      name: "images",
+      title: "Galeri Görselleri",
+      description: "Görselleri sürükleyip bırakarak sıralayabilirsiniz. Toplu görsel yükleme desteklenir.",
+      type: "array",
+      group: "content",
+      of: [
+        defineArrayMember({
+          type: "image",
+          options: { hotspot: true },
+          fields: [
+            defineField({
+              name: "alt",
+              title: "Alt Metni (SEO)",
+              type: "string",
+              description: "Boş bırakılırsa varsayılan 'Renin Diyaliz Galeri' kullanılır.",
+            }),
+            defineField({
+              name: "caption",
+              title: "Açıklama",
+              type: "localizedString",
+              description: "İsteğe bağlı görsel açıklaması.",
+            }),
+          ],
+          preview: {
+            select: {
+              captionTr: "caption.tr",
+              captionEn: "caption.en",
+              alt: "alt",
+              media: "asset",
+            },
+            prepare({ captionTr, captionEn, alt, media }) {
+              return {
+                title: captionTr || captionEn || alt || "Galeri Görseli",
+                media,
+              };
+            },
+          },
+        }),
+      ],
     }),
     // SEO Group
     defineField({ name: "seo", title: "SEO", type: "seo", group: "seo" }),

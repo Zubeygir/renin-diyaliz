@@ -87,7 +87,6 @@ _type in [
   "service",
   "project",
   "staffMember",
-  "galleryItem",
   "partner",
   "faq"
 ]

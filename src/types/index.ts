@@ -235,16 +235,18 @@ export interface Partner {
   link?: string;
 }
 
+export interface GalleryImage extends SanityImage {
+  _key?: string;
+  caption?: string;
+}
+
 export interface GalleryPage extends BasePage {
   pageTitle: string;
   pageSubtitle?: string;
+  images?: GalleryImage[];
 }
 
-export interface GalleryItem {
-  _id?: string;
-  caption?: string;
-  image?: SanityImage;
-}
+export type GalleryItem = GalleryImage;
 
 export interface WorkingHourItem {
   days: string;

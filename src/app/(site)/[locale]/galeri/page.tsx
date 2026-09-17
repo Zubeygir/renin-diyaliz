@@ -1,11 +1,11 @@
 import { Metadata } from "next";
 import { cachedFetch } from "@/sanity/lib/client";
-import { galleryPageQuery, galleryListQuery } from "@/sanity/lib/queries";
+import { galleryPageQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
 import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
 import { PageTitle } from "@/components/layout/PageTitle";
 import { GalleryGrid } from "@/components/gallery/GalleryGrid";
-import { GalleryPage as GalleryPageType, GalleryItem } from "@/types";
+import { GalleryPage as GalleryPageType } from "@/types";
 
 export async function generateMetadata({
   params,
@@ -43,10 +43,13 @@ export default async function GalleryHubPage({
   const locale: Locale = isValidLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
   const dict = getDictionary(locale);
 
-  const [items, pageData] = await Promise.all([
-    cachedFetch<GalleryItem[]>(galleryListQuery, { locale }, { next: { tags: ["gallery:list"] } }),
-    cachedFetch<GalleryPageType>(galleryPageQuery, { locale }, { next: { tags: ["galleryPage"] } }),
-  ]);
+  const pageData = await cachedFetch<GalleryPageType>(
+    galleryPageQuery,
+    { locale },
+    { next: { tags: ["galleryPage"] } }
+  );
+
+  const items = pageData?.images || [];
 
   return (
     <div className="flex flex-col gap-10 md:gap-14 pb-20">
@@ -56,8 +59,8 @@ export default async function GalleryHubPage({
       />
 
       <div className="container mx-auto px-4">
-        {items && items.length > 0 ? (
-          <GalleryGrid items={items} />
+        {items.length > 0 ? (
+          <GalleryGrid items={items} locale={locale} />
         ) : (
           <p className="text-muted-foreground text-center py-16">
             {dict.gallery.noImagesFound}

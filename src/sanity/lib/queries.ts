@@ -251,13 +251,15 @@ export const galleryPageQuery = groq`*[_type == "galleryPage"][0] {
   heroImage ${imageFields},
   "pageTitle": coalesce(pageTitle[$locale], pageTitle.tr, pageTitle),
   "pageSubtitle": coalesce(pageSubtitle[$locale], pageSubtitle.tr, pageSubtitle),
+  images[] {
+    _key,
+    "caption": coalesce(caption[$locale], caption.tr, caption),
+    alt,
+    asset->{ _id, url, metadata { lqip, dimensions } },
+    hotspot,
+    crop
+  },
   seo
-}`;
-
-export const galleryListQuery = groq`*[_type == "galleryItem"] | order(order asc) {
-  _id,
-  "caption": coalesce(caption[$locale], caption.tr, caption),
-  image ${imageFields}
 }`;
 
 export const contactPageQuery = groq`*[_type == "contactPage"][0] {
