@@ -3,7 +3,7 @@ import Link from "next/link";
 import { cachedFetch } from "@/sanity/lib/client";
 import { aboutPageQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
-import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
+import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary, getLocalizedPath } from "@/lib/i18n";
 import { RichText } from "@/components/ui/RichText";
 import { PageTitle } from "@/components/layout/PageTitle";
 import { StatValue } from "@/components/home/StatValue";
@@ -70,7 +70,7 @@ export default async function AboutPage({
             {facts.length > 0 && (
               <div className="border border-border rounded-md p-6 bg-card">
                 <h2 className="font-heading text-base font-semibold text-foreground mb-4">
-                  {locale === "en" ? "Institutional Facts" : "Kurumsal Künye"}
+                  {dict.about.institutionalFacts}
                 </h2>
                 <dl className="divide-y divide-border text-sm">
                   {facts.map((fact, idx) => (
@@ -85,10 +85,10 @@ export default async function AboutPage({
 
             <div className="pt-1">
               <Link
-                href={locale === "en" ? "/en/mission-vision-values" : "/misyon-vizyon-degerler"}
+                href={getLocalizedPath("misyon-vizyon-degerler", locale)}
                 className="inline-flex items-center text-sm font-medium text-primary hover:underline gap-1.5"
               >
-                {locale === "en" ? "Mission, Vision & Quality Policy" : "Misyon, Vizyon ve Kalite Politikası"}
+                {dict.about.missionVisionQuality}
                 <span>→</span>
               </Link>
             </div>

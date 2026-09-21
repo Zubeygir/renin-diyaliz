@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { cachedFetch } from "@/sanity/lib/client";
 import { blogPostBySlugQuery, blogSlugsQuery, blogRelatedPostsQuery } from "@/sanity/lib/queries";
 import { buildMetadata, getLayoutData } from "@/lib/seo";
-import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
+import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary, getDateLocale, getLocalizedPath } from "@/lib/i18n";
 import { RichText } from "@/components/ui/RichText";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
@@ -18,7 +18,7 @@ type Props = { params: Promise<{ locale: string; slug: string }> };
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  const posts = await cachedFetch<Array<{ tr?: string; en?: string }>>(
+  const posts = await cachedFetch<Array<{ tr?: string; en?: string; de?: string; ar?: string }>>(
     blogSlugsQuery,
     {},
     { next: { tags: ["blog:list"] } }
@@ -27,6 +27,8 @@ export async function generateStaticParams() {
   posts?.forEach((post) => {
     if (post.tr) params.push({ locale: "tr", slug: post.tr });
     if (post.en) params.push({ locale: "en", slug: post.en });
+    if (post.de) params.push({ locale: "de", slug: post.de });
+    if (post.ar) params.push({ locale: "ar", slug: post.ar });
   });
   return params;
 }
@@ -45,6 +47,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const trSlug = post.rawSlug?.tr?.current || slug;
   const enSlug = post.rawSlug?.en?.current || slug;
+  const deSlug = post.rawSlug?.de?.current || enSlug;
+  const arSlug = post.rawSlug?.ar?.current || enSlug;
 
   const baseSeo = await buildMetadata(
     {
@@ -52,6 +56,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: post.excerpt,
       canonicalPath: `/blog/${trSlug}`,
       enCanonicalPath: `/en/blog/${enSlug}`,
+      deCanonicalPath: `/de/blog/${deSlug}`,
+      arCanonicalPath: `/ar/blog/${arSlug}`,
       pageSeo: post.seo,
     },
     locale
@@ -68,7 +74,7 @@ export default async function BlogPostPage({ params }: Props) {
   const { locale: rawLocale, slug } = await params;
   const locale: Locale = isValidLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
   const dict = getDictionary(locale);
-  const dateLocale = locale === "en" ? "en-US" : "tr-TR";
+  const dateLocale = getDateLocale(locale);
 
   const [post, layoutData] = await Promise.all([
     cachedFetch<BlogPost | null>(
@@ -83,8 +89,14 @@ export default async function BlogPostPage({ params }: Props) {
 
   const trSlug = post.rawSlug?.tr?.current || slug;
   const enSlug = post.rawSlug?.en?.current || slug;
+  const deSlug = post.rawSlug?.de?.current || enSlug;
+  const arSlug = post.rawSlug?.ar?.current || enSlug;
   const trPath = `/blog/${trSlug}`;
   const enPath = `/en/blog/${enSlug}`;
+  const dePath = `/de/blog/${deSlug}`;
+  const arPath = `/ar/blog/${arSlug}`;
+  const currentDetailPath =
+    locale === "en" ? enPath : locale === "de" ? dePath : locale === "ar" ? arPath : trPath;
 
   let relatedPosts: BlogPost[] = [];
   if (post.category?._id) {
@@ -95,21 +107,21 @@ export default async function BlogPostPage({ params }: Props) {
     );
   }
 
-  const blogIndexHref = locale === "en" ? "/en/blog" : "/blog";
+  const blogIndexHref = getLocalizedPath("blog", locale);
   const authorText = post.author?.name
     ? `${post.author.title ? `${post.author.title} ` : ""}${post.author.name}`
     : null;
 
   return (
     <>
-      <SetAlternateUrls tr={trPath} en={enPath} />
+      <SetAlternateUrls tr={trPath} en={enPath} de={dePath} ar={arPath} />
       <JsonLd data={articleJsonLd(post, layoutData?.settings)} />
 
       <article className="container mx-auto px-4 py-8 md:py-12 pb-20 break-words">
         <Breadcrumbs
           items={[
             { label: dict.nav.blog, href: blogIndexHref },
-            { label: post.title, href: locale === "en" ? enPath : trPath, active: true },
+            { label: post.title, href: currentDetailPath, active: true },
           ]}
           className="mb-8"
         />
@@ -123,8 +135,7 @@ export default async function BlogPostPage({ params }: Props) {
                 </h3>
                 <nav className="divide-y divide-border">
                   {relatedPosts.map((rPost: BlogPost) => {
-                    const rPostHref =
-                      locale === "en" ? `/en/blog/${rPost.slug}` : `/blog/${rPost.slug}`;
+                    const rPostHref = `${getLocalizedPath("blog", locale)}/${rPost.slug}`;
 
                     return (
                       <Link

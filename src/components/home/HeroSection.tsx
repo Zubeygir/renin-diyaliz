@@ -3,7 +3,7 @@ import { SanityImage } from "@/components/ui/SanityImage";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { urlForImage } from "@/sanity/lib/image";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary, getLocalizedPath } from "@/lib/i18n";
 import {
   SanityImage as SanityImageType,
   SanityFile,
@@ -31,20 +31,20 @@ interface HeroSectionProps {
 }
 
 export function resolveLink(linkData?: CtaLink, locale: Locale = "tr") {
-  if (!linkData) return locale === "en" ? "/en" : "/";
-  if (linkData.linkType === "manual") return linkData.manual || (locale === "en" ? "/en" : "/");
+  const homePath = getLocalizedPath("home", locale);
+  if (!linkData) return homePath;
+  if (linkData.linkType === "manual") return linkData.manual || homePath;
 
   const ref = linkData.internal;
-  if (!ref || !ref._type) return locale === "en" ? "/en" : "/";
+  if (!ref || !ref._type) return homePath;
 
-  const isEn = locale === "en";
   switch (ref._type) {
-    case "service": return isEn ? `/en/services/${ref.slug}` : `/hizmetler/${ref.slug}`;
-    case "project": return isEn ? `/en/projects/${ref.slug}` : `/projeler/${ref.slug}`;
-    case "blogPost": return isEn ? `/en/blog/${ref.slug}` : `/blog/${ref.slug}`;
-    case "aboutPage": return isEn ? `/en/about` : `/hakkimizda`;
-    case "contactPage": return isEn ? `/en/contact` : `/iletisim`;
-    default: return isEn ? "/en" : "/";
+    case "service": return `${getLocalizedPath("hizmetler", locale)}/${ref.slug}`;
+    case "project": return `${getLocalizedPath("projeler", locale)}/${ref.slug}`;
+    case "blogPost": return `${getLocalizedPath("blog", locale)}/${ref.slug}`;
+    case "aboutPage": return getLocalizedPath("hakkimizda", locale);
+    case "contactPage": return getLocalizedPath("iletisim", locale);
+    default: return homePath;
   }
 }
 

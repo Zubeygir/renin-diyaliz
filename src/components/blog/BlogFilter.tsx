@@ -5,7 +5,7 @@ import Link from "next/link";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { formatDate } from "@/lib/utils";
 import { BlogPost, BlogCategory, Locale } from "@/types";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary, getLocalizedPath, getDateLocale } from "@/lib/i18n";
 
 interface BlogFilterProps {
   posts: BlogPost[];
@@ -16,8 +16,8 @@ interface BlogFilterProps {
 export function BlogFilter({ posts, categories, locale = "tr" }: BlogFilterProps) {
   const [currentCategory, setCurrentCategory] = useState<string | null>(null);
   const dict = getDictionary(locale);
-  const basePath = locale === "en" ? "/en/blog" : "/blog";
-  const dateLocale = locale === "en" ? "en-US" : "tr-TR";
+  const basePath = getLocalizedPath("blog", locale);
+  const dateLocale = getDateLocale(locale);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -90,7 +90,7 @@ export function BlogFilter({ posts, categories, locale = "tr" }: BlogFilterProps
             {/* Büyük Öne Çıkan İlk Yazı */}
             <article className="group">
               <Link
-                href={locale === "en" ? `/en/blog/${featuredPost.slug}` : `/blog/${featuredPost.slug}`}
+                href={`${basePath}/${featuredPost.slug}`}
                 prefetch={false}
                 className="block space-y-4"
               >
@@ -141,8 +141,7 @@ export function BlogFilter({ posts, categories, locale = "tr" }: BlogFilterProps
             {remainingPosts.length > 0 && (
               <div className="divide-y divide-border border-t border-border pt-2">
                 {remainingPosts.map((post: BlogPost) => {
-                  const postHref =
-                    locale === "en" ? `/en/blog/${post.slug}` : `/blog/${post.slug}`;
+                  const postHref = `${basePath}/${post.slug}`;
 
                   return (
                     <article key={post.slug} className="py-8 first:pt-6 last:pb-0">

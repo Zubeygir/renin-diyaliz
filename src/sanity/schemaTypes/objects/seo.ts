@@ -8,17 +8,14 @@ export const seoType = defineType({
     defineField({
       name: "metaTitle",
       title: "Meta Başlık",
-      type: "string",
+      type: "localizedString",
       description: "Boş bırakılırsa sayfa başlığı kullanılır. Maksimum 60 karakter.",
-      validation: (Rule) => Rule.max(60),
     }),
     defineField({
       name: "metaDescription",
       title: "Meta Açıklama",
-      type: "text",
-      rows: 3,
+      type: "localizedText",
       description: "Boş bırakılırsa varsayılan site açıklaması kullanılır. Maksimum 160 karakter.",
-      validation: (Rule) => Rule.max(160),
     }),
     defineField({
       name: "ogImage",

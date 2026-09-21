@@ -5,6 +5,8 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 export type AlternateUrls = {
   tr?: string | null;
   en?: string | null;
+  de?: string | null;
+  ar?: string | null;
 };
 
 type AlternateUrlsContextType = {
@@ -31,15 +33,15 @@ export function useAlternateUrls() {
   return useContext(AlternateUrlsContext);
 }
 
-export function SetAlternateUrls({ tr, en }: AlternateUrls) {
+export function SetAlternateUrls({ tr, en, de, ar }: AlternateUrls) {
   const { setAlternateUrls } = useAlternateUrls();
 
   useEffect(() => {
-    setAlternateUrls({ tr, en });
+    setAlternateUrls({ tr, en, de, ar });
     return () => {
-      setAlternateUrls({ tr: null, en: null });
+      setAlternateUrls({ tr: null, en: null, de: null, ar: null });
     };
-  }, [tr, en, setAlternateUrls]);
+  }, [tr, en, de, ar, setAlternateUrls]);
 
   return null;
 }

@@ -8,7 +8,7 @@ import { HtmlLang } from "@/components/layout/HtmlLang";
 import { AlternateUrlsProvider } from "@/components/providers/AlternateUrlsContext";
 
 export async function generateStaticParams() {
-  return [{ locale: "tr" }, { locale: "en" }];
+  return [{ locale: "tr" }, { locale: "en" }, { locale: "de" }, { locale: "ar" }];
 }
 
 export const dynamicParams = false;

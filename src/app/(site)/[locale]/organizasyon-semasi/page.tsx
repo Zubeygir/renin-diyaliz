@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { cachedFetch } from "@/sanity/lib/client";
 import { orgChartPageQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
-import { isValidLocale, DEFAULT_LOCALE, Locale } from "@/lib/i18n";
+import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
 import { PageTitle } from "@/components/layout/PageTitle";
 import { OrgChartViewer } from "@/components/common/OrgChartViewer";
 import { OrgChartPage as OrgChartPageType } from "@/types";
@@ -21,11 +21,12 @@ export async function generateMetadata({
     { next: { tags: ["orgChart"] } }
   );
 
+  const dict = getDictionary(locale);
+
   return buildMetadata(
     {
-      title: data?.heroTitle || data?.pageTitle || (locale === "en" ? "Organization Chart" : "Organizasyon Şeması"),
+      title: data?.heroTitle || data?.pageTitle || dict.orgChart.defaultTitle,
       canonicalPath: "/organizasyon-semasi",
-      enCanonicalPath: "/en/organization-chart",
       pageSeo: data?.seo,
     },
     locale
@@ -46,7 +47,8 @@ export default async function OrgChartPage({
     { next: { tags: ["orgChart"] } }
   );
 
-  const defaultTitle = locale === "en" ? "Organization Chart" : "Organizasyon Şeması";
+  const dict = getDictionary(locale);
+  const defaultTitle = dict.orgChart.defaultTitle;
 
   return (
     <div className="flex flex-col gap-10 md:gap-14 pb-20">

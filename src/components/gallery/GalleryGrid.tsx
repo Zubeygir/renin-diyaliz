@@ -16,7 +16,13 @@ interface GalleryGridProps {
  */
 export function GalleryGrid({ items, locale = "tr" }: GalleryGridProps) {
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
-  const defaultAlt = locale === "en" ? "Renin Dialysis Gallery" : "Renin Diyaliz Galeri";
+  const defaultAltMap: Record<Locale, string> = {
+    tr: "Renin Diyaliz Galeri",
+    en: "Renin Dialysis Gallery",
+    de: "Renin Dialyse Galerie",
+    ar: "معرض رينين للغسيل الكلوي",
+  };
+  const defaultAlt = defaultAltMap[locale] || defaultAltMap.tr;
 
   const validItems = items.filter((item) => item.asset);
   const lightboxItems: LightboxImage[] = validItems.map((item) => ({

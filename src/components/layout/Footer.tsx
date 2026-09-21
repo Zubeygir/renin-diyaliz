@@ -12,7 +12,7 @@ import { FaXTwitter } from "react-icons/fa6";
 import { RiMailLine, RiPhoneLine, RiMapPinLine } from "react-icons/ri";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { SiteSettings, Navigation, NavItem, WorkingHourItem } from "@/types";
-import { Locale, getDictionary } from "@/lib/i18n";
+import { Locale, getDictionary, getLocalizedPath } from "@/lib/i18n";
 
 type SocialLink = {
   platform: string;
@@ -50,8 +50,8 @@ export function Footer({
   const socialLinks: SocialLink[] = (settings?.socialLinks || []).filter((s: SocialLink) => s.url);
   const contact = settings?.contactInfo;
   const currentYear = new Date().getFullYear();
-  const kvkkHref = locale === "en" ? "/en/privacy" : "/kvkk";
-  const cookiePolicyHref = locale === "en" ? "/en/cookie-policy" : "/cerez-politikasi";
+  const kvkkHref = getLocalizedPath("kvkk", locale);
+  const cookiePolicyHref = getLocalizedPath("cerez-politikasi", locale);
 
   return (
     <footer className="border-t bg-background">

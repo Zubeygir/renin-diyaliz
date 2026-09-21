@@ -5,7 +5,7 @@ import { StaggerItem } from "@/components/ui/StaggerItem";
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
 import { BlogPost, Locale } from "@/types";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary, getLocalizedPath, getDateLocale } from "@/lib/i18n";
 
 interface BlogSectionProps {
   title?: string;
@@ -15,7 +15,7 @@ interface BlogSectionProps {
 }
 
 function postHref(post: BlogPost, locale: Locale) {
-  return locale === "en" ? `/en/blog/${post.slug}` : `/blog/${post.slug}`;
+  return `${getLocalizedPath("blog", locale)}/${post.slug}`;
 }
 
 export function BlogSection({
@@ -25,8 +25,8 @@ export function BlogSection({
   locale = "tr",
 }: BlogSectionProps) {
   const dict = getDictionary(locale);
-  const allBlogHref = locale === "en" ? "/en/blog" : "/blog";
-  const dateLocale = locale === "en" ? "en-US" : "tr-TR";
+  const allBlogHref = getLocalizedPath("blog", locale);
+  const dateLocale = getDateLocale(locale);
 
   if (!posts || posts.length === 0) return null;
 

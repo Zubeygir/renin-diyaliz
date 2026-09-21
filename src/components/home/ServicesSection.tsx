@@ -4,7 +4,7 @@ import { AnimateGroup } from "@/components/ui/AnimateGroup";
 import { StaggerItem } from "@/components/ui/StaggerItem";
 import Link from "next/link";
 import { Service, Locale } from "@/types";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary, getLocalizedPath } from "@/lib/i18n";
 
 interface ServicesSectionProps {
   title?: string;
@@ -20,7 +20,7 @@ export function ServicesSection({
   locale = "tr",
 }: ServicesSectionProps) {
   const dict = getDictionary(locale);
-  const allServicesHref = locale === "en" ? "/en/services" : "/hizmetler";
+  const allServicesHref = getLocalizedPath("hizmetler", locale);
 
   if (!services || services.length === 0) return null;
 
@@ -44,9 +44,7 @@ export function ServicesSection({
       {/* Rows, not cards: three services of different nature don't belong in equal tiles */}
       <AnimateGroup stagger={0.1} className="border-t border-border">
         {services.slice(0, 4).map((service: Service, i) => {
-          const serviceHref = locale === "en"
-            ? `/en/services/${service.slug}`
-            : `/hizmetler/${service.slug}`;
+          const serviceHref = `${getLocalizedPath("hizmetler", locale)}/${service.slug}`;
 
           return (
             <StaggerItem key={service.slug ?? i} className="border-b border-border">

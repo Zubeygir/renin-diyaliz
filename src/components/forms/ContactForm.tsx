@@ -156,13 +156,13 @@ export function ContactForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="subject">{locale === "en" ? "Subject" : "Konu"}</Label>
+          <Label htmlFor="subject">{dict.contact.form.subject}</Label>
           <Input
             id="subject"
             name="subject"
             value={formData.subject}
             onChange={handleChange}
-            placeholder={locale === "en" ? "Subject of your message" : "Mesajınızın konusu"}
+            placeholder={dict.contact.form.subjectPlaceholder}
           />
         </div>
       </div>

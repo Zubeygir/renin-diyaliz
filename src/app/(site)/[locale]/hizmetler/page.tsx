@@ -3,7 +3,7 @@ import Link from "next/link";
 import { cachedFetch } from "@/sanity/lib/client";
 import { servicesPageQuery, serviceListQuery } from "@/sanity/lib/queries";
 import { buildMetadata, getLayoutData } from "@/lib/seo";
-import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
+import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary, getLocalizedPath } from "@/lib/i18n";
 import { PageTitle } from "@/components/layout/PageTitle";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { ServicesPage as ServicesPageType, Service } from "@/types";
@@ -28,7 +28,6 @@ export async function generateMetadata({
     {
       title: pageData?.heroTitle || pageData?.pageTitle || dict.nav.services,
       canonicalPath: "/hizmetler",
-      enCanonicalPath: "/en/services",
       pageSeo: pageData?.seo,
     },
     locale
@@ -64,9 +63,7 @@ export default async function ServicesHubPage({
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
             {services.map((service: Service, idx: number) => {
               const serviceHref = service.slug
-                ? (locale === "en"
-                    ? `/en/services/${service.slug}`
-                    : `/hizmetler/${service.slug}`)
+                ? `${getLocalizedPath("hizmetler", locale)}/${service.slug}`
                 : "#";
 
               return (
@@ -112,35 +109,29 @@ export default async function ServicesHubPage({
         <div className="mt-16 pt-10 border-t border-border grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="p-6 rounded-md border border-border bg-card">
             <h3 className="font-heading font-semibold text-base text-foreground mb-2">
-              {locale === "en" ? "Social Security (SGK)" : "Sosyal Güvence (SGK)"}
+              {dict.services.sgkTitle}
             </h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              {locale === "en"
-                ? "Hemodialysis treatments are provided in full compliance with SGK and contracted private health insurances."
-                : "Merkezimizdeki tüm hemodiyaliz tedavileri SGK ve anlaşmalı özel sağlık sigortaları kapsamında yürütülmektedir."}
+              {dict.services.sgkDesc}
             </p>
           </div>
 
           <div className="p-6 rounded-md border border-border bg-card">
             <h3 className="font-heading font-semibold text-base text-foreground mb-2">
-              {locale === "en" ? "Patient Transport" : "Hasta Nakil / Servis"}
+              {dict.services.transportTitle}
             </h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              {locale === "en"
-                ? "Scheduled door-to-door transportation for patients along defined district routes on treatment days."
-                : "Tedavi günlerinde hastalarımızın ulaşımı, belirlenen ilçe güzergâhlarında ücretsiz servis araçlarımızla sağlanır."}
+              {dict.services.transportDesc}
             </p>
           </div>
 
           <div className="p-6 rounded-md border border-border bg-card flex flex-col justify-between">
             <div>
               <h3 className="font-heading font-semibold text-base text-foreground mb-2">
-                {locale === "en" ? "Direct Consultation" : "Tedavi ve Başvuru"}
+                {dict.services.consultationTitle}
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                {locale === "en"
-                  ? "Contact our clinical coordinators directly for admission and session scheduling."
-                  : "Tedavi kabul süreçleri ve seans planlaması için merkezimizle doğrudan irtibat kurabilirsiniz."}
+                {dict.services.consultationDesc}
               </p>
             </div>
             {phone && (

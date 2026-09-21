@@ -4,7 +4,7 @@ import { RichText } from "@/components/ui/RichText";
 import { StatValue } from "@/components/home/StatValue";
 import Link from "next/link";
 import { SanityImage as SanityImageType, Locale, StatItem, StaffPreviewItem } from "@/types";
-import { getDictionary } from "@/lib/i18n";
+import { getDictionary, getLocalizedPath } from "@/lib/i18n";
 import type { PortableTextBlock } from "@portabletext/react";
 
 interface AboutSectionProps {
@@ -31,8 +31,8 @@ export function AboutSection({
   locale = "tr",
 }: AboutSectionProps) {
   const dict = getDictionary(locale);
-  const defaultHref = locale === "en" ? "/en/about" : "/hakkimizda";
-  const staffHref = locale === "en" ? "/en/team" : "/kadromuz";
+  const defaultHref = getLocalizedPath("hakkimizda", locale);
+  const staffHref = getLocalizedPath("kadromuz", locale);
 
   return (
     <SplitSection

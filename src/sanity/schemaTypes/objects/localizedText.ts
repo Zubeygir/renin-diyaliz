@@ -26,5 +26,19 @@ export const localizedTextType = defineType({
       rows: 4,
       fieldset: "translations",
     }),
+    defineField({
+      name: "de",
+      title: "Almanca (DE)",
+      type: "text",
+      rows: 4,
+      fieldset: "translations",
+    }),
+    defineField({
+      name: "ar",
+      title: "Arapça (AR)",
+      type: "text",
+      rows: 4,
+      fieldset: "translations",
+    }),
   ],
 });

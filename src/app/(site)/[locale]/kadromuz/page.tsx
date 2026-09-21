@@ -3,7 +3,7 @@ import Link from "next/link";
 import { cachedFetch } from "@/sanity/lib/client";
 import { staffPageQuery, staffListQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
-import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
+import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary, getLocalizedPath } from "@/lib/i18n";
 import { PageTitle } from "@/components/layout/PageTitle";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { RiUserLine } from "react-icons/ri";
@@ -31,7 +31,6 @@ export async function generateMetadata({
     {
       title: pageData?.heroTitle || pageData?.pageTitle || dict.nav.staff,
       canonicalPath: "/kadromuz",
-      enCanonicalPath: "/en/team",
       pageSeo: pageData?.seo,
     },
     locale
@@ -78,7 +77,7 @@ export default async function StaffHubPage({
                     {dict.staff.groups[group]}
                   </h2>
                   <p className="text-sm text-muted-foreground mt-1.5 tabular-nums">
-                    {members.length} {locale === "en" ? "members" : "kişi"}
+                    {members.length} {dict.staff.membersUnit}
                   </p>
                 </div>
 
@@ -88,9 +87,7 @@ export default async function StaffHubPage({
                     {members.map((member) => {
                       const staffHref =
                         member.hasDetailPage && member.slug
-                          ? locale === "en"
-                            ? `/en/team/${member.slug}`
-                            : `/kadromuz/${member.slug}`
+                          ? `${getLocalizedPath("kadromuz", locale)}/${member.slug}`
                           : undefined;
 
                       const cardContent = (
@@ -149,7 +146,7 @@ export default async function StaffHubPage({
           })
         ) : (
           <p className="text-muted-foreground text-center py-16">
-            {locale === "en" ? "No staff members listed yet." : "Henüz eklenmiş bir personel bulunmuyor."}
+            {dict.staff.noStaffFound}
           </p>
         )}
 
@@ -157,9 +154,7 @@ export default async function StaffHubPage({
         {pageData?.ctaLabel && pageData?.ctaLink && (
           <div className="border-t border-border pt-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
             <p className="text-muted-foreground text-center sm:text-left">
-              {locale === "en"
-                ? "If you would like to join our clinical and technical team, please send your application."
-                : "Sağlık ve teknik ekibimize katılmak isterseniz başvurunuzu iletebilirsiniz."}
+              {dict.staff.joinTeamDesc}
             </p>
             <Link
               href={pageData.ctaLink}

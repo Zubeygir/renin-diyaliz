@@ -31,6 +31,8 @@ export async function generateMetadata({
       title: data?.heroTitle || data?.pageTitle || dict.nav.contact,
       canonicalPath: "/iletisim",
       enCanonicalPath: "/en/contact",
+      deCanonicalPath: "/de/kontakt",
+      arCanonicalPath: "/ar/contact",
       pageSeo: data?.seo,
     },
     locale
@@ -118,7 +120,7 @@ export default async function ContactPage({
             {contact?.address && (
               <div className="pt-6 border-t border-border space-y-3">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  {locale === "en" ? "Address" : "Merkez Adresi"}
+                  {dict.contact.address}
                 </p>
                 <p className="text-sm text-foreground/90 leading-relaxed">
                   {contact.address}

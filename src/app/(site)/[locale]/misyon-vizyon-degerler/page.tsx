@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { cachedFetch } from "@/sanity/lib/client";
 import { missionVisionPageQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
-import { isValidLocale, DEFAULT_LOCALE, Locale } from "@/lib/i18n";
+import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
 import { PageTitle } from "@/components/layout/PageTitle";
 import { ScrollSpyNav } from "@/components/ui/ScrollSpyNav";
 import { MissionVisionPage as MissionVisionPageType } from "@/types";
@@ -21,11 +21,12 @@ export async function generateMetadata({
     { next: { tags: ["missionVision"] } }
   );
 
+  const dict = getDictionary(locale);
+
   return buildMetadata(
     {
-      title: data?.heroTitle || data?.pageTitle || (locale === "en" ? "Mission, Vision & Values" : "Misyon, Vizyon, Değerler ve Kalite Politikası"),
+      title: data?.heroTitle || data?.pageTitle || dict.missionVision.defaultTitle,
       canonicalPath: "/misyon-vizyon-degerler",
-      enCanonicalPath: "/en/mission-vision-values",
       pageSeo: data?.seo,
     },
     locale
@@ -46,11 +47,12 @@ export default async function MissionVisionPage({
     { next: { tags: ["missionVision"] } }
   );
 
-  const defaultTitle = locale === "en" ? "Mission, Vision & Values" : "Misyon, Vizyon, Değerler ve Kalite Politikası";
-  const missionTitle = data?.missionTitle || (locale === "en" ? "Our Mission" : "Misyonumuz");
-  const visionTitle = data?.visionTitle || (locale === "en" ? "Our Vision" : "Vizyonumuz");
-  const valuesTitle = data?.valuesTitle || (locale === "en" ? "Core Values" : "Temel Değerlerimiz");
-  const qualityTitle = data?.qualityPolicyTitle || (locale === "en" ? "Quality Policy" : "Kalite Politikamız");
+  const dict = getDictionary(locale);
+  const defaultTitle = dict.missionVision.defaultTitle;
+  const missionTitle = data?.missionTitle || dict.missionVision.missionTitle;
+  const visionTitle = data?.visionTitle || dict.missionVision.visionTitle;
+  const valuesTitle = data?.valuesTitle || dict.missionVision.valuesTitle;
+  const qualityTitle = data?.qualityPolicyTitle || dict.missionVision.qualityTitle;
 
   const navItems = [
     { id: "misyon", label: missionTitle, show: Boolean(data?.missionText) },
@@ -72,7 +74,7 @@ export default async function MissionVisionPage({
           <aside className="lg:col-span-4 lg:sticky lg:top-28 lg:self-start">
             <div className="border border-border rounded-md p-6 bg-card">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-                {locale === "en" ? "Page Contents" : "Sayfa Başlıkları"}
+                {dict.common.pageContents}
               </p>
               <ScrollSpyNav items={navItems} />
             </div>

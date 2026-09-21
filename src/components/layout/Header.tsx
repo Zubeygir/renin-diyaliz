@@ -67,7 +67,7 @@ export function Header({
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const dict = getDictionary(locale);
-  const homeUrl = locale === "en" ? "/en" : "/";
+  const homeUrl = locale === "tr" ? "/" : `/${locale}`;
   const isHomepage = pathname === homeUrl;
   const isTransparent = isHomepage && !scrolled && !menuOpen;
 

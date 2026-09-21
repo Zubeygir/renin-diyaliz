@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { cachedFetch } from "@/sanity/lib/client";
 import { projectBySlugQuery, projectSlugsQuery } from "@/sanity/lib/queries";
 import { buildMetadata, portableTextToPlainText } from "@/lib/seo";
-import { isValidLocale, DEFAULT_LOCALE, Locale } from "@/lib/i18n";
+import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary, getLocalizedPath } from "@/lib/i18n";
 import { RichText } from "@/components/ui/RichText";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { FadeIn } from "@/components/ui/FadeIn";
@@ -18,7 +18,7 @@ type Props = { params: Promise<{ locale: string; slug: string }> };
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  const projects = await cachedFetch<Array<{ tr?: string; en?: string }>>(
+  const projects = await cachedFetch<Array<{ tr?: string; en?: string; de?: string; ar?: string }>>(
     projectSlugsQuery,
     {},
     { next: { tags: ["project:list"] } }
@@ -27,6 +27,8 @@ export async function generateStaticParams() {
   projects?.forEach((p) => {
     if (p.tr) params.push({ locale: "tr", slug: p.tr });
     if (p.en) params.push({ locale: "en", slug: p.en });
+    if (p.de) params.push({ locale: "de", slug: p.de });
+    if (p.ar) params.push({ locale: "ar", slug: p.ar });
   });
   return params;
 }
@@ -45,6 +47,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const trSlug = project.rawSlug?.tr?.current || slug;
   const enSlug = project.rawSlug?.en?.current || slug;
+  const deSlug = project.rawSlug?.de?.current || enSlug;
+  const arSlug = project.rawSlug?.ar?.current || enSlug;
 
   return buildMetadata(
     {
@@ -52,6 +56,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: portableTextToPlainText(project.body),
       canonicalPath: `/projeler/${trSlug}`,
       enCanonicalPath: `/en/projects/${enSlug}`,
+      deCanonicalPath: `/de/projekte/${deSlug}`,
+      arCanonicalPath: `/ar/projects/${arSlug}`,
       pageSeo: project.seo,
     },
     locale
@@ -61,6 +67,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProjectPage({ params }: Props) {
   const { locale: rawLocale, slug } = await params;
   const locale: Locale = isValidLocale(rawLocale) ? rawLocale : DEFAULT_LOCALE;
+  const dict = getDictionary(locale);
 
   const project = await cachedFetch<Project | null>(
     projectBySlugQuery,
@@ -72,15 +79,19 @@ export default async function ProjectPage({ params }: Props) {
 
   const trSlug = project.rawSlug?.tr?.current || slug;
   const enSlug = project.rawSlug?.en?.current || slug;
+  const deSlug = project.rawSlug?.de?.current || enSlug;
+  const arSlug = project.rawSlug?.ar?.current || enSlug;
   const trPath = `/projeler/${trSlug}`;
   const enPath = `/en/projects/${enSlug}`;
+  const dePath = `/de/projekte/${deSlug}`;
+  const arPath = `/ar/projects/${arSlug}`;
 
-  const allProjectsHref = locale === "en" ? "/en/projects" : "/projeler";
-  const backLabel = locale === "en" ? "← Back to Projects" : "← Projelere Dön";
+  const allProjectsHref = getLocalizedPath("projeler", locale);
+  const backLabel = dict.projects.backToProjects;
 
   return (
     <>
-      <SetAlternateUrls tr={trPath} en={enPath} />
+      <SetAlternateUrls tr={trPath} en={enPath} de={dePath} ar={arPath} />
       <JsonLd data={projectJsonLd(project)} />
       <article className="container mx-auto px-4 py-16 max-w-3xl break-words overflow-x-hidden">
         <FadeIn direction="up">

@@ -33,7 +33,7 @@ export interface SanityFile {
   };
 }
 
-export type Locale = "tr" | "en";
+export type Locale = "tr" | "en" | "de" | "ar";
 
 export interface SanitySlug {
   current: string;
@@ -43,6 +43,8 @@ export interface SanitySlug {
 export interface RawSlug {
   tr?: SanitySlug;
   en?: SanitySlug;
+  de?: SanitySlug;
+  ar?: SanitySlug;
   current?: string;
 }
 

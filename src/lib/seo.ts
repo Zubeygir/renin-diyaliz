@@ -4,7 +4,7 @@ import { cachedFetch } from "@/sanity/lib/client";
 import { layoutQuery } from "@/sanity/lib/queries";
 import { urlForImage } from "@/sanity/lib/image";
 import { getSiteUrl } from "./utils";
-import { Locale } from "./i18n";
+import { Locale, resolveLocalizedUrl } from "./i18n";
 import { SanityImage, SiteSettings, Navigation, SeoSettings, WorkingHourItem } from "@/types";
 import { toPlainText, type PortableTextBlock } from "@portabletext/react";
 
@@ -14,6 +14,8 @@ type BuildMetadataParams = {
   ogImage?: SanityImage;
   canonicalPath?: string;
   enCanonicalPath?: string;
+  deCanonicalPath?: string;
+  arCanonicalPath?: string;
   noIndex?: boolean;
   pageSeo?: SeoSettings;
 };
@@ -66,8 +68,15 @@ export async function buildMetadata(
   const siteUrl = getSiteUrl();
 
   const trPath = params.canonicalPath || "/";
-  const enPath = params.enCanonicalPath || (trPath === "/" ? "/en" : `/en${trPath}`);
-  const currentPublicPath = locale === "en" ? enPath : trPath;
+  const enPath = params.enCanonicalPath || resolveLocalizedUrl(trPath, "tr", "en");
+  const dePath = params.deCanonicalPath || resolveLocalizedUrl(trPath, "tr", "de");
+  const arPath = params.arCanonicalPath || resolveLocalizedUrl(trPath, "tr", "ar");
+
+  let currentPublicPath = trPath;
+  if (locale === "en") currentPublicPath = enPath;
+  else if (locale === "de") currentPublicPath = dePath;
+  else if (locale === "ar") currentPublicPath = arPath;
+
   const canonicalUrl = params.pageSeo?.canonicalUrl || `${siteUrl}${currentPublicPath}`;
   const noIndex = params.pageSeo?.noIndex || params.noIndex || false;
 
@@ -75,6 +84,13 @@ export async function buildMetadata(
   const ogImageUrl = ogImageSource
     ? urlForImage(ogImageSource)?.width(1200).height(630).url()
     : undefined;
+
+  const ogLocaleMap: Record<Locale, string> = {
+    tr: "tr_TR",
+    en: "en_US",
+    de: "de_DE",
+    ar: "ar_SA",
+  };
 
   return {
     title,
@@ -90,6 +106,8 @@ export async function buildMetadata(
       languages: {
         "tr-TR": `${siteUrl}${trPath}`,
         "en-US": `${siteUrl}${enPath}`,
+        "de-DE": `${siteUrl}${dePath}`,
+        "ar-SA": `${siteUrl}${arPath}`,
         "x-default": `${siteUrl}${trPath}`,
       },
     },
@@ -97,7 +115,7 @@ export async function buildMetadata(
       title: title || "",
       description: description || "",
       ...(ogImageUrl && { images: [{ url: ogImageUrl, width: 1200, height: 630 }] }),
-      locale: locale === "en" ? "en_US" : "tr_TR",
+      locale: ogLocaleMap[locale] || "tr_TR",
       type: "website",
     },
     twitter: {

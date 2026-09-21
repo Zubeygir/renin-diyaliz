@@ -24,5 +24,17 @@ export const localizedStringType = defineType({
       type: "string",
       fieldset: "translations",
     }),
+    defineField({
+      name: "de",
+      title: "Almanca (DE)",
+      type: "string",
+      fieldset: "translations",
+    }),
+    defineField({
+      name: "ar",
+      title: "Arapça (AR)",
+      type: "string",
+      fieldset: "translations",
+    }),
   ],
 });

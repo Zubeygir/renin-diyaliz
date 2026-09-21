@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { cachedFetch } from "@/sanity/lib/client";
 import { serviceBySlugQuery, serviceSlugsQuery, siblingServicesQuery } from "@/sanity/lib/queries";
 import { buildMetadata, portableTextToPlainText, getLayoutData } from "@/lib/seo";
-import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
+import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary, getLocalizedPath } from "@/lib/i18n";
 import { RichText } from "@/components/ui/RichText";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
@@ -17,7 +17,7 @@ type Props = { params: Promise<{ locale: string; slug: string }> };
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  const services = await cachedFetch<Array<{ tr?: string; en?: string }>>(
+  const services = await cachedFetch<Array<{ tr?: string; en?: string; de?: string; ar?: string }>>(
     serviceSlugsQuery,
     {},
     { next: { tags: ["service:list"] } }
@@ -26,6 +26,8 @@ export async function generateStaticParams() {
   services?.forEach((s) => {
     if (s.tr) params.push({ locale: "tr", slug: s.tr });
     if (s.en) params.push({ locale: "en", slug: s.en });
+    if (s.de) params.push({ locale: "de", slug: s.de });
+    if (s.ar) params.push({ locale: "ar", slug: s.ar });
   });
   return params;
 }
@@ -44,13 +46,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const trSlug = service.rawSlug?.tr?.current || slug;
   const enSlug = service.rawSlug?.en?.current || slug;
+  const deSlug = service.rawSlug?.de?.current || slug;
+  const arSlug = service.rawSlug?.ar?.current || slug;
+
+  const trPath = `${getLocalizedPath("hizmetler", "tr")}/${trSlug}`;
+  const enPath = `${getLocalizedPath("hizmetler", "en")}/${enSlug}`;
+  const dePath = `${getLocalizedPath("hizmetler", "de")}/${deSlug}`;
+  const arPath = `${getLocalizedPath("hizmetler", "ar")}/${arSlug}`;
 
   return buildMetadata(
     {
       title: service.title,
       description: portableTextToPlainText(service.body),
-      canonicalPath: `/hizmetler/${trSlug}`,
-      enCanonicalPath: `/en/services/${enSlug}`,
+      canonicalPath: trPath,
+      enCanonicalPath: enPath,
+      deCanonicalPath: dePath,
+      arCanonicalPath: arPath,
       pageSeo: service.seo,
     },
     locale
@@ -80,23 +91,30 @@ export default async function ServicePage({ params }: Props) {
 
   const trSlug = service.rawSlug?.tr?.current || slug;
   const enSlug = service.rawSlug?.en?.current || slug;
-  const trPath = `/hizmetler/${trSlug}`;
-  const enPath = `/en/services/${enSlug}`;
+  const deSlug = service.rawSlug?.de?.current || slug;
+  const arSlug = service.rawSlug?.ar?.current || slug;
 
-  const allServicesHref = locale === "en" ? "/en/services" : "/hizmetler";
+  const trPath = `${getLocalizedPath("hizmetler", "tr")}/${trSlug}`;
+  const enPath = `${getLocalizedPath("hizmetler", "en")}/${enSlug}`;
+  const dePath = `${getLocalizedPath("hizmetler", "de")}/${deSlug}`;
+  const arPath = `${getLocalizedPath("hizmetler", "ar")}/${arSlug}`;
+
+  const currentPath =
+    locale === "en" ? enPath : locale === "de" ? dePath : locale === "ar" ? arPath : trPath;
+  const allServicesHref = getLocalizedPath("hizmetler", locale);
   const phone = layoutData?.settings?.contactInfo?.phone;
   const otherServices = (allServices ?? []).filter((s) => s.slug !== slug);
 
   return (
     <>
-      <SetAlternateUrls tr={trPath} en={enPath} />
+      <SetAlternateUrls tr={trPath} en={enPath} de={dePath} ar={arPath} />
       <JsonLd data={serviceJsonLd(service)} />
 
       <article className="container mx-auto px-4 py-8 md:py-12 pb-20">
         <Breadcrumbs
           items={[
             { label: dict.nav.services, href: allServicesHref },
-            { label: service.title, href: locale === "en" ? enPath : trPath, active: true },
+            { label: service.title, href: currentPath, active: true },
           ]}
           className="mb-8"
         />
@@ -131,31 +149,23 @@ export default async function ServicePage({ params }: Props) {
             {/* Sosyal Güvence & Başvuru Kutusu */}
             <div className="border border-border rounded-md p-6 bg-card space-y-4">
               <h3 className="font-heading font-semibold text-base text-foreground">
-                {locale === "en" ? "Service Information" : "Hizmet Bilgileri"}
+                {dict.services.serviceInfo}
               </h3>
               <div className="space-y-3 text-xs sm:text-sm text-muted-foreground leading-relaxed">
                 <div className="flex items-start gap-2">
                   <span className="text-primary font-bold">•</span>
-                  <span>
-                    {locale === "en"
-                      ? "Fully contracted under SGK and private insurances."
-                      : "SGK ve anlaşmalı özel sağlık sigortaları kapsamındadır."}
-                  </span>
+                  <span>{dict.services.sgkDesc}</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <span className="text-primary font-bold">•</span>
-                  <span>
-                    {locale === "en"
-                      ? "Free scheduled door-to-door patient shuttle."
-                      : "Tedavi günlerinde ücretsiz hasta servis imkânı sunulmaktadır."}
-                  </span>
+                  <span>{dict.services.transportDesc}</span>
                 </div>
               </div>
 
               {phone && (
                 <div className="pt-4 border-t border-border">
                   <p className="text-xs text-muted-foreground mb-1">
-                    {locale === "en" ? "Direct Admission / Phone" : "Doğrudan Başvuru / Danışma"}
+                    {dict.services.directConsultation}
                   </p>
                   <a
                     href={`tel:${phone.replace(/\s+/g, "")}`}
@@ -171,12 +181,11 @@ export default async function ServicePage({ params }: Props) {
             {otherServices.length > 0 && (
               <div className="border border-border rounded-md p-6 bg-card">
                 <h3 className="font-heading font-semibold text-base text-foreground mb-3">
-                  {locale === "en" ? "Other Services" : "Diğer Hizmetlerimiz"}
+                  {dict.services.otherServices}
                 </h3>
                 <nav className="divide-y divide-border">
                   {otherServices.map((s, idx) => {
-                    const siblingHref =
-                      locale === "en" ? `/en/services/${s.slug}` : `/hizmetler/${s.slug}`;
+                    const siblingHref = `${getLocalizedPath("hizmetler", locale)}/${s.slug}`;
                     return (
                       <Link
                         key={s._id ?? s.slug ?? idx}

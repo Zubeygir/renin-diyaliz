@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { cachedFetch } from "@/sanity/lib/client";
 import { staffMemberBySlugQuery, staffSlugsQuery } from "@/sanity/lib/queries";
 import { buildMetadata, portableTextToPlainText } from "@/lib/seo";
-import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
+import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary, getLocalizedPath } from "@/lib/i18n";
 import { RichText } from "@/components/ui/RichText";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
@@ -16,7 +16,7 @@ type Props = { params: Promise<{ locale: string; slug: string }> };
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  const staff = await cachedFetch<Array<{ tr?: string; en?: string }>>(
+  const staff = await cachedFetch<Array<{ tr?: string; en?: string; de?: string; ar?: string }>>(
     staffSlugsQuery,
     {},
     { next: { tags: ["staff:list"] } }
@@ -25,6 +25,8 @@ export async function generateStaticParams() {
   staff?.forEach((s) => {
     if (s.tr) params.push({ locale: "tr", slug: s.tr });
     if (s.en) params.push({ locale: "en", slug: s.en });
+    if (s.de) params.push({ locale: "de", slug: s.de });
+    if (s.ar) params.push({ locale: "ar", slug: s.ar });
   });
   return params;
 }
@@ -43,13 +45,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const trSlug = member.rawSlug?.tr?.current || member.slug || slug;
   const enSlug = member.rawSlug?.en?.current || member.slug || slug;
+  const deSlug = member.rawSlug?.de?.current || member.slug || slug;
+  const arSlug = member.rawSlug?.ar?.current || member.slug || slug;
+
+  const trPath = `${getLocalizedPath("kadromuz", "tr")}/${trSlug}`;
+  const enPath = `${getLocalizedPath("kadromuz", "en")}/${enSlug}`;
+  const dePath = `${getLocalizedPath("kadromuz", "de")}/${deSlug}`;
+  const arPath = `${getLocalizedPath("kadromuz", "ar")}/${arSlug}`;
 
   return buildMetadata(
     {
       title: `${member.name} - ${member.role}`,
       description: portableTextToPlainText(member.bio),
-      canonicalPath: `/kadromuz/${trSlug}`,
-      enCanonicalPath: `/en/team/${enSlug}`,
+      canonicalPath: trPath,
+      enCanonicalPath: enPath,
+      deCanonicalPath: dePath,
+      arCanonicalPath: arPath,
       pageSeo: member.seo,
     },
     locale
@@ -71,10 +82,17 @@ export default async function StaffDetailPage({ params }: Props) {
 
   const trSlug = member.rawSlug?.tr?.current || member.slug || slug;
   const enSlug = member.rawSlug?.en?.current || member.slug || slug;
-  const trPath = `/kadromuz/${trSlug}`;
-  const enPath = `/en/team/${enSlug}`;
+  const deSlug = member.rawSlug?.de?.current || member.slug || slug;
+  const arSlug = member.rawSlug?.ar?.current || member.slug || slug;
 
-  const allStaffHref = locale === "en" ? "/en/team" : "/kadromuz";
+  const trPath = `${getLocalizedPath("kadromuz", "tr")}/${trSlug}`;
+  const enPath = `${getLocalizedPath("kadromuz", "en")}/${enSlug}`;
+  const dePath = `${getLocalizedPath("kadromuz", "de")}/${deSlug}`;
+  const arPath = `${getLocalizedPath("kadromuz", "ar")}/${arSlug}`;
+
+  const currentPath =
+    locale === "en" ? enPath : locale === "de" ? dePath : locale === "ar" ? arPath : trPath;
+  const allStaffHref = getLocalizedPath("kadromuz", locale);
 
   const hasBio = Boolean(member.bio && member.bio.length > 0);
   const hasEducation = Boolean(member.education && member.education.length > 0);
@@ -83,12 +101,12 @@ export default async function StaffDetailPage({ params }: Props) {
 
   return (
     <>
-      <SetAlternateUrls tr={trPath} en={enPath} />
+      <SetAlternateUrls tr={trPath} en={enPath} de={dePath} ar={arPath} />
       <article className="container mx-auto px-4 py-8 md:py-12 pb-20">
         <Breadcrumbs
           items={[
             { label: dict.nav.staff, href: allStaffHref },
-            { label: member.name, href: locale === "en" ? enPath : trPath, active: true },
+            { label: member.name, href: currentPath, active: true },
           ]}
           className="mb-8"
         />

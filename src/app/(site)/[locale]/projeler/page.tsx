@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { cachedFetch } from "@/sanity/lib/client";
 import { projectsPageQuery, projectListQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
-import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
+import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary, getLocalizedPath } from "@/lib/i18n";
 import { PageTitle } from "@/components/layout/PageTitle";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { FadeIn } from "@/components/ui/FadeIn";
@@ -31,7 +31,6 @@ export async function generateMetadata({
     {
       title: pageData?.heroTitle || pageData?.pageTitle || dict.nav.projects,
       canonicalPath: "/projeler",
-      enCanonicalPath: "/en/projects",
       pageSeo: pageData?.seo,
     },
     locale
@@ -63,9 +62,7 @@ export default async function ProjectsHubPage({
         {projects && projects.length > 0 ? (
           <AnimateGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project: Project) => {
-              const projectHref = locale === "en"
-                ? `/en/projects/${project.slug?.current}`
-                : `/projeler/${project.slug?.current}`;
+              const projectHref = `${getLocalizedPath("projeler", locale)}/${project.slug?.current}`;
 
               return (
                 <Link key={project.slug?.current} href={projectHref} prefetch={false} className="group block">
@@ -101,7 +98,7 @@ export default async function ProjectsHubPage({
         ) : (
           <FadeIn>
             <p className="text-muted-foreground text-center py-16">
-              {locale === "en" ? "No projects found." : "Henüz eklenmiş bir proje bulunmuyor."}
+              {dict.projects.noProjectsFound}
             </p>
           </FadeIn>
         )}
@@ -110,12 +107,10 @@ export default async function ProjectsHubPage({
         {pageData?.ctaLabel && pageData?.ctaLink && (
           <FadeIn className="mt-16 md:mt-24 p-8 md:p-12 rounded-2xl bg-gradient-to-r from-primary/10 via-primary/5 to-background border text-center max-w-4xl mx-auto">
             <h3 className="text-2xl md:text-3xl font-bold mb-4">
-              {locale === "en" ? "Have a Project in Mind?" : "Bir Projeniz mi Var?"}
+              {dict.projects.haveAProject}
             </h3>
             <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-              {locale === "en"
-                ? "Let's turn your vision into reality together. Contact us today to consult with our experts."
-                : "Hayalinizdeki projeyi birlikte gerçeğe dönüştürelim. Uzman ekibimizle konuşmak için hemen iletişime geçin."}
+              {dict.projects.haveAProjectDesc}
             </p>
             <Button size="lg" render={<Link href={pageData.ctaLink} prefetch={false} />}>
               {pageData.ctaLabel}

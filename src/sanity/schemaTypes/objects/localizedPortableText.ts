@@ -67,5 +67,19 @@ export const localizedPortableTextType = defineType({
       of: richTextOf,
       fieldset: "translations",
     }),
+    defineField({
+      name: "de",
+      title: "Almanca İçerik (DE)",
+      type: "array",
+      of: richTextOf,
+      fieldset: "translations",
+    }),
+    defineField({
+      name: "ar",
+      title: "Arapça İçerik (AR)",
+      type: "array",
+      of: richTextOf,
+      fieldset: "translations",
+    }),
   ],
 });

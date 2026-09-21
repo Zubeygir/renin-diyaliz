@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Schibsted_Grotesk, Public_Sans } from "next/font/google";
+import { Schibsted_Grotesk, Public_Sans, Noto_Sans_Arabic } from "next/font/google";
 import "./globals.css";
 import { buildMetadata, getLayoutData } from "@/lib/seo";
 
@@ -17,6 +17,11 @@ const schibstedGrotesk = Schibsted_Grotesk({
   variable: "--font-heading",
 });
 
+const notoSansArabic = Noto_Sans_Arabic({
+  subsets: ["arabic"],
+  variable: "--font-arabic",
+});
+
 export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata();
 }
@@ -25,7 +30,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const { settings } = await getLayoutData();
 
   return (
-    <html lang="tr" className={`${publicSans.variable} ${schibstedGrotesk.variable}`} suppressHydrationWarning>
+    <html
+      lang="tr"
+      className={`${publicSans.variable} ${schibstedGrotesk.variable} ${notoSansArabic.variable}`}
+      suppressHydrationWarning
+    >
       <body className={publicSans.className}>
         <noscript>
           <style>{`[data-fade-in]{opacity:1!important;transform:none!important}`}</style>

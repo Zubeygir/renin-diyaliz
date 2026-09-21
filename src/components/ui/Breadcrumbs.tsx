@@ -4,39 +4,48 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { RiArrowRightSLine, RiHome4Line } from "react-icons/ri";
 import { JsonLd, breadcrumbListJsonLd } from "@/components/seo/JsonLd";
+import { isValidLocale, Locale, getDictionary } from "@/lib/i18n";
 import { BreadcrumbItem } from "@/types";
 
-const ROUTE_LABELS: Record<string, { tr: string; en: string }> = {
-  hakkimizda: { tr: "Hakkımızda", en: "About Us" },
-  about: { tr: "Hakkımızda", en: "About Us" },
-  hizmetler: { tr: "Hizmetlerimiz", en: "Services" },
-  services: { tr: "Hizmetlerimiz", en: "Services" },
-  projeler: { tr: "Projelerimiz", en: "Projects" },
-  projects: { tr: "Projelerimiz", en: "Projects" },
-  blog: { tr: "Blog", en: "Blog" },
-  iletisim: { tr: "İletişim", en: "Contact" },
-  contact: { tr: "İletişim", en: "Contact" },
-  galeri: { tr: "Galeri", en: "Gallery" },
-  gallery: { tr: "Galeri", en: "Gallery" },
-  kadromuz: { tr: "Kadromuz", en: "Our Team" },
-  team: { tr: "Kadromuz", en: "Our Team" },
-  "misyon-vizyon-degerler": { tr: "Misyon, Vizyon & Değerler", en: "Mission, Vision & Values" },
-  "mission-vision-values": { tr: "Misyon, Vizyon & Değerler", en: "Mission, Vision & Values" },
-  "organizasyon-semasi": { tr: "Organizasyon Şeması", en: "Organization Chart" },
-  "organization-chart": { tr: "Organizasyon Şeması", en: "Organization Chart" },
+const ROUTE_LABELS: Record<string, Partial<Record<Locale, string>>> = {
+  hakkimizda: { tr: "Hakkımızda", en: "About Us", de: "Über uns", ar: "من نحن" },
+  about: { tr: "Hakkımızda", en: "About Us", de: "Über uns", ar: "من نحن" },
+  "ueber-uns": { tr: "Hakkımızda", en: "About Us", de: "Über uns", ar: "من نحن" },
+  hizmetler: { tr: "Hizmetlerimiz", en: "Services", de: "Leistungen", ar: "خدماتنا" },
+  services: { tr: "Hizmetlerimiz", en: "Services", de: "Leistungen", ar: "خدماتنا" },
+  leistungen: { tr: "Hizmetlerimiz", en: "Services", de: "Leistungen", ar: "خدماتنا" },
+  projeler: { tr: "Projelerimiz", en: "Projects", de: "Projekte", ar: "مشاريعنا" },
+  projects: { tr: "Projelerimiz", en: "Projects", de: "Projekte", ar: "مشاريعنا" },
+  projekte: { tr: "Projelerimiz", en: "Projects", de: "Projekte", ar: "مشاريعنا" },
+  blog: { tr: "Blog", en: "Blog", de: "Blog", ar: "المدونة" },
+  iletisim: { tr: "İletişim", en: "Contact", de: "Kontakt", ar: "اتصل بنا" },
+  contact: { tr: "İletişim", en: "Contact", de: "Kontakt", ar: "اتصل بنا" },
+  kontakt: { tr: "İletişim", en: "Contact", de: "Kontakt", ar: "اتصل بنا" },
+  galeri: { tr: "Galeri", en: "Gallery", de: "Galerie", ar: "معرض الصور" },
+  gallery: { tr: "Galeri", en: "Gallery", de: "Galerie", ar: "معرض الصور" },
+  galerie: { tr: "Galeri", en: "Gallery", de: "Galerie", ar: "معرض الصور" },
+  kadromuz: { tr: "Kadromuz", en: "Our Team", de: "Unser Team", ar: "فريقنا" },
+  team: { tr: "Kadromuz", en: "Our Team", de: "Unser Team", ar: "فريقنا" },
+  "misyon-vizyon-degerler": { tr: "Misyon, Vizyon & Değerler", en: "Mission, Vision & Values", de: "Mission, Vision & Werte", ar: "الرسالة والرؤية والقيم" },
+  "mission-vision-values": { tr: "Misyon, Vizyon & Değerler", en: "Mission, Vision & Values", de: "Mission, Vision & Werte", ar: "الرسالة والرؤية والقيم" },
+  "mission-vision-werte": { tr: "Misyon, Vizyon & Değerler", en: "Mission, Vision & Values", de: "Mission, Vision & Werte", ar: "الرسالة والرؤية والقيم" },
+  "organizasyon-semasi": { tr: "Organizasyon Şeması", en: "Organization Chart", de: "Organigramm", ar: "الهيكل التنظيمي" },
+  "organization-chart": { tr: "Organizasyon Şeması", en: "Organization Chart", de: "Organigramm", ar: "الهيكل التنظيمي" },
+  organigramm: { tr: "Organizasyon Şeması", en: "Organization Chart", de: "Organigramm", ar: "الهيكل التنظيمي" },
 };
 
-function formatSlugToLabel(slug: string, isEn: boolean): string {
+function formatSlugToLabel(slug: string, locale: Locale): string {
   try {
     const decoded = decodeURIComponent(slug).trim().toLowerCase();
     if (ROUTE_LABELS[decoded]) {
-      return isEn ? ROUTE_LABELS[decoded].en : ROUTE_LABELS[decoded].tr;
+      return ROUTE_LABELS[decoded][locale] || ROUTE_LABELS[decoded].tr || slug;
     }
+    const dateLocale = locale === "tr" ? "tr-TR" : locale === "de" ? "de-DE" : locale === "ar" ? "ar-SA" : "en-US";
     return decoded
       .replace(/[-_]+/g, " ")
       .split(" ")
       .filter(Boolean)
-      .map((word) => word.charAt(0).toLocaleUpperCase(isEn ? "en-US" : "tr-TR") + word.slice(1))
+      .map((word) => word.charAt(0).toLocaleUpperCase(dateLocale) + word.slice(1))
       .join(" ");
   } catch {
     return slug;
@@ -46,30 +55,34 @@ function formatSlugToLabel(slug: string, isEn: boolean): string {
 export function Breadcrumbs({ items, className = "" }: { items?: BreadcrumbItem[]; className?: string }) {
   const pathname = usePathname();
   const rawPaths = pathname ? pathname.split("/").filter(Boolean) : [];
-  const isEn = rawPaths[0] === "en";
-  const paths = isEn ? rawPaths.slice(1) : rawPaths;
+  const firstSegment = rawPaths[0];
+  const isLocalePrefix = isValidLocale(firstSegment) && firstSegment !== "tr";
+  const locale: Locale = isValidLocale(firstSegment) ? firstSegment : "tr";
+  const paths = isLocalePrefix ? rawPaths.slice(1) : rawPaths;
+  const dict = getDictionary(locale);
   
   // Eğer dışarıdan liste gelmezse current path'ten üret
   const generateBreadcrumbs = (): BreadcrumbItem[] => {
+    const segmentPrefix = locale === "tr" ? "/" : `/${locale}/`;
     return paths.map((path, index) => {
-      const segmentPrefix = isEn ? "/en/" : "/";
       const href = `${segmentPrefix}${paths.slice(0, index + 1).join("/")}`;
-      const label = formatSlugToLabel(path, isEn);
+      const label = formatSlugToLabel(path, locale);
       return { label, href, active: index === paths.length - 1 };
     });
   };
 
   const breadcrumbs = items || generateBreadcrumbs();
 
-  if (pathname === "/" || pathname === "/en" || !paths.length) return null;
+  if (pathname === "/" || pathname === "/en" || pathname === "/de" || pathname === "/ar" || !paths.length) return null;
 
-  const homeHref = isEn ? "/en" : "/";
-  const homeLabel = isEn ? "Home" : "Ana Sayfa";
+  const homeHref = locale === "tr" ? "/" : `/${locale}`;
+  const homeLabel = dict.nav.home;
+  const ariaLabel = locale === "tr" ? "Ekmek Kırıntısı" : locale === "de" ? "Brotkrümelnavigation" : locale === "ar" ? "فتات الخبز" : "Breadcrumb";
 
   return (
     <>
       <JsonLd data={breadcrumbListJsonLd(breadcrumbs)} />
-      <nav aria-label={isEn ? "Breadcrumb" : "Ekmek Kırıntısı"} className={`flex items-center text-sm text-muted-foreground ${className}`}>
+      <nav aria-label={ariaLabel} className={`flex items-center text-sm text-muted-foreground ${className}`}>
       <ol className="flex items-center gap-2 flex-wrap">
         <li>
           <Link 
