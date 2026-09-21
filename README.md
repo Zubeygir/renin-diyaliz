@@ -87,8 +87,7 @@ _type in [
   "service",
   "project",
   "staffMember",
-  "partner",
-  "faq"
+  "partner"
 ]
 ```
 
@@ -99,12 +98,12 @@ _type in [
   "_id": coalesce(after()._id, before()._id),
   "_type": coalesce(after()._type, before()._type),
   "operation": delta::operation(),
-  "slug": after().slug.current,
-  "previousSlug": before().slug.current,
+  "slug": after().slug,
+  "previousSlug": before().slug,
   "categoryId": after().category._ref,
   "previousCategoryId": before().category._ref,
   "slugChanged": select(
-    delta::operation() == "update" => delta::changedAny(slug.current),
+    delta::operation() == "update" => delta::changedAny(slug),
     false
   ),
   "noIndexChanged": select(
@@ -113,9 +112,10 @@ _type in [
   ),
   "affectsList": select(
     delta::operation() != "update" => true,
-    _type == "blogPost" => delta::changedAny((title, slug.current, excerpt, publishedAt, category, mainImage, seo.noIndex)),
-    _type == "service" => delta::changedAny((title, slug.current, mainImage, seo.noIndex)),
-    _type == "project" => delta::changedAny((title, slug.current, mainImage, seo.noIndex)),
+    _type == "blogPost" => delta::changedAny((title, slug, excerpt, publishedAt, category, mainImage, seo.noIndex)),
+    _type == "service" => delta::changedAny((title, slug, mainImage, seo.noIndex)),
+    _type == "project" => delta::changedAny((title, slug, mainImage, seo.noIndex)),
+    _type == "staffMember" => delta::changedAny((name, role, group, photo, hasDetailPage, slug)),
     false
   )
 }
