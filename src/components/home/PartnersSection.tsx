@@ -124,7 +124,7 @@ export function PartnersSection({ title, note, partners = [] }: PartnersSectionP
   const asideContent = (
     <div className="flex flex-col gap-4">
       {note && <p className="max-w-[40ch]">{note}</p>}
-      <div className="flex items-center gap-2 pt-1">
+      <div className="flex items-center gap-2 pt-1" dir="ltr">
         <button
           type="button"
           onClick={() => scroll("left")}
@@ -157,6 +157,7 @@ export function PartnersSection({ title, note, partners = [] }: PartnersSectionP
     >
       <div
         ref={trackRef}
+        dir="ltr"
         onMouseDown={onMouseDown}
         onMouseEnter={pause}
         onMouseLeave={resume}
