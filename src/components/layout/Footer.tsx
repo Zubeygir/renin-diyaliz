@@ -116,7 +116,7 @@ export function Footer({
                       className="flex items-start gap-3 text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
                       <RiPhoneLine className="mt-0.5 shrink-0" />
-                      {contact.phone}
+                      <span dir="ltr">{contact.phone}</span>
                     </a>
                   </li>
                 )}

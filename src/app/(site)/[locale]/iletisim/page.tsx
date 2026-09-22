@@ -77,6 +77,7 @@ export default async function ContactPage({
                 <a
                   href={`tel:${contact.phone.replace(/\s+/g, "")}`}
                   className="font-heading font-semibold text-2xl sm:text-3xl text-foreground hover:text-primary transition-colors tabular-nums block"
+                  dir="ltr"
                 >
                   {contact.phone}
                 </a>
@@ -84,6 +85,7 @@ export default async function ContactPage({
                   <a
                     href={`tel:${contact.phone2.replace(/\s+/g, "")}`}
                     className="font-heading font-medium text-lg sm:text-xl text-muted-foreground hover:text-primary transition-colors tabular-nums block mt-1"
+                    dir="ltr"
                   >
                     {contact.phone2}
                   </a>

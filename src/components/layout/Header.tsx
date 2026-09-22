@@ -164,7 +164,7 @@ export function Header({
               )}
             >
               <RiPhoneLine size={15} className="shrink-0" />
-              {contactInfo.phone}
+              <span dir="ltr">{contactInfo.phone}</span>
             </a>
           )}
           <LanguageSwitcher currentLocale={locale} light={isTransparent} />
@@ -246,7 +246,7 @@ export function Header({
                       className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
                       <RiPhoneLine className="shrink-0" />
-                      {contactInfo.phone}
+                      <span dir="ltr">{contactInfo.phone}</span>
                     </a>
                   )}
                   {contactInfo?.email && (

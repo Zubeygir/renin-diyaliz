@@ -135,11 +135,11 @@ export function HeroSection({ data, contact, workingHours, locale = "tr" }: Hero
               <div className="py-5 md:pr-8">
                 <dt className="text-xs uppercase tracking-wide text-white/60">{dict.contact.phone}</dt>
                 <dd className="mt-1 flex flex-wrap gap-x-4 font-heading text-lg font-semibold">
-                  <a href={`tel:${contact.phone.replace(/\s+/g, "")}`} className="hover:underline underline-offset-4">
+                  <a href={`tel:${contact.phone.replace(/\s+/g, "")}`} className="hover:underline underline-offset-4" dir="ltr">
                     {contact.phone}
                   </a>
                   {contact.phone2 && (
-                    <a href={`tel:${contact.phone2.replace(/\s+/g, "")}`} className="hover:underline underline-offset-4">
+                    <a href={`tel:${contact.phone2.replace(/\s+/g, "")}`} className="hover:underline underline-offset-4" dir="ltr">
                       {contact.phone2}
                     </a>
                   )}
