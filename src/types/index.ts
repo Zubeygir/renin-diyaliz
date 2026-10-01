@@ -272,9 +272,6 @@ export type CookiePolicyPage = KvkkPage;
 export interface ContactPage extends BasePage {
   pageTitle: string;
   pageSubtitle?: string;
-  showForm?: boolean;
-  formTitle?: string;
-  successMessage?: string;
   contactInfo?: SiteSettings["contactInfo"];
   workingHours?: WorkingHourItem[];
   faqs?: FaqItem[];

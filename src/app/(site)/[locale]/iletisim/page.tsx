@@ -3,7 +3,6 @@ import { cachedFetch } from "@/sanity/lib/client";
 import { contactPageQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
 import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
-import { ContactForm } from "@/components/forms/ContactForm";
 import { PageTitle } from "@/components/layout/PageTitle";
 import { ContactPage as ContactPageType } from "@/types";
 import { RiMailLine, RiMapPinLine } from "react-icons/ri";
@@ -169,23 +168,13 @@ export default async function ContactPage({
             </div>
           </aside>
 
-          {/* Sağ Kolon: Harita ve İletişim Formu */}
+          {/* Sağ Kolon: Harita */}
           <main className="lg:col-span-7 space-y-10">
             {contact?.mapIframe && (
               <div className="rounded-md border border-border overflow-hidden bg-muted">
                 <div
                   className="w-full [&_iframe]:w-full [&_iframe]:h-[420px] [&_iframe]:border-0"
                   dangerouslySetInnerHTML={{ __html: contact.mapIframe }}
-                />
-              </div>
-            )}
-
-            {data?.showForm && (
-              <div className="border border-border rounded-md p-6 sm:p-8 bg-card">
-                <ContactForm
-                  formTitle={data?.formTitle}
-                  successMessage={data?.successMessage}
-                  locale={locale}
                 />
               </div>
             )}

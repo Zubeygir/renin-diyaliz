@@ -284,9 +284,6 @@ export const contactPageQuery = groq`*[_type == "contactPage"][0] {
   heroImage ${imageFields},
   "pageTitle": coalesce(pageTitle[$locale], pageTitle.en, pageTitle.tr, pageTitle),
   "pageSubtitle": coalesce(pageSubtitle[$locale], pageSubtitle.en, pageSubtitle.tr, pageSubtitle),
-  showForm,
-  "formTitle": coalesce(formTitle[$locale], formTitle.en, formTitle.tr, formTitle),
-  "successMessage": coalesce(successMessage[$locale], successMessage.en, successMessage.tr, successMessage),
   workingHours[] {
     "days": coalesce(days[$locale], days.en, days.tr, days),
     hours

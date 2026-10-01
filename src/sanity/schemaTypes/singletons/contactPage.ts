@@ -61,21 +61,6 @@ export const contactPageType = defineType({
       },
     }),
     defineField({
-      name: "showForm",
-      title: "İletişim Formunu Göster",
-      type: "boolean",
-      group: "content",
-      initialValue: false,
-      description: "Açılırsa sayfada e-posta formu gösterilir. Kapalıyken form gizlenir.",
-    }),
-    defineField({ name: "formTitle", title: "Form Başlığı", type: "localizedString", group: "content" }),
-    defineField({
-      name: "successMessage",
-      title: "Form Başarı Mesajı",
-      type: "localizedText",
-      group: "content",
-    }),
-    defineField({
       name: "workingHours",
       title: "Çalışma Saatleri",
       type: "array",

@@ -65,22 +65,6 @@ export interface Dictionary {
     workingHoursSubtitle: string;
     faqTitle: string;
     faqSubtitle: string;
-    form: {
-      name: string;
-      namePlaceholder: string;
-      email: string;
-      emailPlaceholder: string;
-      phone: string;
-      phonePlaceholder: string;
-      subject: string;
-      subjectPlaceholder: string;
-      message: string;
-      messagePlaceholder: string;
-      submit: string;
-      submitting: string;
-      success: string;
-      error: string;
-    };
   };
   staff: {
     viewProfile: string;
@@ -211,22 +195,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
       workingHoursSubtitle: "Haftalık diyaliz seansları ve merkezin açık olduğu saatler.",
       faqTitle: "Sık Sorulan Sorular",
       faqSubtitle: "Diyaliz tedavisi, servis hizmeti ve SGK anlaşmaları hakkında merak edilenler.",
-      form: {
-        name: "Ad Soyad",
-        namePlaceholder: "Adınız ve soyadınız",
-        email: "E-posta",
-        emailPlaceholder: "ornek@email.com",
-        phone: "Telefon",
-        phonePlaceholder: "+90 5XX XXX XX XX",
-        subject: "Konu",
-        subjectPlaceholder: "Mesajınızın konusu",
-        message: "Mesajınız",
-        messagePlaceholder: "Mesajınızı buraya yazabilirsiniz...",
-        submit: "Mesaj Gönder",
-        submitting: "Gönderiliyor...",
-        success: "Mesajınız başarıyla iletildi. En kısa sürede size dönüş yapacağız.",
-        error: "Mesaj iletilirken bir hata oluştu. Lütfen tekrar deneyin.",
-      },
     },
     staff: {
       viewProfile: "Özgeçmişi İncele",
@@ -355,22 +323,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
       workingHoursSubtitle: "Our center operates on a regular schedule throughout the week.",
       faqTitle: "Frequently Asked Questions",
       faqSubtitle: "Answers to common questions about treatment, transport, and coverage.",
-      form: {
-        name: "Full Name",
-        namePlaceholder: "Your full name",
-        email: "Email Address",
-        emailPlaceholder: "example@email.com",
-        phone: "Phone Number",
-        phonePlaceholder: "+90 5XX XXX XX XX",
-        subject: "Subject",
-        subjectPlaceholder: "Subject of your message",
-        message: "Your Message",
-        messagePlaceholder: "Write your message here...",
-        submit: "Send Message",
-        submitting: "Sending...",
-        success: "Your message has been sent successfully. We will get back to you shortly.",
-        error: "An error occurred while sending your message. Please try again.",
-      },
     },
     staff: {
       viewProfile: "View Profile",
@@ -499,22 +451,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
       workingHoursSubtitle: "Unser Zentrum ist die ganze Woche über regelmäßig für Sie da.",
       faqTitle: "Häufig gestellte Fragen",
       faqSubtitle: "Wissenswertes über Dialysebehandlung, Shuttleservice und Verträge.",
-      form: {
-        name: "Vor- und Nachname",
-        namePlaceholder: "Ihr vollständiger Name",
-        email: "E-Mail-Adresse",
-        emailPlaceholder: "beispiel@email.com",
-        phone: "Telefonnummer",
-        phonePlaceholder: "+90 5XX XXX XX XX",
-        subject: "Betreff",
-        subjectPlaceholder: "Betreff Ihrer Nachricht",
-        message: "Ihre Nachricht",
-        messagePlaceholder: "Schreiben Sie Ihre Nachricht hier...",
-        submit: "Nachricht senden",
-        submitting: "Wird gesendet...",
-        success: "Ihre Nachricht wurde erfolgreich übermittelt. Wir melden uns in Kürze bei Ihnen.",
-        error: "Beim Senden Ihrer Nachricht ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
-      },
     },
     staff: {
       viewProfile: "Profil ansehen",
@@ -643,22 +579,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
       workingHoursSubtitle: "يعمل مركزنا وفق جدول منتظم طوال أيام الأسبوع.",
       faqTitle: "الأسئلة الشائعة",
       faqSubtitle: "إجابات عن أكثر الأسئلة شيوعاً حول جلسات الغسيل، خدمة التوصيل، والتأمينات.",
-      form: {
-        name: "الاسم الكامل",
-        namePlaceholder: "اسمك الكامل",
-        email: "البريد الإلكتروني",
-        emailPlaceholder: "example@email.com",
-        phone: "رقم الهاتف",
-        phonePlaceholder: "+90 5XX XXX XX XX",
-        subject: "الموضوع",
-        subjectPlaceholder: "موضوع رسالتك",
-        message: "رسالتك",
-        messagePlaceholder: "اكتب رسالتك هنا...",
-        submit: "إرسال الرسالة",
-        submitting: "جارٍ الإرسال...",
-        success: "تم إرسال رسالتك بنجاح. سنتواصل معك في أقرب وقت.",
-        error: "حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة مرة أخرى.",
-      },
     },
     staff: {
       viewProfile: "عرض الملف الشخصي",

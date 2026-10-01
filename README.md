@@ -12,8 +12,6 @@ Modern ajanslar için hazır, production-grade Next.js 15 + Sanity v3 boilerplat
 | Sanity | v3 | Headless CMS |
 | Framer Motion | latest | Animasyonlar |
 | react-icons | latest | SVG ikon kütüphanesi |
-| Nodemailer | latest | İletişim formu e-postası |
-| Zod + @t3-oss/env-nextjs | latest | Type-safe env validasyonu |
 
 ---
 
@@ -125,12 +123,6 @@ Bu projection zorunludur. Delete olayında eski slug'ı, slug değişikliğinde 
 
 5. `.env.local` içinde `SANITY_WEBHOOK_SECRET` değerini güncelleyin. Uygulama `@sanity/webhook` paketi ile imzayı otomatik doğrular.
 
-### 4. Gmail SMTP Kurulumu (İletişim Formu)
-
-1. Google Hesabı → **Güvenlik** → **2 Adımlı Doğrulama** → etkinleştir
-2. **Uygulama Şifreleri** → Uygulama: Mail → Şifreyi kopyala
-3. `.env.local` içinde `SMTP_USER` ve `SMTP_PASS` değerlerini güncelle
-
 ---
 
 ## Yeni Projede Yapılacaklar Checklist
@@ -158,15 +150,13 @@ src/
 │   │   ├── projeler/     # Proje hub ve [slug] detay sayfaları
 │   │   ├── iletisim/     # İletişim sayfası
 │   ├── api/              # API route'ları
-│   │   ├── revalidate/   # ISR webhook
-│   │   └── contact/      # İletişim formu
+│   │   └── revalidate/   # ISR webhook
 │   ├── studio/           # Sanity Studio (embedded)
 │   ├── layout.tsx        # Root layout
 │   ├── not-found.tsx     # 404 sayfası
 │   ├── sitemap.ts        # Dinamik sitemap
 │   └── robots.ts         # robots.txt
 ├── components/
-│   ├── forms/            # ContactForm
 │   ├── layout/           # Header, Footer, vb.
 │   ├── seo/              # JsonLd
 │   └── ui/               # SanityImage, RichText, FAQ, Breadcrumbs, FadeIn
