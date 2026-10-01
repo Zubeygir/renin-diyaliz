@@ -66,6 +66,12 @@ export default async function StaffHubPage({
       <div className="container mx-auto px-4 flex flex-col gap-16 md:gap-20">
         {groups.length > 0 ? (
           groups.map(({ group, members }) => {
+            // Flex instead of grid for doctors: grid cannot center an incomplete row.
+            const isDoctors = group === "hekimler";
+            const cardClass = isDoctors
+              ? "group block w-[calc((100%-1.5rem)/2)] sm:w-[calc((100%-5rem)/3)]"
+              : "group block";
+
             return (
               <section
                 key={group}
@@ -83,8 +89,21 @@ export default async function StaffHubPage({
 
                 {/* Sağ Kolon: Kart Grid'i */}
                 <div className="lg:col-span-8 min-w-0">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-                    {members.map((member) => {
+                  <div
+                    className={
+                      isDoctors
+                        ? "flex flex-wrap justify-center gap-6 sm:gap-x-20 sm:gap-y-12"
+                        : "grid grid-cols-2 sm:grid-cols-3 gap-6"
+                    }
+                  >
+                    {members.map((member, index) => {
+                      // Head nurse (first by Sanity order) sits alone on a centered row,
+                      // sized to match a regular grid column.
+                      const itemClass =
+                        group === "hemsirelik" && index === 0
+                          ? "group block col-span-full justify-self-center w-[calc((100%-1.5rem)/2)] sm:w-[calc((100%-3rem)/3)]"
+                          : cardClass;
+
                       const staffHref =
                         member.hasDetailPage && member.slug
                           ? `${getLocalizedPath("kadromuz", locale)}/${member.slug}`
@@ -126,7 +145,7 @@ export default async function StaffHubPage({
                             key={member._id}
                             href={staffHref}
                             prefetch={false}
-                            className="group block"
+                            className={itemClass}
                           >
                             {cardContent}
                           </Link>
@@ -134,7 +153,7 @@ export default async function StaffHubPage({
                       }
 
                       return (
-                        <div key={member._id} className="group block">
+                        <div key={member._id} className={itemClass}>
                           {cardContent}
                         </div>
                       );

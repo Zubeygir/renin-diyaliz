@@ -238,9 +238,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
       joinTeamTitle: "Ekibimize Katılın",
       joinTeamDesc: "Hasta odaklı bakım anlayışımıza değer katacak uzman sağlık profesyonellerini aramızda görmekten mutluluk duyarız.",
       groups: {
-        hekimler: "Hekimlerimiz",
-        hemsirelik: "Hemşirelik Kadrosu",
-        teknik: "Teknik Personel",
+        hekimler: "Hekim Kadrosu",
+        hemsirelik: "Hemşire Kadrosu",
+        teknik: "Tekniker Kadrosu",
       },
     },
     services: {
@@ -381,9 +381,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
       joinTeamTitle: "Join Our Team",
       joinTeamDesc: "We welcome dedicated healthcare professionals to contribute to our patient-first dialysis care.",
       groups: {
-        hekimler: "Physicians",
+        hekimler: "Medical Staff",
         hemsirelik: "Nursing Staff",
-        teknik: "Technical Staff",
+        teknik: "Technician Staff",
       },
     },
     services: {
@@ -524,9 +524,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
       joinTeamTitle: "Werden Sie Teil unseres Teams",
       joinTeamDesc: "Wir freuen uns über engagierte medizinische Fachkräfte, die unsere patientenorientierte Versorgung verstärken möchten.",
       groups: {
-        hekimler: "Ärzte",
-        hemsirelik: "Pflegepersonal",
-        teknik: "Technisches Personal",
+        hekimler: "Ärzteteam",
+        hemsirelik: "Pflegeteam",
+        teknik: "Technikerteam",
       },
     },
     services: {
@@ -667,9 +667,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
       joinTeamTitle: "انضم إلى فريقنا",
       joinTeamDesc: "نرحب بالكوادر الطبية المتميزة للانضمام إلى فريقنا وتقديم أفضل رعاية لمرضى الغسيل الكلوي.",
       groups: {
-        hekimler: "أطباؤنا",
+        hekimler: "كادر الأطباء",
         hemsirelik: "كادر التمريض",
-        teknik: "الكادر الفني",
+        teknik: "كادر الفنيين",
       },
     },
     services: {
