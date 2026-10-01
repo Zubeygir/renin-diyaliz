@@ -20,7 +20,7 @@ export async function generateMetadata({
   const data = await cachedFetch<ContactPageType>(
     contactPageQuery,
     { locale },
-    { next: { tags: ["contact"] } }
+    { next: { tags: ["contact", "layout"] } }
   );
 
   const dict = getDictionary(locale);
@@ -50,7 +50,7 @@ export default async function ContactPage({
   const data = await cachedFetch<ContactPageType>(
     contactPageQuery,
     { locale },
-    { next: { tags: ["contact"] } }
+    { next: { tags: ["contact", "layout"] } }
   );
 
   const contact = data?.contactInfo;
