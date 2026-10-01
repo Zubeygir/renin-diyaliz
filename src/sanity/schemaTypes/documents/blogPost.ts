@@ -6,7 +6,19 @@ export const blogPostType = defineType({
   type: "document",
   fields: [
     defineField({ name: "title", title: "Başlık", type: "localizedString" }),
-    defineField({ name: "slug", title: "Slug", type: "localizedSlug" }),
+    defineField({
+      name: "slug",
+      title: "Slug",
+      type: "localizedSlug",
+      validation: (Rule) =>
+        Rule.required().custom((value) => {
+          const val = value as { tr?: { current?: string } } | undefined;
+          if (!val?.tr?.current) {
+            return "Yazının yayına alınabilmesi için Türkçe slug (TR) zorunludur. 'Generate' butonuna basarak oluşturabilirsiniz.";
+          }
+          return true;
+        }),
+    }),
     defineField({ name: "publishedAt", title: "Yayın Tarihi", type: "datetime", initialValue: () => new Date().toISOString() }),
     defineField({
       name: "author",

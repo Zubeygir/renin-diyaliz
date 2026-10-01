@@ -46,7 +46,6 @@ const PAGE_KEY_MAP: Record<string, keyof NonNullable<SitemapData["pages"]>> = {
   "cerez-politikasi": "cookiePolicy",
   blog: "blog",
   hizmetler: "services",
-  projeler: "projects",
 };
 
 const PRIORITY_MAP: Record<string, number> = {
@@ -54,7 +53,6 @@ const PRIORITY_MAP: Record<string, number> = {
   hizmetler: 0.9,
   blog: 0.9,
   hakkimizda: 0.8,
-  projeler: 0.8,
   kadromuz: 0.7,
   iletisim: 0.7,
   "misyon-vizyon-degerler": 0.6,
@@ -108,7 +106,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const addDynamic = (
     items: LocalizedItem[] | undefined,
-    routeKey: "blog" | "hizmetler" | "projeler" | "kadromuz",
+    routeKey: "blog" | "hizmetler" | "kadromuz",
     basePriority: number
   ) => {
     if (!items) return;
@@ -134,7 +132,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   addDynamic(data?.services, "hizmetler", 0.8);
   addDynamic(data?.blogPosts, "blog", 0.7);
-  addDynamic(data?.projects, "projeler", 0.7);
   addDynamic(data?.staffMembers, "kadromuz", 0.7);
 
   return [...staticRoutes, ...dynamicRoutes];

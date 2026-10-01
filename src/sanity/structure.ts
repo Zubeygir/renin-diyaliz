@@ -41,15 +41,12 @@ export const structure: StructureResolver = (S) =>
               .child(S.document().schemaType("blogPage").documentId("blogPage")),
             S.listItem().title("🛠 Hizmetler").id("servicesPage").schemaType("servicesPage")
               .child(S.document().schemaType("servicesPage").documentId("servicesPage")),
-            S.listItem().title("💼 Projeler").id("projectsPage").schemaType("projectsPage")
-              .child(S.document().schemaType("projectsPage").documentId("projectsPage")),
           ])
         ),
       S.divider(),
       S.documentTypeListItem("blogCategory").title("📝 Blog Kategorileri"),
       S.documentTypeListItem("blogPost").title("📝 Blog Yazıları"),
       S.documentTypeListItem("service").title("🛠 Hizmetler"),
-      S.documentTypeListItem("project").title("💼 Projeler"),
       S.documentTypeListItem("staffMember").title("👥 Personel"),
       S.documentTypeListItem("partner").title("🤝 Anlaşmalı Kurumlar"),
     ]);

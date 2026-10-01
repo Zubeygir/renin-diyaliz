@@ -28,7 +28,7 @@ export function PageTitle({
 }: PageTitleProps) {
   return (
     <header className={cn("container mx-auto px-4 pt-8 md:pt-12", className)}>
-      <Breadcrumbs items={breadcrumbs} className="mb-6" />
+      <Breadcrumbs items={breadcrumbs} currentLabel={title} className="mb-6" />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12 gap-y-4 items-end border-b border-border pb-8 md:pb-10">
         <div className="lg:col-span-7">

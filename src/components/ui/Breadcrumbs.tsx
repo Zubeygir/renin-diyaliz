@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { RiArrowRightSLine, RiHome4Line } from "react-icons/ri";
 import { JsonLd, breadcrumbListJsonLd } from "@/components/seo/JsonLd";
-import { isValidLocale, Locale, getDictionary } from "@/lib/i18n";
+import { isValidLocale, Locale, getDictionary, toPublicPath } from "@/lib/i18n";
 import { BreadcrumbItem } from "@/types";
 
 const ROUTE_LABELS: Record<string, Partial<Record<Locale, string>>> = {
@@ -14,9 +14,6 @@ const ROUTE_LABELS: Record<string, Partial<Record<Locale, string>>> = {
   hizmetler: { tr: "Hizmetlerimiz", en: "Services", de: "Leistungen", ar: "خدماتنا" },
   services: { tr: "Hizmetlerimiz", en: "Services", de: "Leistungen", ar: "خدماتنا" },
   leistungen: { tr: "Hizmetlerimiz", en: "Services", de: "Leistungen", ar: "خدماتنا" },
-  projeler: { tr: "Projelerimiz", en: "Projects", de: "Projekte", ar: "مشاريعنا" },
-  projects: { tr: "Projelerimiz", en: "Projects", de: "Projekte", ar: "مشاريعنا" },
-  projekte: { tr: "Projelerimiz", en: "Projects", de: "Projekte", ar: "مشاريعنا" },
   blog: { tr: "Blog", en: "Blog", de: "Blog", ar: "المدونة" },
   iletisim: { tr: "İletişim", en: "Contact", de: "Kontakt", ar: "اتصل بنا" },
   contact: { tr: "İletişim", en: "Contact", de: "Kontakt", ar: "اتصل بنا" },
@@ -52,8 +49,16 @@ function formatSlugToLabel(slug: string, locale: Locale): string {
   }
 }
 
-export function Breadcrumbs({ items, className = "" }: { items?: BreadcrumbItem[]; className?: string }) {
-  const pathname = usePathname();
+export function Breadcrumbs({
+  items,
+  currentLabel,
+  className = "",
+}: {
+  items?: BreadcrumbItem[];
+  currentLabel?: string;
+  className?: string;
+}) {
+  const pathname = toPublicPath(usePathname() || "");
   const rawPaths = pathname ? pathname.split("/").filter(Boolean) : [];
   const firstSegment = rawPaths[0];
   const isLocalePrefix = isValidLocale(firstSegment) && firstSegment !== "tr";
@@ -66,8 +71,11 @@ export function Breadcrumbs({ items, className = "" }: { items?: BreadcrumbItem[
     const segmentPrefix = locale === "tr" ? "/" : `/${locale}/`;
     return paths.map((path, index) => {
       const href = `${segmentPrefix}${paths.slice(0, index + 1).join("/")}`;
-      const label = formatSlugToLabel(path, locale);
-      return { label, href, active: index === paths.length - 1 };
+      const active = index === paths.length - 1;
+      // Routes missing from ROUTE_LABELS fall back to the page's own localized title
+      // instead of a label guessed from the URL slug.
+      const label = (active && !ROUTE_LABELS[path] && currentLabel) || formatSlugToLabel(path, locale);
+      return { label, href, active };
     });
   };
 
@@ -81,7 +89,7 @@ export function Breadcrumbs({ items, className = "" }: { items?: BreadcrumbItem[
 
   return (
     <>
-      <JsonLd data={breadcrumbListJsonLd(breadcrumbs)} />
+      <JsonLd data={breadcrumbListJsonLd(breadcrumbs, { label: homeLabel, href: homeHref })} />
       <nav aria-label={ariaLabel} className={`flex items-center text-sm text-muted-foreground ${className}`}>
       <ol className="flex items-center gap-2 flex-wrap">
         <li>

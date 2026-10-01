@@ -18,6 +18,7 @@ export interface Dictionary {
     notFoundDesc: string;
     errorTitle: string;
     errorDesc: string;
+    retry: string;
     workingHours: string;
     workingHoursVal: string;
     getDirections: string;
@@ -163,6 +164,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
       notFoundDesc: "Aradığınız sayfa mevcut değil veya taşınmış olabilir.",
       errorTitle: "Bir Hata Oluştu",
       errorDesc: "Beklenmedik bir sorun meydana geldi. Lütfen tekrar deneyin.",
+      retry: "Tekrar Dene",
       workingHours: "Çalışma Saatleri",
       workingHoursVal: "Pazartesi - Cumartesi: 07:00 - 19:00",
       getDirections: "Yol Tarifi",
@@ -306,6 +308,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
       notFoundDesc: "The page you are looking for might have been removed or is temporarily unavailable.",
       errorTitle: "Something Went Wrong",
       errorDesc: "An unexpected error occurred. Please try again.",
+      retry: "Try Again",
       workingHours: "Working Hours",
       workingHoursVal: "Monday - Saturday: 07:00 - 19:00",
       getDirections: "Get Directions",
@@ -449,6 +452,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
       notFoundDesc: "Die gesuchte Seite existiert nicht oder wurde verschoben.",
       errorTitle: "Ein Fehler ist aufgetreten",
       errorDesc: "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+      retry: "Erneut versuchen",
       workingHours: "Öffnungszeiten",
       workingHoursVal: "Montag - Samstag: 07:00 - 19:00",
       getDirections: "Anfahrt",
@@ -592,6 +596,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
       notFoundDesc: "الصفحة التي تبحث عنها قد تكون حذفت أو غير متوفرة حالياً.",
       errorTitle: "حدث خطأ ما",
       errorDesc: "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.",
+      retry: "إعادة المحاولة",
       workingHours: "ساعات العمل",
       workingHoursVal: "الإثنين - السبت: 07:00 - 19:00",
       getDirections: "الاتجاهات",

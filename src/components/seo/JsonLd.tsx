@@ -84,12 +84,12 @@ export function faqPageJsonLd(faqs: { question: string; answer: string }[]) {
   };
 }
 
-export function breadcrumbListJsonLd(items: { label: string; href: string }[]) {
+export function breadcrumbListJsonLd(
+  items: { label: string; href: string }[],
+  home: { label: string; href: string }
+) {
   const siteUrl = getSiteUrl();
-  const allItems = [
-    { label: "Ana Sayfa", href: "/" },
-    ...items.filter((item) => item.href !== "/"),
-  ];
+  const allItems = [home, ...items.filter((item) => item.href !== home.href)];
 
   return {
     "@context": "https://schema.org",

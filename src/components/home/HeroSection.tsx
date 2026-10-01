@@ -40,7 +40,6 @@ export function resolveLink(linkData?: CtaLink, locale: Locale = "tr") {
 
   switch (ref._type) {
     case "service": return `${getLocalizedPath("hizmetler", locale)}/${ref.slug}`;
-    case "project": return `${getLocalizedPath("projeler", locale)}/${ref.slug}`;
     case "blogPost": return `${getLocalizedPath("blog", locale)}/${ref.slug}`;
     case "aboutPage": return getLocalizedPath("hakkimizda", locale);
     case "contactPage": return getLocalizedPath("iletisim", locale);

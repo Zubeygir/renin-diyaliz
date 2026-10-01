@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Locale, LOCALES, resolveLocalizedUrl } from "@/lib/i18n";
+import { Locale, LOCALES, resolveLocalizedUrl, toPublicPath } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { useAlternateUrls } from "@/components/providers/AlternateUrlsContext";
 
@@ -17,7 +17,7 @@ export function LanguageSwitcher({
   className,
   light = false,
 }: LanguageSwitcherProps) {
-  const pathname = usePathname();
+  const pathname = toPublicPath(usePathname() || "");
   const { alternateUrls } = useAlternateUrls();
 
   return (

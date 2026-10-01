@@ -2,7 +2,8 @@ import { Metadata } from "next";
 import { cachedFetch } from "@/sanity/lib/client";
 import { kvkkPageQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
-import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary } from "@/lib/i18n";
+import { isValidLocale, DEFAULT_LOCALE, Locale, getDictionary, getDateLocale } from "@/lib/i18n";
+import { formatDate } from "@/lib/utils";
 import { PageTitle } from "@/components/layout/PageTitle";
 import { RichText } from "@/components/ui/RichText";
 import { KvkkPage as KvkkPageType } from "@/types";
@@ -48,9 +49,11 @@ export default async function KvkkPage({
       <PageTitle title={title} />
 
       <div className="container mx-auto px-4 max-w-4xl">
-        <p className="text-xs text-muted-foreground mb-8 pb-3 border-b border-border tabular-nums">
-          {dict.common.lastUpdated} 14.09.2026
-        </p>
+        {data?._updatedAt && (
+          <p className="text-xs text-muted-foreground mb-8 pb-3 border-b border-border tabular-nums">
+            {dict.common.lastUpdated} {formatDate(data._updatedAt, getDateLocale(locale))}
+          </p>
+        )}
 
         <div className="prose prose-slate max-w-[68ch] leading-relaxed text-foreground/90 space-y-6">
           <RichText value={data?.body} />

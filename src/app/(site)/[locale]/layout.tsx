@@ -11,8 +11,6 @@ export async function generateStaticParams() {
   return [{ locale: "tr" }, { locale: "en" }, { locale: "de" }, { locale: "ar" }];
 }
 
-export const dynamicParams = false;
-
 function assertLocale(raw: string): Locale {
   if (!isValidLocale(raw)) notFound();
   return raw;

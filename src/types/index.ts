@@ -261,6 +261,7 @@ export interface FaqItem {
 }
 
 export interface KvkkPage {
+  _updatedAt?: string;
   pageTitle: string;
   body?: PortableTextBlock[];
   seo?: SeoSettings;

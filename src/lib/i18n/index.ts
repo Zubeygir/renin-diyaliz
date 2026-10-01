@@ -1,11 +1,16 @@
 import { dictionaries, Locale, Dictionary } from "./dictionaries";
-export { ROUTE_MAP, resolveLocalizedUrl, getLocalizedPath } from "./routes";
+export { ROUTE_MAP, resolveLocalizedUrl, getLocalizedPath, toPublicPath } from "./routes";
 
 export const LOCALES: Locale[] = ["tr", "en", "de", "ar"];
 export const DEFAULT_LOCALE: Locale = "tr";
 
 export function isValidLocale(locale: string): locale is Locale {
   return LOCALES.includes(locale as Locale);
+}
+
+export function getPathLocale(pathname: string | null): Locale {
+  const first = pathname?.split("/")[1] ?? "";
+  return isValidLocale(first) ? first : DEFAULT_LOCALE;
 }
 
 export function getDictionary(locale: Locale): Dictionary {

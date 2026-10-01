@@ -56,12 +56,6 @@ export const ROUTE_MAP: Record<string, RouteEntry> = {
     de: "/de/blog",
     ar: "/ar/blog",
   },
-  projeler: {
-    tr: "/projeler",
-    en: "/en/projects",
-    de: "/de/projekte",
-    ar: "/ar/projects",
-  },
   iletisim: {
     tr: "/iletisim",
     en: "/en/contact",
@@ -111,7 +105,7 @@ export function resolveLocalizedUrl(
   }
 
   // 3. Dynamic sub-routes (e.g., /hizmetler/:slug, /en/services/:slug, etc.)
-  const dynamicKeys = ["hizmetler", "projeler", "blog", "kadromuz"];
+  const dynamicKeys = ["hizmetler", "blog", "kadromuz"];
   for (const key of dynamicKeys) {
     const entry = ROUTE_MAP[key];
     const currPrefix = entry[currentLocale];
@@ -132,6 +126,20 @@ export function resolveLocalizedUrl(
       ? withoutLocale
       : `/${targetLocale}${withoutLocale === "/" ? "" : withoutLocale}`;
   }
+}
+
+/**
+ * Converts an internal App Router path (/tr/hakkimizda, /en/hakkimizda) to its public URL
+ * (/hakkimizda, /en/about). Prerendered pages are served through next.config rewrites, so
+ * usePathname() yields the internal path in the static HTML and the public one in the browser.
+ */
+export function toPublicPath(pathname: string): string {
+  const [first, key, ...rest] = pathname.split("/").filter(Boolean);
+  if (first === "tr") return `/${[key, ...rest].filter(Boolean).join("/")}`;
+  if (first !== "en" && first !== "de" && first !== "ar") return pathname;
+
+  const localized = key ? ROUTE_MAP[key]?.[first] : undefined;
+  return localized ? [localized, ...rest].join("/") : pathname;
 }
 
 /**

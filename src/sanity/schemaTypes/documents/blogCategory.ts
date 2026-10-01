@@ -16,6 +16,14 @@ export const blogCategoryType = defineType({
       title: "Slug",
       type: "localizedSlug",
       description: "URL'de görünecek kategori ismi.",
+      validation: (Rule) =>
+        Rule.required().custom((value) => {
+          const val = value as { tr?: { current?: string } } | undefined;
+          if (!val?.tr?.current) {
+            return "Kategorinin yayına alınabilmesi için Türkçe slug (TR) zorunludur. 'Generate' butonuna basarak oluşturabilirsiniz.";
+          }
+          return true;
+        }),
     }),
   ],
   preview: {

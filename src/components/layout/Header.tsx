@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "./LanguageSwitcher";
-import { Locale, getDictionary } from "@/lib/i18n";
+import { Locale, getDictionary, toPublicPath } from "@/lib/i18n";
 import {
   FaInstagram,
   FaFacebook,
@@ -62,7 +62,7 @@ export function Header({
   socialLinks = [],
   locale = "tr",
 }: HeaderProps) {
-  const pathname = usePathname();
+  const pathname = toPublicPath(usePathname());
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -289,7 +289,7 @@ export function Header({
 }
 
 function DesktopNavItem({ item, active, light = false }: { item: NavItem; active: boolean; light?: boolean }) {
-  const pathname = usePathname();
+  const pathname = toPublicPath(usePathname());
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 

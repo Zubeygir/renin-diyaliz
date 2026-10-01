@@ -232,7 +232,7 @@ export const staffListQuery = groq`*[_type == "staffMember"] | order(group asc, 
   "slug": coalesce(slug[$locale].current, slug.en.current, slug.tr.current, slug.current)
 }`;
 
-export const staffMemberBySlugQuery = groq`*[_type == "staffMember" && hasDetailPage == true && (slug[$locale].current == $slug || slug.tr.current == $slug || slug.current == $slug)][0] {
+export const staffMemberBySlugQuery = groq`*[_type == "staffMember" && hasDetailPage == true && (slug[$locale].current == $slug || slug.en.current == $slug || slug.tr.current == $slug || slug.current == $slug)][0] {
   _id,
   name,
   "role": coalesce(role[$locale], role.en, role.tr, role),
@@ -307,12 +307,14 @@ export const contactPageQuery = groq`*[_type == "contactPage"][0] {
 }`;
 
 export const kvkkPageQuery = groq`*[_type == "kvkkPage"][0] {
+  _updatedAt,
   "pageTitle": coalesce(pageTitle[$locale], pageTitle.en, pageTitle.tr, pageTitle),
   "body": coalesce(body[$locale], body.en, body.tr, body),
   seo ${seoFields}
 }`;
 
 export const cookiePolicyPageQuery = groq`*[_type == "cookiePolicyPage"][0] {
+  _updatedAt,
   "pageTitle": coalesce(pageTitle[$locale], pageTitle.en, pageTitle.tr, pageTitle),
   "body": coalesce(body[$locale], body.en, body.tr, body),
   seo ${seoFields}
@@ -385,7 +387,7 @@ export const blogFallbackQuery = groq`*[_type == "blogPost"] | order(publishedAt
   mainImage ${imageFields}
 }`;
 
-export const blogPostBySlugQuery = groq`*[_type == "blogPost" && (slug[$locale].current == $slug || slug.tr.current == $slug || slug.current == $slug)][0] {
+export const blogPostBySlugQuery = groq`*[_type == "blogPost" && (slug[$locale].current == $slug || slug.en.current == $slug || slug.tr.current == $slug || slug.current == $slug)][0] {
   _id, _updatedAt,
   "title": coalesce(title[$locale], title.en, title.tr, title),
   "slug": coalesce(slug[$locale].current, slug.en.current, slug.tr.current, slug.current),
@@ -419,7 +421,7 @@ export const blogCategoriesQuery = groq`*[_type == "blogCategory"] | order(title
   "slug": coalesce(slug[$locale].current, slug.en.current, slug.tr.current, slug.current)
 }`;
 
-export const blogListByCategorySlugQuery = groq`*[_type == "blogPost" && (category->slug[$locale].current == $slug || category->slug.tr.current == $slug || category->slug.current == $slug)] | order(publishedAt desc) {
+export const blogListByCategorySlugQuery = groq`*[_type == "blogPost" && (category->slug[$locale].current == $slug || category->slug.en.current == $slug || category->slug.tr.current == $slug || category->slug.current == $slug)] | order(publishedAt desc) {
   "title": coalesce(title[$locale], title.en, title.tr, title),
   "slug": coalesce(slug[$locale].current, slug.en.current, slug.tr.current, slug.current),
   "excerpt": coalesce(excerpt[$locale], excerpt.en, excerpt.tr, excerpt),
@@ -475,7 +477,7 @@ export const serviceFallbackQuery = groq`*[_type == "service"] | order(_createdA
   mainImage ${imageFields}
 }`;
 
-export const serviceBySlugQuery = groq`*[_type == "service" && (slug[$locale].current == $slug || slug.tr.current == $slug || slug.current == $slug)][0] {
+export const serviceBySlugQuery = groq`*[_type == "service" && (slug[$locale].current == $slug || slug.en.current == $slug || slug.tr.current == $slug || slug.current == $slug)][0] {
   "title": coalesce(title[$locale], title.en, title.tr, title),
   "slug": coalesce(slug[$locale].current, slug.en.current, slug.tr.current, slug.current),
   "rawSlug": slug,
