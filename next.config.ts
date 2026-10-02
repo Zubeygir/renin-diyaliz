@@ -12,7 +12,6 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       // Turkish prefixless routes -> mapped to internal /tr/...
-      { source: "/", destination: "/tr" },
       { source: "/hakkimizda", destination: "/tr/hakkimizda" },
       { source: "/misyon-vizyon-degerler", destination: "/tr/misyon-vizyon-degerler" },
       { source: "/organizasyon-semasi", destination: "/tr/organizasyon-semasi" },
